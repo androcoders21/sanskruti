@@ -2,26 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home_menu"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/home_new"
         android:title="Poster" />
     <item
         android:id="@+id/custom_menu"
-        android:icon="@drawable/ic_custom"
+        android:icon="@drawable/greetings_new"
         android:title="Custom" />
 
     <item
         android:id="@+id/business_menu"
         android:icon="@drawable/ic_business"
+        android:visible="false"
         android:title="My Business" />
 
 
     <item
         android:id="@+id/download_menu"
-        android:icon="@drawable/ic_my_creation"
+        android:icon="@drawable/category_new"
         android:title="My Creation" />
 
     <item
         android:id="@+id/profile_menu"
-        android:icon="@drawable/ic_user_profile"
+        android:icon="@drawable/upcoming_new"
         android:title="Profile" />
 </menu>

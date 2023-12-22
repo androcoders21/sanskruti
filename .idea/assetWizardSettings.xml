@@ -28,9 +28,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="baseline_format_italic_24" />
-                            <entry key="sourceFile" value="C:\Users\Devkraft\Desktop\Naga\Abdul\android\Brandboost Ultimate\Brandboost Ultimate" />
+                            <entry key="outputName" value="upcoming_new" />
+                            <entry key="sourceFile" value="C:\Users\Devkraft\Downloads\upcoming.svg" />
                           </map>
                         </option>
                       </PersistentState>

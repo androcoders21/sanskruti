@@ -1601,8 +1601,11 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
-
-            changeSizeView(txtStkrRel.getChildAt(mobileIndex),(float) progress,(float) progress);
+            if(mobileIndex == -1){
+                showToast();
+            }else {
+                changeSizeView(txtStkrRel.getChildAt(mobileIndex), (float) progress, (float) progress);
+            }
 
         }
 
@@ -1622,8 +1625,11 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
-
-            changeSizeView(txtStkrRel.getChildAt(emailIndex),(float) progress,(float) progress);
+            if(emailIndex == -1){
+                showToast();
+            }else {
+                changeSizeView(txtStkrRel.getChildAt(emailIndex), (float) progress, (float) progress);
+            }
 
         }
 
@@ -1643,7 +1649,12 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
 
-            changeSizeView(txtStkrRel.getChildAt(businessIndex),(float) progress,(float) progress);
+            if(businessIndex == -1){
+            //    showToast();
+            }else {
+                changeSizeView(txtStkrRel.getChildAt(businessIndex),(float) progress,(float) progress);
+            }
+
 
         }
 
@@ -1664,7 +1675,11 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
 
-            changeSizeView(txtStkrRel.getChildAt(addressIndex),(float) progress,(float) progress);
+            if(addressIndex == -1){
+                showToast();
+            }else {
+                changeSizeView(txtStkrRel.getChildAt(addressIndex), (float) progress, (float) progress);
+            }
 
         }
 
@@ -1685,8 +1700,11 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
-
-            changeSizeLogoView(txtStkrRel.getChildAt(logoIndex),(float) progress,(float) progress);
+            if(logoIndex == -1){
+                showToast();
+            }else {
+                changeSizeLogoView(txtStkrRel.getChildAt(logoIndex), (float) progress, (float) progress);
+            }
 
         }
 
@@ -1701,6 +1719,9 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         }
     };
 
+    private void showToast(){
+        Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+    }
     private void drawBackgroundImageFromDp(final String str, String str3, final String str4) {
         this.laySticker.setVisibility(GONE);
         File file = new File(this.frameName);
@@ -2677,40 +2698,90 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
                 this.layVideoFilter.setVisibility(GONE);
                 return;
             case R.id.btnItalicFontAddress:
-                changeItalic(txtStkrRel.getChildAt(addressIndex));
+                if(addressIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    changeItalic(txtStkrRel.getChildAt(addressIndex));
+                }
                 return;
             case R.id.btnUnderlineFontAddress:
-                changeUnderLine(txtStkrRel.getChildAt(addressIndex));
+                if(addressIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    changeUnderLine(txtStkrRel.getChildAt(addressIndex));
+                }
                 return;
             case R.id.btnBoldFontAddress:
-                changeBold(txtStkrRel.getChildAt(addressIndex));
+                if(addressIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    changeBold(txtStkrRel.getChildAt(addressIndex));
+                }
                 return;
             case R.id.btnItalicFontBusiness:
-                changeItalic(txtStkrRel.getChildAt(businessIndex));
+                if(businessIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    changeItalic(txtStkrRel.getChildAt(businessIndex));
+
+                }
                 return;
             case R.id.btnUnderlineFontBusiness:
-                changeUnderLine(txtStkrRel.getChildAt(businessIndex));
+                if(businessIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    changeUnderLine(txtStkrRel.getChildAt(businessIndex));
+                }
+
                 return;
             case R.id.btnBoldFontBusiness:
-                changeBold(txtStkrRel.getChildAt(businessIndex));
+                if(businessIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    changeBold(txtStkrRel.getChildAt(businessIndex));
+                }
                 return;
             case R.id.btnItalicFontEmail:
-                changeItalic(txtStkrRel.getChildAt(emailIndex));
+                if(emailIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    changeItalic(txtStkrRel.getChildAt(emailIndex));
+                }
                 return;
             case R.id.btnUnderlineFontEmail:
-                changeUnderLine(txtStkrRel.getChildAt(emailIndex));
+                if(emailIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    changeUnderLine(txtStkrRel.getChildAt(emailIndex));
+                }
                 return;
             case R.id.btnBoldFontEmail:
-                changeBold(txtStkrRel.getChildAt(emailIndex));
+                if(emailIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    changeBold(txtStkrRel.getChildAt(emailIndex));
+                }
                 return;
             case R.id.btnItalicFontMobile:
-                changeItalic(txtStkrRel.getChildAt(mobileIndex));
+                if(mobileIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    changeItalic(txtStkrRel.getChildAt(mobileIndex));
+                }
                 return;
             case R.id.btnUnderlineFontMobile:
-                changeUnderLine(txtStkrRel.getChildAt(mobileIndex));
+                if(mobileIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    changeUnderLine(txtStkrRel.getChildAt(mobileIndex));
+                }
                 return;
             case R.id.btnBoldFontMobile:
-                changeBold(txtStkrRel.getChildAt(mobileIndex));
+                if(mobileIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    changeBold(txtStkrRel.getChildAt(mobileIndex));
+                }
                 return;
             case R.id.mobileShowLL:
                 changeMobileNumberShow();
@@ -7014,6 +7085,11 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         @Override
         public void onPostExecute(Boolean bool) {
             super.onPostExecute(bool);
+            businessIndex = -1;
+            logoIndex = -1;
+            mobileIndex = -1;
+            emailIndex = -1;
+            addressIndex = -1;
 
             ArrayList arrayList = new ArrayList(txtShapeListFrame.keySet());
             Collections.sort(arrayList);

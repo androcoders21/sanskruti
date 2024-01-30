@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_screen"
+    tools:context="com.sanskruti.volotek.ui.activities.PoliticalProfileDetailsEditActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_layout"
+        android:layout_width="0dp"
+        android:layout_height="?actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingHorizontal="@dimen/_15sdp"
+        app:layout_constraintBottom_toTopOf="@+id/ll_adview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:orientation="horizontal">
+
+                        <com.mikhaellopez.circularimageview.CircularImageView
+                            android:id="@+id/iv_add_img"
+                            android:layout_width="@dimen/_65sdp"
+                            android:layout_height="@dimen/_65sdp"
+                            android:src="@drawable/profile_pic"
+                            app:civ_border_color="@color/al_gray"
+                            app:civ_border_width="@dimen/_1sdp"
+
+                            app:civ_shadow="false"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:id="@+id/btn_add_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_bg"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_add_img"
+                            app:layout_constraintEnd_toEndOf="@+id/iv_add_img">
+
+                            <ImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:background="@drawable/round_bg"
+                                android:padding="@dimen/_6sdp"
+                                android:src="@drawable/ic_camera"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/iv_business" />
+
+
+                        </LinearLayout>
+
+
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Profile Photo"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:orientation="horizontal">
+
+                        <com.mikhaellopez.circularimageview.CircularImageView
+                            android:id="@+id/iv_add_img_party"
+                            android:layout_width="@dimen/_65sdp"
+                            android:layout_height="@dimen/_65sdp"
+                            android:src="@drawable/sanskruti_logo"
+                            app:civ_border_color="@color/al_gray"
+                            app:civ_border_width="@dimen/_1sdp"
+
+                            app:civ_shadow="false"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:id="@+id/btn_add_image_party"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_bg"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_add_img_party"
+                            app:layout_constraintEnd_toEndOf="@+id/iv_add_img_party">
+
+                            <ImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:background="@drawable/round_bg"
+                                android:padding="@dimen/_6sdp"
+                                android:src="@drawable/ic_camera"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/iv_business" />
+
+
+                        </LinearLayout>
+
+
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Party Icon"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal">
+
+                            <com.mikhaellopez.circularimageview.CircularImageView
+                                android:id="@+id/iv_add_img_leader1"
+                                android:layout_width="@dimen/_45sdp"
+                                android:layout_height="@dimen/_45sdp"
+                                android:src="@drawable/leader_pic"
+                                app:civ_border_color="@color/al_gray"
+                                app:civ_border_width="@dimen/_1sdp"
+                                app:civ_shadow="false"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <LinearLayout
+                                android:id="@+id/btn_add_image_leader1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/round_bg"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_add_img_leader1"
+                                app:layout_constraintEnd_toEndOf="@+id/iv_add_img_leader1">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_20sdp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:background="@drawable/round_bg"
+                                    android:padding="@dimen/_6sdp"
+                                    android:src="@drawable/ic_camera"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="@+id/iv_business" />
+
+
+                            </LinearLayout>
+
+
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="leader 1"
+                            android:layout_marginTop="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="12dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal">
+
+                            <com.mikhaellopez.circularimageview.CircularImageView
+                                android:id="@+id/iv_add_img_leader2"
+                                android:layout_width="@dimen/_45sdp"
+                                android:layout_height="@dimen/_45sdp"
+                                android:src="@drawable/leader_pic"
+                                app:civ_border_color="@color/al_gray"
+                                app:civ_border_width="@dimen/_1sdp"
+                                app:civ_shadow="false"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <LinearLayout
+                                android:id="@+id/btn_add_image_leader2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/round_bg"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_add_img_leader2"
+                                app:layout_constraintEnd_toEndOf="@+id/iv_add_img_leader2">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_20sdp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:background="@drawable/round_bg"
+                                    android:padding="@dimen/_6sdp"
+                                    android:src="@drawable/ic_camera"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="@+id/iv_business" />
+
+
+                            </LinearLayout>
+
+
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="leader 2"
+                            android:layout_marginTop="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="12dp"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal">
+
+                            <com.mikhaellopez.circularimageview.CircularImageView
+                                android:id="@+id/iv_add_img_leader3"
+                                android:layout_width="@dimen/_45sdp"
+                                android:layout_height="@dimen/_45sdp"
+                                android:src="@drawable/leader_pic"
+                                app:civ_border_color="@color/al_gray"
+                                app:civ_border_width="@dimen/_1sdp"
+                                app:civ_shadow="false"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <LinearLayout
+                                android:id="@+id/btn_add_image_leader3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/round_bg"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_add_img_leader3"
+                                app:layout_constraintEnd_toEndOf="@+id/iv_add_img_leader3">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_20sdp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:background="@drawable/round_bg"
+                                    android:padding="@dimen/_6sdp"
+                                    android:src="@drawable/ic_camera"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="@+id/iv_business" />
+
+
+                            </LinearLayout>
+
+
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="leader 3"
+                            android:layout_marginTop="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="12dp"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal">
+
+                            <com.mikhaellopez.circularimageview.CircularImageView
+                                android:id="@+id/iv_add_img_leader4"
+                                android:layout_width="@dimen/_45sdp"
+                                android:layout_height="@dimen/_45sdp"
+                                android:src="@drawable/leader_pic"
+                                app:civ_border_color="@color/al_gray"
+                                app:civ_border_width="@dimen/_1sdp"
+                                app:civ_shadow="false"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <LinearLayout
+                                android:id="@+id/btn_add_image_leader4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/round_bg"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_add_img_leader4"
+                                app:layout_constraintEnd_toEndOf="@+id/iv_add_img_leader4">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_20sdp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:background="@drawable/round_bg"
+                                    android:padding="@dimen/_6sdp"
+                                    android:src="@drawable/ic_camera"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="@+id/iv_business" />
+
+
+                            </LinearLayout>
+
+
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="leader 4"
+                            android:layout_marginTop="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="12dp"/>
+                    </LinearLayout>
+
+
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal">
+
+                            <com.mikhaellopez.circularimageview.CircularImageView
+                                android:id="@+id/iv_add_img_leader5"
+                                android:layout_width="@dimen/_45sdp"
+                                android:layout_height="@dimen/_45sdp"
+                                android:src="@drawable/leader_pic"
+                                app:civ_border_color="@color/al_gray"
+                                app:civ_border_width="@dimen/_1sdp"
+                                app:civ_shadow="false"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <LinearLayout
+                                android:id="@+id/btn_add_image_leader5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/round_bg"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_add_img_leader5"
+                                app:layout_constraintEnd_toEndOf="@+id/iv_add_img_leader5">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_20sdp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:background="@drawable/round_bg"
+                                    android:padding="@dimen/_6sdp"
+                                    android:src="@drawable/ic_camera"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="@+id/iv_business" />
+
+
+                            </LinearLayout>
+
+
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="leader 5"
+                            android:layout_marginTop="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="12dp"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal">
+
+                            <com.mikhaellopez.circularimageview.CircularImageView
+                                android:id="@+id/iv_add_img_leader6"
+                                android:layout_width="@dimen/_45sdp"
+                                android:layout_height="@dimen/_45sdp"
+                                android:src="@drawable/leader_pic"
+                                app:civ_border_color="@color/al_gray"
+                                app:civ_border_width="@dimen/_1sdp"
+                                app:civ_shadow="false"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <LinearLayout
+                                android:id="@+id/btn_add_image_leader6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/round_bg"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_add_img_leader6"
+                                app:layout_constraintEnd_toEndOf="@+id/iv_add_img_leader6">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_20sdp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:background="@drawable/round_bg"
+                                    android:padding="@dimen/_6sdp"
+                                    android:src="@drawable/ic_camera"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="@+id/iv_business" />
+
+
+                            </LinearLayout>
+
+
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="leader 6"
+                            android:layout_marginTop="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="12dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/nunito_sans_semibold"
+                android:text="Name *"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_business"
+                 />
+
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:background="@drawable/edit_bg"
+                android:hint="@string/hint_name"
+                android:inputType="textPersonName"
+                android:paddingHorizontal="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:textColorHint="@color/gray"
+                 />
+
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/nunito_sans_semibold"
+                android:text="@string/email"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/etBusinessName"
+                app:layout_constraintTop_toBottomOf="@+id/etBusinessName"
+                 />
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:background="@drawable/edit_bg"
+                android:hint="@string/hint_email"
+                android:inputType="textEmailAddress"
+                android:paddingHorizontal="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:textColor="@color/black30"
+                android:textColorHint="@color/gray"
+                
+                app:layout_constraintEnd_toEndOf="@+id/etBusinessName"
+                app:layout_constraintStart_toStartOf="@+id/textView10"
+                app:layout_constraintTop_toBottomOf="@+id/textView10"
+                 />
+
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/nunito_sans_semibold"
+                android:text="Designation 1"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/etBusinessName"
+                app:layout_constraintTop_toBottomOf="@+id/etBusinessName"
+                 />
+
+            <EditText
+                android:id="@+id/etDesignation1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:background="@drawable/edit_bg"
+                android:hint="Enter Designation 1"
+                android:paddingHorizontal="@dimen/_5sdp"
+
+                android:paddingVertical="@dimen/_8sdp"
+                android:textColorHint="@color/gray"
+                
+                 />
+
+            <TextView
+                android:id="@+id/textView121"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/nunito_sans_semibold"
+                android:text="Designation 2"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/etBusinessName"
+                app:layout_constraintTop_toBottomOf="@+id/etBusinessName"
+                />
+
+            <EditText
+                android:id="@+id/etDesignation2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:background="@drawable/edit_bg"
+                android:hint="Enter Designation 2"
+                android:paddingHorizontal="@dimen/_5sdp"
+
+                android:paddingVertical="@dimen/_8sdp"
+                android:textColorHint="@color/gray"
+
+                />
+
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/nunito_sans_semibold"
+                android:text="Phone *"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/etBusinessName"
+                app:layout_constraintTop_toBottomOf="@+id/etBusinessNumber"
+                 />
+
+            <EditText
+                android:id="@+id/etPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:background="@drawable/edit_bg"
+                android:hint="@string/hint_phone_number"
+                android:inputType="number"
+                android:paddingHorizontal="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:textColorHint="@color/gray"
+                
+                 />
+
+            <TextView
+                android:id="@+id/textViewFacebook121"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/nunito_sans_semibold"
+                android:text="Facebook Username"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/etBusinessName"
+                app:layout_constraintTop_toBottomOf="@+id/etBusinessName"
+                />
+
+            <EditText
+                android:id="@+id/etFacebookUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:background="@drawable/edit_bg"
+                android:hint="Enter Facebook Username"
+                android:paddingHorizontal="@dimen/_5sdp"
+
+                android:paddingVertical="@dimen/_8sdp"
+                android:textColorHint="@color/gray"
+
+                />
+
+
+
+            <TextView
+                android:id="@+id/textViewInstagram121"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/nunito_sans_semibold"
+                android:text="Instagram Username"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/etBusinessName"
+                app:layout_constraintTop_toBottomOf="@+id/etBusinessName"
+                />
+
+            <EditText
+                android:id="@+id/etInstagramUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:background="@drawable/edit_bg"
+                android:hint="Enter Instagram Username"
+                android:paddingHorizontal="@dimen/_5sdp"
+
+                android:paddingVertical="@dimen/_8sdp"
+                android:textColorHint="@color/gray"
+
+                />
+
+
+            <TextView
+                android:id="@+id/textViewTwitter121"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/nunito_sans_semibold"
+                android:text="Twitter Username"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/etBusinessName"
+                app:layout_constraintTop_toBottomOf="@+id/etBusinessName"
+                />
+
+            <EditText
+                android:id="@+id/etTwitterUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:background="@drawable/edit_bg"
+                android:hint="Enter Twitter Username"
+                android:paddingHorizontal="@dimen/_5sdp"
+
+                android:paddingVertical="@dimen/_8sdp"
+                android:textColorHint="@color/gray"
+
+                />
+
+            <TextView
+                android:id="@+id/btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginVertical="@dimen/_20sdp"
+                android:background="@drawable/round_bg"
+                android:backgroundTint="@color/active_color"
+                android:fontFamily="@font/nunito_sans_semibold"
+                android:paddingHorizontal="@dimen/_70sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="@color/al_white"
+                 />
+            <TextView
+                android:id="@+id/btn_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginVertical="@dimen/_20sdp"
+                android:visibility="gone"
+                android:background="@drawable/round_bg"
+                android:backgroundTint="@color/active_color"
+                android:fontFamily="@font/nunito_sans_semibold"
+                android:paddingHorizontal="@dimen/_70sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:text="Edit"
+                android:textAllCaps="false"
+                android:textColor="@color/al_white"
+                />
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/ll_adview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

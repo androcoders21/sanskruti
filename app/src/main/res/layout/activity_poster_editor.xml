@@ -1923,6 +1923,8 @@
         </RelativeLayout>
     </RelativeLayout>
 
+
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -1986,8 +1988,8 @@
                 android:layout_weight="1" />
             <SeekBar
                 android:id="@+id/seekBarLogo"
-                android:max="5"
-                android:progress="1"
+                android:max="15"
+                android:progress="6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <View
@@ -2048,8 +2050,8 @@
                 android:layout_weight="1" />
             <SeekBar
                 android:id="@+id/seekBarAddress"
-                android:max="5"
-                android:progress="1"
+                android:max="15"
+                android:progress="6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <View
@@ -2098,6 +2100,64 @@
                         android:onClick="onClick"
                         android:padding="5dp"
                         android:src="@drawable/baseline_format_italic_24" />
+
+
+                    <LinearLayout
+                        android:id="@+id/llcolorAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A"
+                            android:textStyle="bold"
+                            android:textSize="17dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Color"
+                            android:textSize="12dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/llfontAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ff"
+                            android:textStyle="bold"
+                            android:textSize="17dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Font"
+                            android:textSize="12dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                    </LinearLayout>
+                    <GridView
+                        android:id="@+id/font_gridview_Address"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="4.0dip"
+                        android:horizontalSpacing="2.0dip"
+                        android:numColumns="1"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="2.0dip"
+                        android:visibility="visible" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -2157,8 +2217,8 @@
                 android:layout_weight="1" />
             <SeekBar
                 android:id="@+id/seekBarBusiness"
-                android:max="5"
-                android:progress="1"
+                android:max="15"
+                android:progress="6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <View
@@ -2207,6 +2267,64 @@
                         android:onClick="onClick"
                         android:padding="5dp"
                         android:src="@drawable/baseline_format_italic_24" />
+
+
+                    <LinearLayout
+                        android:id="@+id/llcolorBusiness"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A"
+                            android:textStyle="bold"
+                            android:textSize="17dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Color"
+                            android:textSize="12dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llfontBusiness"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ff"
+                            android:textStyle="bold"
+                            android:textSize="17dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Font"
+                            android:textSize="12dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                    </LinearLayout>
+
+                    <GridView
+                        android:id="@+id/font_gridview_Business"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="4.0dip"
+                        android:horizontalSpacing="2.0dip"
+                        android:numColumns="1"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="2.0dip"
+                        android:visibility="visible" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -2263,8 +2381,8 @@
                 android:layout_weight="1" />
             <SeekBar
                 android:id="@+id/seekBarEmail"
-                android:max="5"
-                android:progress="1"
+                android:max="15"
+                android:progress="6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <View
@@ -2313,6 +2431,65 @@
                         android:onClick="onClick"
                         android:padding="5dp"
                         android:src="@drawable/baseline_format_italic_24" />
+
+
+                    <LinearLayout
+                        android:id="@+id/llcolorEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A"
+                            android:textStyle="bold"
+                            android:textSize="17dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Color"
+                            android:textSize="12dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:id="@+id/llfontEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ff"
+                            android:textStyle="bold"
+                            android:textSize="17dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Font"
+                            android:textSize="12dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                    </LinearLayout>
+                    <GridView
+                        android:id="@+id/font_gridview_email"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="4.0dip"
+                        android:horizontalSpacing="2.0dip"
+                        android:numColumns="1"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="2.0dip"
+                        android:visibility="visible" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -2370,8 +2547,8 @@
                 android:layout_weight="1" />
             <SeekBar
                 android:id="@+id/seekBarMobile"
-                android:max="5"
-                android:progress="1"
+                android:max="15"
+                android:progress="6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <View
@@ -2419,6 +2596,65 @@
                         android:onClick="onClick"
                         android:padding="5dp"
                         android:src="@drawable/baseline_format_italic_24" />
+
+
+                    <LinearLayout
+                        android:id="@+id/llcolorMobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A"
+                            android:textStyle="bold"
+                            android:textSize="17dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Color"
+                            android:textSize="12dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/llfontMobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ff"
+                            android:textStyle="bold"
+                            android:textSize="17dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Font"
+                            android:textSize="12dp"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="5dp"/>
+                    </LinearLayout>
+
+                    <GridView
+                        android:id="@+id/font_gridview_mobile"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="4.0dip"
+                        android:horizontalSpacing="2.0dip"
+                        android:numColumns="1"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="2.0dip"
+                        android:visibility="visible" />
                 </LinearLayout>
             </LinearLayout>
 

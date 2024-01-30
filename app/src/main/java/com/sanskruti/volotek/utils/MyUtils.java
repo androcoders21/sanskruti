@@ -33,18 +33,19 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.sanskruti.volotek.R;
-import com.sanskruti.volotek.custom.animated_video.model.TemplateModel;
-import com.sanskruti.volotek.model.AdsModel;
-import com.sanskruti.volotek.ui.activities.SubsPlanActivity;
 import com.downloader.Error;
 import com.downloader.OnDownloadListener;
 import com.downloader.PRDownloader;
 import com.google.gson.Gson;
+import com.sanskruti.volotek.R;
+import com.sanskruti.volotek.custom.animated_video.model.TemplateModel;
+import com.sanskruti.volotek.model.AdsModel;
+import com.sanskruti.volotek.ui.activities.SubsPlanActivity;
 
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,7 +69,7 @@ public class MyUtils {
     public static AdsModel model;
     public static AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
     public static PreferenceManager preferenceManager;
-    private static String TAG="AdmobAppId";
+    private static String TAG = "AdmobAppId";
     public Activity context;
     public static TemplateModel templateModel;
 
@@ -133,39 +134,110 @@ public class MyUtils {
 
     }
 
-    public static void unzip(File zipFile, File targetDirectory, TemplateUtils.OnUnZipListener onUnZipListener) throws Exception {
-        ZipInputStream zis = new ZipInputStream(
-                new BufferedInputStream(new FileInputStream(zipFile)));
+    public static void unzipFile(String zipFilePath, String destinationPath, TemplateUtils.OnUnZipListener onUnZipListener) throws Exception {
+        File zipFile = new File(zipFilePath);
+        FileInputStream fis = new FileInputStream(zipFile);
+        ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
         try {
 
+
             ZipEntry ze;
+
+            byte[] buffer = new
+
+                    byte[1024];
             int count;
-            byte[] buffer = new byte[8192];
+
             while ((ze = zis.getNextEntry()) != null) {
-                File file = new File(targetDirectory, ze.getName());
-                File dir = ze.isDirectory() ? file : file.getParentFile();
-                if (!dir.isDirectory() && !dir.mkdirs())
-                    throw new FileNotFoundException("Failed to ensure directory: " +
-                            dir.getAbsolutePath());
-                if (ze.isDirectory())
-                    continue;
-                FileOutputStream fout = new FileOutputStream(file);
-                try {
-                    while ((count = zis.read(buffer)) != -1)
-                        fout.write(buffer, 0, count);
-                } finally {
-                    fout.close();
+                String fileName = ze.getName();
+                File newFile = new File(destinationPath + File.separator + fileName);
+
+                // Check for existing file and handle appropriately
+                if (newFile.exists()) {
+                    // Choose how to handle existing file: overwrite, rename, etc.
+                    continue; // Example: skip existing files
                 }
 
+                if (ze.isDirectory()) {
+                    newFile.mkdirs();
+                } else {
+                    FileOutputStream fos = new FileOutputStream(newFile);
+                    BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
+
+                    while ((count = zis.read(buffer)) != -1) {
+                        bos.write(buffer, 0, count);
+                    }
+
+                    bos.flush();
+                    bos.close();
+                }
+                zis.closeEntry();
             }
+
+            zis.close();
+            fis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.i("checkErrordata", "123 123 123 : error message 1 : " + e.getMessage());
         } finally {
             zis.close();
 
             zipFile.delete();
 
-            onUnZipListener.onZip(targetDirectory.getAbsolutePath());
+            onUnZipListener.onZip(destinationPath);
 
         }
+    }
+
+    public static void unzip(File zipFile, File targetDirectory, TemplateUtils.OnUnZipListener onUnZipListener) throws Exception {
+
+
+        File zipFiles = new File(String.valueOf(zipFile.getAbsoluteFile()));
+        Log.i("checkErrordata", "Final : zip file path: " + zipFiles.getAbsolutePath());
+        if (!zipFiles.exists()) {
+            // Handle the case where the file does not exist
+            Log.i("checkErrordata", "Handle the case where the file does not exist ");
+        } else {
+            Log.i("checkErrordata", "Handle the case where the file exist ");
+            ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile)));
+            try {
+
+                ZipEntry ze;
+                int count;
+                byte[] buffer = new byte[8192];
+                while ((ze = zis.getNextEntry()) != null) {
+                    File file = new File(targetDirectory, ze.getName());
+                    Log.i("checkErrordata", "unzip file path =  " + file.getAbsolutePath());
+                    File dir = ze.isDirectory() ? file : file.getParentFile();
+                    if (!dir.isDirectory() && !dir.mkdirs())
+                        throw new FileNotFoundException("Failed to ensure directory: " +
+                                dir.getAbsolutePath());
+                    if (ze.isDirectory())
+                        continue;
+
+                    FileOutputStream fout = new FileOutputStream(file);
+                    try {
+                        while ((count = zis.read(buffer)) != -1)
+                            fout.write(buffer, 0, count);
+                    } catch (Exception e) {
+                        Log.i("checkErrordata", "123 123 123 : error message 2 : " + e.getMessage());
+                    } finally {
+                        fout.close();
+                    }
+
+                }
+            } catch (Exception e) {
+                Log.i("checkErrordata", "123 123 123 : error message 1 : " + e.getMessage());
+            } finally {
+                zis.close();
+
+                zipFile.delete();
+
+                onUnZipListener.onZip(targetDirectory.getAbsolutePath());
+
+            }
+        }
+
     }
 
     public static boolean isConnectingToInternet(Context context) {
@@ -280,7 +352,21 @@ public class MyUtils {
 
     public static String getFolderPath(Activity activity, String folder) {
 
-        File file = new File(activity.getFilesDir().getAbsolutePath(), folder);
+        File file = new File(Environment.getExternalStorageDirectory() + File.separator
+                + Environment.DIRECTORY_PICTURES + File.separator + activity.getString(R.string.app_name), "Sanskruti");
+
+        if (!file.exists())
+            file.mkdirs();
+
+        return file.getAbsolutePath();
+
+
+    }
+
+    public static String getDownloadFolderPath(Activity activity, String folder) {
+
+        File file = new File(Environment.getExternalStorageDirectory() + File.separator
+                + Environment.DIRECTORY_DOWNLOADS + File.separator + activity.getString(R.string.app_name), "Sanskruti");
 
         if (!file.exists())
             file.mkdirs();
@@ -442,12 +528,11 @@ public class MyUtils {
     }
 
 
-    public static void updateAdmobAppid(Activity context, String appId){
-
+    public static void updateAdmobAppid(Activity context, String appId) {
 
 
         try {
-            ApplicationInfo ai =  context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = ai.metaData;
             String myApiKey = bundle.getString("com.google.android.gms.ads.APPLICATION_ID");
             Log.d(TAG, "Name Found: " + myApiKey);

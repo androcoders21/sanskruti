@@ -69,6 +69,7 @@ import com.sanskruti.volotek.model.FrameModel;
 import com.sanskruti.volotek.model.PostItem;
 import com.sanskruti.volotek.model.UserItem;
 import com.sanskruti.volotek.ui.dialog.UniversalDialog;
+import com.sanskruti.volotek.ui.fragments.MyBottomSheetFragment;
 import com.sanskruti.volotek.ui.fragments.MyBusinessFragmentBottomSheet;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.MyUtils;
@@ -382,7 +383,7 @@ public class PreviewActivity extends AppCompatActivity {
 
     private void getPostDataMore() {
 
-        Constant.getHomeViewModel(this).getAllPostsByCategory(pageCount, type, postType, categoryID, language, video).observe(this, postItems -> {
+        Constant.getHomeViewModel(this).getAllPostsByCategory(pageCount, type, "square", categoryID, language, video).observe(this, postItems -> {
             if (postItems != null) {
 
                 MyUtils.showResponse(postItems);
@@ -485,7 +486,7 @@ public class PreviewActivity extends AppCompatActivity {
         FFmpeg.executeAsync(ffmpegCommand, (executionId, returnCode) -> {
 
             ivPlayVideo.setVisibility(VISIBLE);
-            btnEdit.setVisibility(VISIBLE);
+            btnEdit.setVisibility(GONE);
 
 
             if (returnCode == 1) {
@@ -564,11 +565,11 @@ public class PreviewActivity extends AppCompatActivity {
         MediaScannerConnection.scanFile(context, new String[]{filePath}, new String[]{filePath.contains("mp4") ? "video/mp4" : "image/png"}, null);
 
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(filePath))));
-
-        Intent intent = new Intent(context, ShareImageActivity.class);
+        Toast.makeText(PreviewActivity.this,"Download Successfully",Toast.LENGTH_SHORT).show();
+        /*Intent intent = new Intent(context, ShareImageActivity.class);
         intent.putExtra("uri", filePath);
         intent.putExtra("way", "Poster");
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
 
@@ -777,7 +778,14 @@ public class PreviewActivity extends AppCompatActivity {
             if (postItemList != null) {
                 position = data;
 
+
                 setImageShow(postItemList.get(data));
+                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(postItemList.get(data).image_url,this,"NA");
+
+                // Or using static method
+                // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
+
+                bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
             }
         }, 3, getResources().getDimension(com.intuit.ssp.R.dimen._2ssp));
         rvPost.setAdapter(adapter);
@@ -1144,10 +1152,10 @@ public class PreviewActivity extends AppCompatActivity {
         MyUtils.showResponse(data);
 
         ivShow.setVisibility(VISIBLE);
-        cardView.setVisibility(VISIBLE);
+        cardView.setVisibility(GONE);
         rvPost.setVisibility(VISIBLE);
         btnEdit.setVisibility(VISIBLE);
-        llTab.setVisibility(VISIBLE);
+        llTab.setVisibility(GONE);
 
         llSave.setVisibility(GONE);
 
@@ -1191,7 +1199,8 @@ public class PreviewActivity extends AppCompatActivity {
             loadVideo(postItem.image_url);
 
 
-        } else {
+        }
+        else {
             videoPlayer.setVisibility(GONE);
             ivCross.setVisibility(postItem.is_premium ? VISIBLE : GONE);
             if (userItem != null && userItem.isSubscribed) {
@@ -1229,6 +1238,17 @@ public class PreviewActivity extends AppCompatActivity {
             });
         }
 
+
+
+
+
+
+/*
+        Intent intent = new Intent(PreviewActivity.this, ThumbnailActivity.class);
+        intent.putExtra("backgroundImage", postItem.image_url);
+        intent.putExtra("type", typePost);
+        intent.putExtra("sizeposition", ratio);
+        startActivity(intent);*/
     }
 
     private void loadVideo(String videoURL) {

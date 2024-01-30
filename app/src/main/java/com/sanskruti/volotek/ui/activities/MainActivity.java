@@ -212,11 +212,12 @@ public class MainActivity extends BaseActivity {
         activeBusinessName = (TextView) findViewById(R.id.active_business_name);
         circularImageView = (CircularImageView) findViewById(R.id.circularImageView);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
+
+
         llBusiness = (LinearLayout)findViewById(R.id.ll_business);
         toolName = (TextView)findViewById(R.id.tool_name);
         ivPremium = (ImageView)findViewById(R.id.ivPremium);
         favorite = (ImageView)findViewById(R.id.favorite);
-        dailyPost = (LottieAnimationView) findViewById(R.id.daily_post);
         addBusiness = (LinearLayout)findViewById(R.id.add_business);
         toolbar = (RelativeLayout)findViewById(R.id.toolbar);
         activity = this;
@@ -251,10 +252,9 @@ public class MainActivity extends BaseActivity {
     BottomNavigationView bottomNavigationView;
     LinearLayout llBusiness, addBusiness;
     ImageView ivPremium, favorite;
-    LottieAnimationView dailyPost;
     private void setDefault(BusinessItem businessItem) {
-        activeBusinessName.setText(businessItem.getName());
-        GlideDataBinding.bindImage(circularImageView, businessItem.getLogo());
+        activeBusinessName.setText("Hi "+Constant.getUserItem(this).userName.toString());
+        GlideDataBinding.bindImage(circularImageView, Constant.getUserItem(this).userImage.toString());
         Constant.setDefaultBusiness(MainActivity.this, businessItem);
 
         MyUtils.saveLogoPath(this, businessItem.getLogo(), new FrameUtils.OnLogoDownloadListener() {
@@ -431,8 +431,8 @@ public class MainActivity extends BaseActivity {
 
                    /* navController.navigate(R.id.allSavedDataFragment);
                     topBar(R.string.my_creation, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE);*/
+                    startActivity(new Intent(activity, CategoryActivity.class));
 
-                    Toast.makeText(activity, "Coming Soon", Toast.LENGTH_SHORT).show();
 
                     return true;
                 default:
@@ -450,11 +450,10 @@ public class MainActivity extends BaseActivity {
 
         ivPremium.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SubsPlanActivity.class)));
         favorite.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, FavouriteActivity.class)));
-        dailyPost.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DailyPostActivity.class)));
 
         addBusiness.setOnClickListener(v -> {
 
-            fragment = new MyBusinessFragmentBottomSheet(businessItem -> {
+           /* fragment = new MyBusinessFragmentBottomSheet(businessItem -> {
 
                 fragment.dismiss();
                 setDefault(businessItem);
@@ -462,7 +461,7 @@ public class MainActivity extends BaseActivity {
 
             });
 
-            fragment.show(getSupportFragmentManager(), "");
+            fragment.show(getSupportFragmentManager(), "");*/
 
 
         });
@@ -495,7 +494,6 @@ public class MainActivity extends BaseActivity {
         toolbar.setVisibility(visible3);
         toolName.setVisibility(visible);
         favorite.setVisibility(visible1);
-        dailyPost.setVisibility(gone);
         ivPremium.setVisibility(gone);
     }
 

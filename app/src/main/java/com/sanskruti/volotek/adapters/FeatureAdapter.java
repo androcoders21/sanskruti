@@ -4,13 +4,18 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.sanskruti.volotek.AdsUtils.InterstitialsAdsManager;
+import com.sanskruti.volotek.custom.poster.activity.ThumbnailActivity;
 import com.sanskruti.volotek.databinding.ItemFeatureBinding;
 import com.sanskruti.volotek.model.FeatureItem;
 import com.sanskruti.volotek.model.PostItem;
@@ -78,7 +83,7 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.MyViewHo
     }
 
     private void gotoPreviewActivity(MyViewHolder holder, PostItem data, int position) {
-        Intent intent = new Intent(context, PreviewActivity.class);
+      /*  Intent intent = new Intent(context, PreviewActivity.class);
         intent.putExtra(Constant.INTENT_TYPE, featureItemList.get(position).type);
         intent.putExtra(Constant.INTENT_FEST_ID, data.fest_id);
         intent.putExtra(Constant.INTENT_FEST_NAME, featureItemList.get(position).title);
@@ -86,6 +91,13 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.MyViewHo
         intent.putExtra(Constant.INTENT_POS, holder.adapters.getItemPosition());
         intent.putExtra(Constant.INTENT_VIDEO, featureItemList.get(position).video);
         intent.putExtra("From", From);
+        context.startActivity(intent);*/
+        Log.i("checkAdapterStatus","check details in this type = "+featureItemList.get(position).type);
+
+        Intent intent = new Intent(context, ThumbnailActivity.class);
+        intent.putExtra("backgroundImage", data.image_url);
+        intent.putExtra("type", "images");
+        intent.putExtra("sizeposition", "1:1");
         context.startActivity(intent);
 
 
@@ -123,3 +135,4 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.MyViewHo
         }
     }
 }
+

@@ -441,7 +441,21 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabWhatsApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_whatsapp"
+            app:backgroundTint="#25D366"
+            android:visibility="gone"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            app:rippleColor="#2196F3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

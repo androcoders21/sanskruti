@@ -3,11 +3,11 @@
     <item
         android:id="@+id/home_menu"
         android:icon="@drawable/home_new"
-        android:title="Poster" />
+        android:title="Home" />
     <item
         android:id="@+id/custom_menu"
         android:icon="@drawable/greetings_new"
-        android:title="Custom" />
+        android:title="Greetings" />
 
     <item
         android:id="@+id/business_menu"
@@ -19,10 +19,10 @@
     <item
         android:id="@+id/download_menu"
         android:icon="@drawable/category_new"
-        android:title="My Creation" />
+        android:title="My Category" />
 
     <item
         android:id="@+id/profile_menu"
-        android:icon="@drawable/upcoming_new"
+        android:icon="@drawable/ic_user_profile"
         android:title="Profile" />
 </menu>

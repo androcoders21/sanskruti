@@ -22,7 +22,7 @@
         android:id="@+id/shimmer_view_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -239,11 +239,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/image" />
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_video"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/video" />
         </com.google.android.material.tabs.TabLayout>
 
         <LinearLayout
@@ -252,12 +247,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginEnd="@dimen/_15sdp"
+
             android:background="@drawable/round_bg"
             android:backgroundTint="@color/tabColor"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/_10sdp"
             android:paddingVertical="@dimen/_6sdp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -352,6 +348,7 @@
         android:layout_marginBottom="@dimen/_20sdp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -398,7 +395,7 @@
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/_18sdp"
             android:paddingVertical="@dimen/_10sdp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/_20sdp"

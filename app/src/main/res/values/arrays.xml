@@ -26,14 +26,39 @@
 
     <string-array name="fonts_array">
         <item>default</item>
+        <item>Akshar-Regular.ttf</item>
         <item>AldotheApache.ttf</item>
+        <item>Alkatra-Regular.ttf</item>
         <item>American Captain.otf</item>
         <item>American Captain.ttf</item>
+        <item>Amiko-Regular.ttf</item>
+        <item>Amita-Regular.ttf</item>
+        <item>AnekDevanagari-Bold.ttf</item>
+        <item>AnekDevanagari-Light.ttf</item>
+        <item>AnekDevanagari-Medium.ttf</item>
+        <item>AnekDevanagari-Regular.ttf</item>
+        <item>Baloo2-Regular.ttf</item>
+        <item>Cambay-Regular.ttf</item>
+        <item>Dekko-Regular.ttf</item>
+
+        <item>GajrajOne-Regular.ttf</item>
         <item>GROBOLD.ttf</item>
         <item>KOMIKAX_.ttf</item>
+        <item>Hind-Regular.ttf</item>
+        <item>InknutAntiqua-Regular.ttf</item>
+        <item>Khand-Regular.ttf</item>
+
         <item>LemonMilk.otf</item>
         <item>libertylegion.ttf</item>
         <item>libertylegion3d.ttf</item>
+        <item>Martel-Regular.ttf</item>
+        <item>Modak-Regular.ttf</item>
+        <item>Mukta-Regular.ttf</item>
+        <item>NotoSans-Bold.ttf</item>
+
+        <item>NotoSans-Regular.ttf</item>
+        <item>NotoSerif-Regular.ttf</item>
+
         <item>ObelixProB-cyr.ttf</item>
         <item>ObelixPro-cyr.ttf</item>
         <item>PEPSI_pl.ttf</item>

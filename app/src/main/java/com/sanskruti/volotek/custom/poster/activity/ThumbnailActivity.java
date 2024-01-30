@@ -13,14 +13,17 @@ import static com.sanskruti.volotek.utils.Constant.IS_PREMIUM;
 import static com.sanskruti.volotek.utils.Constant.IS_SUBSCRIBE;
 import static com.sanskruti.volotek.utils.Constant.movieImageList;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -40,6 +43,7 @@ import android.transition.Explode;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +66,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -99,6 +104,7 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.hw.photomovie.render.GLTextureView;
+import com.jaredrummler.android.colorpicker.ColorPickerView;
 import com.sanskruti.volotek.AdsUtils.InterstitialsAdsManager;
 import com.sanskruti.volotek.AdsUtils.RewardAdsManager;
 import com.sanskruti.volotek.R;
@@ -145,8 +151,10 @@ import com.sanskruti.volotek.model.FrameItem;
 import com.sanskruti.volotek.model.FrameModel;
 import com.sanskruti.volotek.model.FrameResponse;
 import com.sanskruti.volotek.model.FramesModelCategory;
+import com.sanskruti.volotek.ui.activities.PreviewActivity;
 import com.sanskruti.volotek.ui.activities.SubsPlanActivity;
 import com.sanskruti.volotek.ui.dialog.UniversalDialog;
+import com.sanskruti.volotek.ui.fragments.FontFamilyBottomSheetDialogFragment;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.FilterAdjuster;
 import com.sanskruti.volotek.utils.FrameUtils;
@@ -463,6 +471,8 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
 
     private ImageView btnBoldFontMobilebtn,btnItalicFontMobilebtn,btnUnderlineFontMobilebtn;
 
+    private LinearLayout llcolorMobilell, llcolorEmailll, llcolorBusinessll, llcolorAddressll, llfontMobilell, llfontEmailll,llfontBusinessll, llfontAddressll;
+
     private SeekBar btnseekBarMobile,btnseekBarEmail, btnseekBarBusiness, btnseekBarAddress,btnseekBarLogo;
 
     private ImageView btnBoldFontEmailbtn,btnItalicFontEmaoilbtn,btnUnderlineFontEmailbtn;
@@ -611,7 +621,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
                     } else if (frameModel.getType().contains(Constant.FRAME_TYPE_IMAGE)) {
 
                         isAnimatedFrame = false;
-
+                        Log.i("checkErrordata","STEP 04 model      =  " + String.valueOf(new Gson().toJson(frameModel)));
                         frameImageProcess(frameModel);
 
                     } else {
@@ -638,11 +648,14 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
                             frameAnimatedProcess(getFrameModel(frameResponse, 1));
                         }
 
-                    } else if (frameType.equals(Constant.FRAME_TYPE_IMAGE)) {
+                    }
+                    else if (frameType.equals(Constant.FRAME_TYPE_IMAGE)) {
 
                         if (getFrameModel(frameResponse, 0).getFrame_category().contains("business")) {
+                            Log.i("checkErrordata","STEP 01 model      =  " + String.valueOf(new Gson().toJson(getFrameModel(frameResponse, 0))));
                             frameImageProcess(getFrameModel(frameResponse, 0));
                         } else if (getFrameModel(frameResponse, 1).getFrame_category().contains("personal")) {
+                            Log.i("checkErrordata","STEP 02 model      =  " + String.valueOf(new Gson().toJson(getFrameModel(frameResponse, 1))));
                             frameImageProcess(getFrameModel(frameResponse, 1));
                         }
                     } else {
@@ -729,6 +742,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void frameImageProcess(FrameModel model) {
+        Log.i("checkErrordata","model      =  " + String.valueOf(new Gson().toJson(model)));
         Log.i("checkSizeData", "model      =  " + String.valueOf(new Gson().toJson(model)));
         isAnimatedFrame = false;
 
@@ -813,6 +827,8 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         }
 
         setContentView(R.layout.activity_poster_editor);
+
+
         context = this;
         activity = this;
 
@@ -1067,6 +1083,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         int appNameStringRes = R.string.app_name;
         String userAgent = com.google.android.exoplayer2.util.Util.getUserAgent(this, this.getString(appNameStringRes));
         DefaultDataSourceFactory defdataSourceFactory = new DefaultDataSourceFactory(this, userAgent);
+
         Uri uriOfContentUrl = Uri.parse(postPath);
         MediaSource mediaSource = new ProgressiveMediaSource.Factory(defdataSourceFactory).createMediaSource(uriOfContentUrl);  // creating a media source
 
@@ -1455,6 +1472,14 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         mobileShowLL = findViewById(R.id.mobileShowLL);
         btnBoldFontMobilebtn = findViewById(R.id.btnBoldFontMobile);
         btnItalicFontMobilebtn = findViewById(R.id.btnItalicFontMobile);
+        llcolorMobilell = findViewById(R.id.llcolorMobile);
+        llfontMobilell = findViewById(R.id.llfontMobile);
+        llfontAddressll = findViewById(R.id.llfontAddress);
+        llfontBusinessll = findViewById(R.id.llfontBusiness);
+        llfontEmailll = findViewById(R.id.llfontEmail);
+        llcolorEmailll = findViewById(R.id.llcolorEmail);
+        llcolorBusinessll = findViewById(R.id.llcolorBusiness);
+        llcolorAddressll = findViewById(R.id.llcolorAddress);
         btnUnderlineFontMobilebtn = findViewById(R.id.btnUnderlineFontMobile);
 
         btnseekBarMobile = findViewById(R.id.seekBarMobile);
@@ -1604,7 +1629,8 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
             if(mobileIndex == -1){
                 showToast();
             }else {
-                changeSizeView(txtStkrRel.getChildAt(mobileIndex), (float) progress, (float) progress);
+                double index = 0.20 * progress;
+                changeSizeView(txtStkrRel.getChildAt(mobileIndex), (float) index, (float) index);
             }
 
         }
@@ -1628,7 +1654,8 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
             if(emailIndex == -1){
                 showToast();
             }else {
-                changeSizeView(txtStkrRel.getChildAt(emailIndex), (float) progress, (float) progress);
+                double index = 0.20 * progress;
+                changeSizeView(txtStkrRel.getChildAt(emailIndex), (float) index, (float) index);
             }
 
         }
@@ -1652,7 +1679,8 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
             if(businessIndex == -1){
             //    showToast();
             }else {
-                changeSizeView(txtStkrRel.getChildAt(businessIndex),(float) progress,(float) progress);
+                double index = 0.20 * progress;
+                changeSizeView(txtStkrRel.getChildAt(businessIndex),(float) index,(float) index);
             }
 
 
@@ -1678,7 +1706,8 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
             if(addressIndex == -1){
                 showToast();
             }else {
-                changeSizeView(txtStkrRel.getChildAt(addressIndex), (float) progress, (float) progress);
+                double index = 0.20 * progress;
+                changeSizeView(txtStkrRel.getChildAt(addressIndex), (float) index, (float) index);
             }
 
         }
@@ -1703,7 +1732,8 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
             if(logoIndex == -1){
                 showToast();
             }else {
-                changeSizeLogoView(txtStkrRel.getChildAt(logoIndex), (float) progress, (float) progress);
+                double index = 0.20 * progress;
+                changeSizeLogoView(txtStkrRel.getChildAt(logoIndex), (float) index, (float) index);
             }
 
         }
@@ -1974,6 +2004,14 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
 
         btnBoldFontMobilebtn.setOnClickListener(this);
         btnItalicFontMobilebtn.setOnClickListener(this);
+        llcolorMobilell.setOnClickListener(this);
+        llfontMobilell.setOnClickListener(this);
+        llfontAddressll.setOnClickListener(this);
+        llfontBusinessll.setOnClickListener(this);
+        llfontEmailll.setOnClickListener(this);
+        llcolorEmailll.setOnClickListener(this);
+        llcolorBusinessll.setOnClickListener(this);
+        llcolorAddressll.setOnClickListener(this);
         btnUnderlineFontMobilebtn.setOnClickListener(this);
 
         btnBoldFontEmailbtn.setOnClickListener(this);
@@ -2760,6 +2798,109 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
                     Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
                 }else {
                     changeBold(txtStkrRel.getChildAt(emailIndex));
+                }
+                return;
+            case R.id.llcolorAddress:
+                // llcolorAddress
+                if(addressIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    showColorPickerDialog(txtStkrRel.getChildAt(addressIndex));
+
+                }
+                return;
+            case R.id.llcolorBusiness:
+                if(businessIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    showColorPickerDialog(txtStkrRel.getChildAt(businessIndex));
+
+                }
+                return;
+            case R.id.llcolorEmail:
+                if(emailIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    showColorPickerDialog(txtStkrRel.getChildAt(emailIndex));
+
+                }
+                return;
+            case R.id.llfontEmail:
+                if(emailIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                  //  showFontFamilyBottomSheet(txtStkrRel.getChildAt(emailIndex));
+
+
+                    ((GridView) findViewById(R.id.font_gridview_email)).setAdapter(this.adapter);
+
+                    this.adapter.setItemClickCallback((OnClickCallback<ArrayList<String>, Integer, String, Activity>) (arrayList, num, str, activity) -> {
+                        AutofitTextRel autofitTextRel = (AutofitTextRel) txtStkrRel.getChildAt(emailIndex);
+                        // Apply the selected font family to the TextView
+                        autofitTextRel.setTextFont(str);
+                        ThumbnailActivity.this.adapter.setSelected(num.intValue());
+                    });
+                }
+                return;
+            case R.id.llfontAddress:
+                if(addressIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                  //  showFontFamilyBottomSheet(txtStkrRel.getChildAt(addressIndex)); // font_gridview_Address
+
+                    ((GridView) findViewById(R.id.font_gridview_Address)).setAdapter(this.adapter);
+
+                    this.adapter.setItemClickCallback((OnClickCallback<ArrayList<String>, Integer, String, Activity>) (arrayList, num, str, activity) -> {
+                        AutofitTextRel autofitTextRel = (AutofitTextRel) txtStkrRel.getChildAt(addressIndex);
+                        // Apply the selected font family to the TextView
+                        autofitTextRel.setTextFont(str);
+                        ThumbnailActivity.this.adapter.setSelected(num.intValue());
+                    });
+                }
+                return;
+            case R.id.llfontBusiness:
+                if(businessIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                 //   showFontFamilyBottomSheet(txtStkrRel.getChildAt(businessIndex)); font_gridview_Business
+
+                    ((GridView) findViewById(R.id.font_gridview_Business)).setAdapter(this.adapter);
+
+                    this.adapter.setItemClickCallback((OnClickCallback<ArrayList<String>, Integer, String, Activity>) (arrayList, num, str, activity) -> {
+                        AutofitTextRel autofitTextRel = (AutofitTextRel) txtStkrRel.getChildAt(businessIndex);
+                        // Apply the selected font family to the TextView
+                        autofitTextRel.setTextFont(str);
+                        ThumbnailActivity.this.adapter.setSelected(num.intValue());
+                    });
+                }
+                return;
+            case R.id.llfontMobile:
+                if(mobileIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    this.adapter = new FontAdapter(this, getResources().getStringArray(R.array.fonts_array));
+                    this.adapter.setSelected(0);
+
+
+                    ((GridView) findViewById(R.id.font_gridview_mobile)).setAdapter(this.adapter);
+
+                    this.adapter.setItemClickCallback((OnClickCallback<ArrayList<String>, Integer, String, Activity>) (arrayList, num, str, activity) -> {
+                        AutofitTextRel autofitTextRel = (AutofitTextRel) txtStkrRel.getChildAt(mobileIndex);
+                        // Apply the selected font family to the TextView
+                        autofitTextRel.setTextFont(str);
+                        ThumbnailActivity.this.adapter.setSelected(num.intValue());
+                    });
+
+                    /*
+                    showFontFamilyBottomSheet(txtStkrRel.getChildAt(mobileIndex));*/
+                }
+                return;
+            case R.id.llcolorMobile:
+                if(mobileIndex == -1){
+                    Toast.makeText(this,"Element unavailable",Toast.LENGTH_SHORT).show();
+                }else {
+                    showColorPickerDialog(txtStkrRel.getChildAt(mobileIndex));
+
                 }
                 return;
             case R.id.btnItalicFontMobile:
@@ -3780,12 +3921,13 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         MediaScannerConnection.scanFile(context, new String[]{filename}, new String[]{filename.contains("mp4") ? "video/mp4" : "image/png"}, null);
 
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(filename))));
+        Toast.makeText(ThumbnailActivity.this,"Download Successfully",Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(ThumbnailActivity.this, ShareImageActivity.class);
+/*        Intent intent = new Intent(ThumbnailActivity.this, ShareImageActivity.class);
         intent.putExtra("uri", ThumbnailActivity.this.filename);
         intent.putExtra("way", "Poster");
         intent.putExtra("pos_id", postId);
-        ThumbnailActivity.this.startActivity(intent);
+        ThumbnailActivity.this.startActivity(intent);*/
     }
 
     private void compressVideo() {
@@ -4413,7 +4555,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
             autoFitEditText.setText("");
         }
         button.setOnClickListener(view -> dialog.dismiss());
-        button2.setOnClickListener(view -> {
+      /*  button2.setOnClickListener(view -> {
             if (autoFitEditText.getText().toString().trim().length() > 0) {
                 String replace = autoFitEditText.getText().toString().replace("\n", " ");
                 TextInfo textInfo = new TextInfo();
@@ -4513,7 +4655,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
                 }
                 if (ThumbnailActivity.this.layTextMain.getVisibility() == GONE) {
                     Log.i("checkdatavisible", "View.VISIBLE step 2");
-                    ThumbnailActivity.this.layTextMain.setVisibility(View.VISIBLE);
+                    ThumbnailActivity.this.layTextMain.setVisibility(GONE);
                     ThumbnailActivity.this.layTextMain.startAnimation(ThumbnailActivity.this.animSlideUp);
                 }
                 ThumbnailActivity.this.saveBitmapUndu();
@@ -4521,7 +4663,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
                 return;
             }
             Toast.makeText(ThumbnailActivity.this, "Please enter text here.", Toast.LENGTH_SHORT).show();
-        });
+        });*/
         dialog.show();
     }
 
@@ -4964,7 +5106,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private void touchUp(final View view) {
+   /* private void touchUp(final View view) {
 
 
         Log.d("delete", "touch up");
@@ -4980,7 +5122,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
             if (this.layTextMain.getVisibility() == GONE) {
                 Toast.makeText(activity, "12", Toast.LENGTH_SHORT).show();
                 Log.i("checkdatavisible", "View.VISIBLE step 0");
-                this.layTextMain.setVisibility(View.VISIBLE);
+                this.layTextMain.setVisibility(GONE);
                 this.layTextMain.startAnimation(this.animSlideUp);
                 this.layTextMain.post(() -> ThumbnailActivity.this.stickerScrollView(view));
             }
@@ -5006,7 +5148,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
             this.seekbarContainer.startAnimation(this.animSlideDown);
             this.seekbarContainer.setVisibility(GONE);
         }
-    }
+    }*/
 
     public void onDelete() {
         removeScroll();
@@ -5030,7 +5172,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
     }
 
     public void onRotateUp(View view) {
-        touchUp(view);
+//        touchUp(view);
     }
 
     public void onScaleDown(View view) {
@@ -5042,7 +5184,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
     }
 
     public void onScaleUp(View view) {
-        touchUp(view);
+//        touchUp(view);
     }
 
     public void onTouchDown(View view) {
@@ -5063,9 +5205,9 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
 
     public void onTouchUp(View view) {
         Toast.makeText(activity, "14", Toast.LENGTH_SHORT).show();
-        this.checkTouchContinue = false;
-        this.mHandler.removeCallbacks(this.mStatusChecker);
-        touchUp(view);
+//        this.checkTouchContinue = false;
+//        this.mHandler.removeCallbacks(this.mStatusChecker);
+//        touchUp(view);
     }
 
     public void onTouchMoveUpClick(View view) {
@@ -5141,6 +5283,76 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         stickerView.setScaleX(scaleX);
         stickerView.setScaleY(scaleY);
 
+    }
+
+    private void showFontFamilyBottomSheet(View textView) {
+        FontFamilyBottomSheetDialogFragment bottomSheetFragment = new FontFamilyBottomSheetDialogFragment();
+        bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+
+        bottomSheetFragment.setOnFontFamilySelectedListener(new FontFamilyBottomSheetDialogFragment.OnFontFamilySelectedListener() {
+            @Override
+            public void onFontFamilySelected(String fontFamily) {
+                Log.i("checkfontFamily","fontFamily 6 = "+String.valueOf(fontFamily));
+
+                applyFontFamily(fontFamily,textView);
+            }
+        });
+    }
+
+    private void applyFontFamily(String fontFamily,View textView) {
+        Typeface typeface;
+        Log.i("checkfontFamily","fontFamily 7 = "+String.valueOf(fontFamily));
+        switch (fontFamily) {
+            case "Roboto":
+                typeface = Typeface.create("Roboto", Typeface.NORMAL);
+                break;
+            case "Caveat":
+                typeface = Typeface.create("caveat_regular", Typeface.NORMAL);
+                break;
+            case "Arial":
+                typeface = Typeface.create("arial", Typeface.NORMAL);
+                break;
+            // Add more font family cases as needed
+            case "Nunito":
+                typeface = Typeface.create("nunito_sans_regular", Typeface.NORMAL);
+                break;
+            case "Georgia":
+                typeface = Typeface.create("georgia", Typeface.NORMAL);
+                break;
+            case "Merriweather":
+                typeface = Typeface.create("merriweather", Typeface.NORMAL);
+            default:
+                typeface = Typeface.DEFAULT;
+                break;
+        }
+        AutofitTextRel autofitTextRel = (AutofitTextRel) textView;
+        // Apply the selected font family to the TextView
+        autofitTextRel.setTextFont(fontFamily);
+    }
+    private void showColorPickerDialog(View tv) {
+        // Inflate the custom layout for the color picker
+        View view = LayoutInflater.from(this).inflate(R.layout.color_picker_layout, null);
+
+        // Find views in the custom layout
+        final ColorPickerView colorPickerView = view.findViewById(R.id.colorPickerView);
+
+        // Build the AlertDialog
+        androidx.appcompat.app.AlertDialog colorPickerDialog = new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setView(view)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Handle the selected color when the OK button is clicked
+                        int selectedColor = colorPickerView.getColor();
+                        AutofitTextRel autofitTextRel = (AutofitTextRel) tv;
+                        autofitTextRel.setTextColor(selectedColor);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+
+        // Show the AlertDialog
+        colorPickerDialog.show();
     }
     private void changeItalic(View childAt) {
         AutofitTextRel autofitTextRel = (AutofitTextRel) childAt;
@@ -5473,7 +5685,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onActivityResult(int i, int i2, Intent intent) {
-        int i3 = i;
+      /*  int i3 = i;
         int i4 = i2;
         Intent intent2 = intent;
         super.onActivityResult(i, i2, intent);
@@ -5529,7 +5741,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
                     }
                     if (this.layTextMain.getVisibility() == GONE) {
                         Log.i("checkdatavisible", "View.VISIBLE step 1");
-                        this.layTextMain.setVisibility(View.VISIBLE);
+                        this.layTextMain.setVisibility(GONE);
                         this.layTextMain.startAnimation(this.animSlideUp);
                     }
                 }
@@ -5682,7 +5894,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
             new AlertDialog.Builder(this, 16974126).setMessage(Constant.getSpannableString(this, Typeface.DEFAULT, R.string.picUpImg)).setPositiveButton(Constant.getSpannableString(this, Typeface.DEFAULT, R.string.ok), (dialogInterface, i1) -> dialogInterface.cancel()).create().show();
         } else if (i3 == TEXT_ACTIVITY) {
             this.editMode = false;
-        }
+        }*/
     }
 
     private void setBackgroundData(Uri uri) throws IOException {

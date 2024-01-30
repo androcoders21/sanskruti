@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,10 +23,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sanskruti.volotek.AdsUtils.InterstitialsAdsManager;
 import com.sanskruti.volotek.R;
 import com.sanskruti.volotek.adapters.CategoryAdapter;
-import com.sanskruti.volotek.adapters.FeatureAdapter;
+import com.sanskruti.volotek.adapters.FeatureAdapterTwo;
 import com.sanskruti.volotek.adapters.FestivalAdapter;
 import com.sanskruti.volotek.adapters.SliderAdapter;
 import com.sanskruti.volotek.adapters.StoryAdapter;
@@ -50,7 +52,7 @@ public class HomeFragment extends Fragment {
     StoryAdapter storyAdapter;
     FestivalAdapter festivalAdapter;
     CategoryAdapter categoryAdapter;
-    FeatureAdapter featureAdapter;
+    FeatureAdapterTwo featureAdapter;
     AnimatedCategoryAdapter animatedCategoryAdapter;
     PreferenceManager preferenceManager;
 
@@ -75,6 +77,7 @@ public class HomeFragment extends Fragment {
 
         return binding.getRoot();
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -214,7 +217,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        featureAdapter = new FeatureAdapter(activity, "HOME");
+        featureAdapter = new FeatureAdapterTwo(activity, "HOME",this);
         binding.rvHomeFeature.setAdapter(featureAdapter);
         binding.rvHomeFeature.setNestedScrollingEnabled(false);
         binding.rvHomeFeature.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
@@ -239,6 +242,16 @@ public class HomeFragment extends Fragment {
             getData();
         });*/
 
+
+        binding.fabWhatsApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+// Replace "1234567890" with the recipient's phone number, including the country code
+                String phoneNumber = "+918553537373";
+                openWhatsAppChat(phoneNumber);
+            }
+        });
+
         binding.txtViewFestival.setOnClickListener(v -> interstitialsAdsManager.showInterstitialAd(() -> getContext().startActivity(new Intent(getActivity(), FestivalActivity.class))));
 
         binding.txtViewCategory.setOnClickListener(v -> interstitialsAdsManager.showInterstitialAd(() -> getContext().startActivity(new Intent(getActivity(), CategoryActivity.class))));
@@ -247,7 +260,16 @@ public class HomeFragment extends Fragment {
 
     }
 
-
+    private void openWhatsAppChat(String phoneNumber) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            String url = "https://api.whatsapp.com/send?phone=" + phoneNumber;
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+        }
+    }
     private void getData() {
 
 
@@ -306,7 +328,24 @@ public class HomeFragment extends Fragment {
         MyUtils.showResponse(data);
 
     }
-
+    private int currentPage = 0;
+    private final int delayMillis = 3000;
+    private Handler handler = new Handler();
+    // Runnable for auto-scrolling
+    private Runnable autoScroll = new Runnable() {
+        @Override
+        public void run() {
+            if (currentPage == sliderAdapter.getCount() - 1) {
+                currentPage = 0;
+       //         handler.removeCallbacks(autoScroll);
+            } else {
+                currentPage++;
+            }
+            binding.imageSlider.setCurrentItem(currentPage, true);
+            handler.postDelayed(autoScroll, delayMillis);
+        }
+    };
+    SliderAdapter sliderAdapter;
     public void getSliderData() {
 
         Constant.getHomeViewModel(this).getHomeBanners().observe(getViewLifecycleOwner(), sliderItems -> {
@@ -314,7 +353,7 @@ public class HomeFragment extends Fragment {
             if (sliderItems != null) {
 
 
-                SliderAdapter sliderAdapter = new SliderAdapter(getActivity(), sliderItems);
+                sliderAdapter = new SliderAdapter(getActivity(), sliderItems);
 
                 binding.imageSlider.setAdapter(sliderAdapter);
                 binding.imageSlider.setClipToPadding(false);
@@ -322,7 +361,8 @@ public class HomeFragment extends Fragment {
                 binding.imageSlider.setPageTransformer(false, transformer);
 
                 binding.linearLayout61.setVisibility(View.VISIBLE);
-
+                // Auto-scroll the ViewPager
+                handler.postDelayed(autoScroll, delayMillis);
             }
             else {
                 binding.linearLayout61.setVisibility(View.GONE);

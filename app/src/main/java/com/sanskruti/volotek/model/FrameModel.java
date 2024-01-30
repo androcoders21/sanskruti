@@ -12,6 +12,7 @@ public class FrameModel {
 
     @PrimaryKey(autoGenerate = true)
     public int frame_id_auto;
+
     @SerializedName("id")
     private String id;
     @SerializedName("title")

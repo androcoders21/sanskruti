@@ -1,26 +1,56 @@
 package com.sanskruti.volotek.utils;
 
-import static com.sanskruti.volotek.utils.MyUtils.unzip;
+import static androidx.core.content.ContextCompat.startActivity;
+import static com.sanskruti.volotek.utils.MyUtils.unzipFile;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import com.sanskruti.volotek.R;
 import com.sanskruti.volotek.custom.poster.model.Sticker_info;
 import com.sanskruti.volotek.custom.poster.model.Text_infoposter;
 import com.sanskruti.volotek.model.BusinessItem;
 import com.sanskruti.volotek.model.FrameModel;
-import com.downloader.Error;
-import com.downloader.OnDownloadListener;
-import com.downloader.PRDownloader;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class FrameUtils {
 
@@ -71,41 +101,125 @@ public class FrameUtils {
     }
 
 
-    private static void downloadTemplate(Activity context, FrameModel frameModel) {
+    public class DownloadZipTask extends AsyncTask<String, Void, Boolean> {
 
-    //    TemplateUtils.setupProgress(context);
+        private String LOCAL_STORAGE_PATH = "";
+        private String ZIP_FILE_NAME = "testframe1.zip";
+        private FrameModel yourModel;
+        private Activity context;
 
-        downloadId = PRDownloader.download(frameModel.getFrame_zip(), MyUtils.getFolderPath(context, context.getString(R.string.poster_frame)), frameModel.getTitle() + ".zip").build()
-                .setOnProgressListener(progress -> {
+        private String title_without = "";
 
-                }).start(new OnDownloadListener() {
-                    @Override
-                    public void onDownloadComplete() {
+        public DownloadZipTask(Activity context, FrameModel frameModel, String title) {
+            this.yourModel = frameModel;
+            this.context = context;
+            LOCAL_STORAGE_PATH = String.valueOf(MyUtils.getFolderPath(context, context.getString(R.string.poster_frame)));
+            ZIP_FILE_NAME = String.valueOf(title + ".zip");
+            title_without = title;
+        }
 
-                        try {
+        @Override
+        protected Boolean doInBackground(String... params) {
+            String downloadUrl = params[0];
 
-                            unzip(new File(MyUtils.getFolderPath(context, context.getString(R.string.poster_frame)), frameModel.getTitle() + ".zip"), new File(MyUtils.getFolderPath(context, context.getString(R.string.poster_frame))), path -> {
+            try {
+                File directory = new File(MyUtils.getDownloadFolderPath(context, "Sanskruti"));
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                } else {
+                    // Create the file within the pictures directory
+                    File outputFile = new File(directory, ZIP_FILE_NAME);
+                    Log.i("checkErrordata", "1234 : file path: " + outputFile.getAbsolutePath());
+                    Log.i("checkErrordata", "1234 : picturesDirectory path: " + directory.getAbsolutePath());
 
-                            proccessFrame(context, frameModel, new File(path, frameModel.getTitle()).getAbsolutePath(), listner);
+                    Log.i("checkErrordata", "Full File Address: " + outputFile.getAbsolutePath());
+                    Log.i("checkErrordata", "Download url : " + downloadUrl);
+                    URL url = new URL(downloadUrl);
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
+                    InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
+                    FileOutputStream outputStream = new FileOutputStream(outputFile);
 
-                            });
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
 
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
                     }
 
-                    @Override
-                    public void onError(Error error) {
+                    outputStream.close();
+                    inputStream.close();
+                    urlConnection.disconnect();
+                    return true;
 
-                        Toast.makeText(context, "Download Failed.", Toast.LENGTH_SHORT).show();
+                }
 
-                        PRDownloader.cancel(downloadId);
-                      //  TemplateUtils.dismissDialog();
+                Log.i("checkErrordata", "123 Download completed: " + directory.getAbsolutePath() + "/" + ZIP_FILE_NAME);
+            } catch (IOException e) {
+                Log.i("checkErrordata", "Error during download: " + e.getMessage());
+                e.printStackTrace();
+            }
 
-                    }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean check) {
+            Log.i("checkErrordata", "123456789 download complete  = " + String.valueOf(check));
+            try {
+
+
+                File targetDirectory = new File(MyUtils.getDownloadFolderPath(context, "Sanskruti"));
+
+                File file = new File(targetDirectory, ZIP_FILE_NAME);
+
+                Log.i("checkErrordata", "Final : zip file  path: " + file.getAbsolutePath() + " unzip file path = " + targetDirectory.getAbsolutePath());
+
+//                UnzipFileTask unzipTask = new UnzipFileTask(context);
+//                unzipTask.execute(file.getAbsolutePath(), targetDirectory.getAbsolutePath());
+
+                // Check and request MANAGE_EXTERNAL_STORAGE permission if needed
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    context.startActivity(intent);
+                    return; // Wait for permission grant before proceeding
+                }
+                unzipFile(file.getAbsolutePath(), targetDirectory.getAbsolutePath(), path -> {
+                    Log.i("checkErrordata", "Final : file path: " + path);
+                    Log.i("checkErrordata", "Final : Title path: " + yourModel.getTitle()+" real file name = "+title_without);
+                    Log.i("checkErrordata", "Final : path: " + new File(path, yourModel.getTitle()).getAbsolutePath());
+                    proccessFrame(context, yourModel, new File(path, yourModel.getTitle()).getAbsolutePath(), listner);
+
                 });
+            } catch (Exception e) {
+                Toast.makeText(context, "Download Failed.", Toast.LENGTH_SHORT).show();
+                Log.i("checkErrordata", "error response = " + String.valueOf(e.getMessage()));
+                TemplateUtils.dismissDialog();
+//                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final int LENGTH = 5;
+
+    public static String generateRandomString() {
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(LENGTH);
+
+        for (int i = 0; i < LENGTH; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            char randomChar = CHARACTERS.charAt(randomIndex);
+            sb.append(randomChar);
+        }
+
+        return sb.toString();
+    }
+
+    private void downloadTemplate(Activity context, FrameModel frameModel) {
+
+
+        new DownloadZipTask(context, frameModel, generateRandomString()).execute(frameModel.getFrame_zip().replace(" ", ""));
 
 
     }
@@ -130,8 +244,8 @@ public class FrameUtils {
             for (int i = 0; i < jsonArrayLayers.length(); i++) {
 
                 JSONObject jsonObject1 = jsonArrayLayers.getJSONObject(i);
-
-                processJson(context, model, i, jsonObject1);
+                Log.i("checkErrordata", "Final : jsonObject1: " + String.valueOf(jsonObject1));
+                processJson(context, model, i, jsonObject1,path);
 
                 File file = new File(Configure.GetFileDir(context).getPath() + File.separator + "font");
 
@@ -162,7 +276,7 @@ public class FrameUtils {
 
             }
 
-           /// TemplateUtils.dismissDialog();
+            /// TemplateUtils.dismissDialog();
 
             listner.onFrameLoaded(stickerInfoArrayList, textInfoArrayList);
         } catch (Exception e) {
@@ -178,7 +292,7 @@ public class FrameUtils {
         void onLogoDownloadError();
     }
 
-    public static void processJson(Activity context, FrameModel model, int i, JSONObject jsonObject1) throws Exception {
+    public static void processJson(Activity context, FrameModel model, int i, JSONObject jsonObject1,String path) throws Exception {
 
 
         String businessLogo = preferenceManager.getString(Constant.BUSINESS_LOGO_PATH);
@@ -198,12 +312,11 @@ public class FrameUtils {
         String y = String.valueOf(jsonObject1.getInt("y"));
 
 
-
-     String   calcWidth = "";
+        String calcWidth = "";
         String calcHeight = "";
 
-        String   realX = String.valueOf(((int) Math.round(Float.parseFloat(x)) * 100) / templateRealWidth);
-        String  realY = String.valueOf((int) Math.round(Float.parseFloat(y) * 100) / templateRealHeight);
+        String realX = String.valueOf(((int) Math.round(Float.parseFloat(x)) * 100) / templateRealWidth);
+        String realY = String.valueOf((int) Math.round(Float.parseFloat(y) * 100) / templateRealHeight);
 
         calcWidth = String.valueOf(Integer.parseInt(width) * 100 / templateRealWidth + Integer.parseInt(realX));
         calcHeight = String.valueOf(Integer.parseInt(height) * 100 / templateRealHeight + Integer.parseInt(realY));
@@ -215,26 +328,26 @@ public class FrameUtils {
                 Sticker_info info = new Sticker_info();
                 info.setSticker_id(String.valueOf(i));
 
-                String stickerUrl = MyUtils.getFolderPath(context, context.getString(R.string.poster_frame)) + File.separator + model.getTitle() + File.separator + jsonObject1.getString("src").replace("../", "");
+                String stickerUrl = MyUtils.getDownloadFolderPath(context, context.getString(R.string.poster_frame)) + File.separator + model.getTitle() + File.separator + jsonObject1.getString("src").replace("../", "");
+                Log.i("checkErrordata", "Final : path: " + String.valueOf(path));
+                Log.i("checkErrordata", "Final : stickerUrl: " + String.valueOf(stickerUrl));
 
+                if (name.equals("logo")) {
 
-               if (name.equals("logo")) {
+                    if (model.getFrame_category().equals("personal")) {
 
-                   if (model.getFrame_category().equals("personal")) {
+                        info.setSt_image(preferenceManager.getString(Constant.USER_IMAGE_PATH));
 
-                       info.setSt_image(preferenceManager.getString(Constant.USER_IMAGE_PATH));
+                    } else {
 
-                   } else {
+                        info.setSt_image(businessLogo);
+                    }
 
-                       info.setSt_image(businessLogo);
-                   }
+                } else {
+                    info.setSt_image(stickerUrl);
+                }
 
-                }else{
-                   info.setSt_image(stickerUrl);
-               }
-
-               info.setNAME(name);
-
+                info.setNAME(name);
 
 
                 info.setSt_order(String.valueOf(i));
@@ -245,7 +358,8 @@ public class FrameUtils {
                 info.setSt_rotation("0");
                 stickerInfoArrayList.add(info);
 
-            } else if (type.contains("text")) {
+            }
+            else if (type.contains("text")) {
 
                 String color = jsonObject1.getString("color");
                 String text = jsonObject1.getString("text");
@@ -262,14 +376,14 @@ public class FrameUtils {
 
                 fontNames.add(font);
 
-               if (!jsonObject1.has("rotation")) {
+                if (!jsonObject1.has("rotation")) {
 
-                //    jsonObject1.put("size", Integer.parseInt(size) + 15);
-                  //  jsonObject1.put("y", Integer.parseInt(y) + 2);
+                    //    jsonObject1.put("size", Integer.parseInt(size) + 15);
+                    //  jsonObject1.put("y", Integer.parseInt(y) + 2);
 
 
-                   jsonObject1.put("size", (int) Math.round(Integer.parseInt(size) +Integer.parseInt(size)*0.5));
-                   jsonObject1.put("y",  (int) Math.round(Integer.parseInt(y) +Integer.parseInt(y)* 0.002));
+                    jsonObject1.put("size", (int) Math.round(Integer.parseInt(size) + Integer.parseInt(size) * 0.5));
+                    jsonObject1.put("y", (int) Math.round(Integer.parseInt(y) + Integer.parseInt(y) * 0.002));
 
                     y = jsonObject1.getString("y");
 
@@ -327,7 +441,7 @@ public class FrameUtils {
 
                 } else if (name.equals("facebook")) {
 
-                     textInfo.setText(businessItem != null ? businessItem.getSocial_facebook() : "");
+                    textInfo.setText(businessItem != null ? businessItem.getSocial_facebook() : "");
 
                 } else if (name.equals("twitter")) {
 
@@ -338,7 +452,7 @@ public class FrameUtils {
 
                     textInfo.setText(businessItem != null ? businessItem.getSocial_youtube() : "");
 
-                }else if (name.equals("instagram")){
+                } else if (name.equals("instagram")) {
 
                     textInfo.setText(businessItem != null ? businessItem.getSocial_instagram() : "");
 

@@ -24,6 +24,9 @@
     <string name="hint_name">Enter Name</string>
     <string name="hint_email">Enter Email</string>
     <string name="hint_phone_number">Enter Phone Number</string>
+    <string name="hint_twitter">Enter Phone Twitter</string>
+    <string name="hint_instagram">Enter Phone Instagram</string>
+    <string name="hint_facebook">Enter Phone Facebook</string>
     <string name="hint_designation">Enter Your Designation</string>
     <string name="login__fail">SignIn Failed</string>
     <string name="login__fail_account">Cannot SignIn your account</string>
@@ -412,10 +415,13 @@
     <string name="term_of_services">Term of Services</string>
     <string name="continue_with_google">Continue With Google</string>
     <string name="continue_with_phone_number">Continue With phone Number</string>
-    <string name="your_business">Your Business</string>
+    <string name="your_business">Your Profile</string>
     <string name="hint_profile">Please Select Profile</string>
     <string name="services">Services</string>
     <string name="swipe_to_change_frames"><![CDATA[<< Swipe to change frames >>]]></string>
+    <string name="political_profile">Political Profile</string>
+    <string name="business_profile">Business Profile</string>
+    <string name="welcome_back">Welcome back</string>
 
 
 </resources>

@@ -56,9 +56,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/iv_edit"
                     android:gravity="center"
-                    android:layout_centerVertical="true"
                     android:orientation="vertical">
 
                     <TextView
@@ -86,8 +86,8 @@
                     android:id="@+id/iv_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-android:layout_centerVertical="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/ivdelete"
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/_15sdp"
                     android:background="@drawable/round_bg">
@@ -107,6 +107,15 @@ android:layout_centerVertical="true"
                         android:textSize="@dimen/_8sdp"
                         app:drawableStartCompat="@drawable/ic_edit_" />
                 </LinearLayout>
+                <ImageView
+                    android:id="@+id/ivdelete"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/baseline_delete_24"/>
 
             </RelativeLayout>
 

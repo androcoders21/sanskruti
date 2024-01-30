@@ -7,8 +7,13 @@ import android.content.SharedPreferences;
 public class PreferenceManager {
 
     private static final String PREF_NAME = "festival_pref";
+    private static final String PREF_NAME_TWO = "festival_pref_two";
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+
+
+    SharedPreferences prefTwo;
+    SharedPreferences.Editor editorTwo;
     Context _context;
     int PRIVATE_MODE = 0;
 
@@ -17,6 +22,10 @@ public class PreferenceManager {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
+
+
+        prefTwo = _context.getSharedPreferences(PREF_NAME_TWO, PRIVATE_MODE);
+        editorTwo = prefTwo.edit();
     }
 
 
@@ -29,6 +38,7 @@ public class PreferenceManager {
         editor.putString(PREF_NAME, VAL);
         editor.commit();
     }
+
 
     public void setInt(String PREF_NAME, int VAL) {
         editor.putInt(PREF_NAME, VAL);
@@ -66,6 +76,17 @@ public class PreferenceManager {
             return pref.getString(PREF_NAME, null);
         }
         return "";
+    }
+
+    public String getStringTwo(String PREF_NAME) {
+        if (prefTwo.contains(PREF_NAME)) {
+            return prefTwo.getString(PREF_NAME, null);
+        }
+        return "";
+    }
+    public void setStringTwo(String PREF_NAME, String VAL) {
+        editorTwo.putString(PREF_NAME, VAL);
+        editorTwo.commit();
     }
 
     public int getInt(String key) {

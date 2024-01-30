@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- fragment_font_family_bottom_sheet.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/white"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnApplyFont"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Apply Font"/>
+</LinearLayout>

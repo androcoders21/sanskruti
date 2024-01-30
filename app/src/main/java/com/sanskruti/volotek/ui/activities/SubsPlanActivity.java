@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,6 +48,7 @@ public class SubsPlanActivity extends AppCompatActivity {
 
         Constant.getHomeViewModel(this).getSubscriptionsPlanList().observe(this, subsPlanItems -> {
 
+            Log.i("getPlanDtataLucky","Model = "+String.valueOf(subsPlanItems));
             if (subsPlanItems != null) {
 
                 subsPlanAdapter.subsPlanItemList(subsPlanItems);

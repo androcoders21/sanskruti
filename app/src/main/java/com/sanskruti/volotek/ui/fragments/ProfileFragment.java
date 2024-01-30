@@ -19,7 +19,9 @@ import com.sanskruti.volotek.R;
 import com.sanskruti.volotek.binding.GlideDataBinding;
 import com.sanskruti.volotek.databinding.FragmentProfileBinding;
 import com.sanskruti.volotek.model.UserItem;
+import com.sanskruti.volotek.ui.activities.AddBusinessActivity;
 import com.sanskruti.volotek.ui.activities.CustomSplashActivity;
+import com.sanskruti.volotek.ui.activities.PoliticalProfileDetailsEditActivity;
 import com.sanskruti.volotek.ui.activities.PrivacyActivity;
 import com.sanskruti.volotek.ui.activities.ProfileEditActivity;
 import com.sanskruti.volotek.ui.activities.ServicesActivity;
@@ -71,6 +73,21 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setProfile() {
+
+        binding.ivBussi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             /*   Intent intent = new Intent(context, AddBusinessActivity.class);
+                intent.putExtra("Action", "Insert");
+                startActivity(intent);*/
+                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"bus");
+
+                // Or using static method
+                // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
+
+                bottomSheetFragment.show(getParentFragmentManager(), bottomSheetFragment.getTag());
+            }
+        });
         userItem = Constant.getUserItem(context);
         GlideDataBinding.bindImage(binding.circularImageView, userItem.getUserImage());
         binding.txtName.setText(userItem.getUserName());
@@ -96,6 +113,39 @@ public class ProfileFragment extends Fragment {
         }
 
         binding.ivEdit.setOnClickListener(v -> startActivity(new Intent(context, ProfileEditActivity.class)));
+
+
+        binding.ivGetInTouch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Replace "1234567890" with the recipient's phone number, including the country code
+                String phoneNumber = "+918553537373";
+                openWhatsAppChat(phoneNumber);
+            }
+        });
+        binding.ivEditPolitical.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"profile");
+
+                // Or using static method
+                // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
+
+                bottomSheetFragment.show(getParentFragmentManager(), bottomSheetFragment.getTag());
+            }
+        });
+        binding.ivEditPolitical.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"profile");
+
+                // Or using static method
+                // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
+
+                bottomSheetFragment.show(getParentFragmentManager(), bottomSheetFragment.getTag());
+            }
+        });
+     //   binding.ivEditPolitical.setOnClickListener(v -> startActivity(new Intent(context, PoliticalProfileDetailsEditActivity.class)));
 
         binding.rlSetting.setOnClickListener(v -> startActivity(new Intent(context, SettingActivity.class)));
 
@@ -163,5 +213,14 @@ public class ProfileFragment extends Fragment {
         });
 
     }
-
+    private void openWhatsAppChat(String phoneNumber) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            String url = "https://api.whatsapp.com/send?phone=" + phoneNumber;
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

@@ -122,6 +122,7 @@ public class Constant {
     public static final String USER_PHONE = "USER_PHONE";
     public static final String USER_DESIGNATION = "USER_DESIGNATION";
     public static final String USER_EMAIL = "USER_EMAIL";
+    public static final String USER_POLITICAL_PROFILE = "USER_POLITICAL_PROFILE";
     public static final String USER_PASSWORD = "password";
     public static final String USER_IMAGE = "USER_IMAGE";
     public static final String USER_LANGUAGE = "USER_LANGUAGE";

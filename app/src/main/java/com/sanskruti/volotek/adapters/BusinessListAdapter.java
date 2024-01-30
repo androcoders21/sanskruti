@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -88,6 +90,12 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
             context.startActivity(intent);
         });
 
+        holder.ivIvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setupDefaultBusinessDelete(holder, position);
+            }
+        });
 
         holder.rawLayout.setOnClickListener(v -> {
 
@@ -98,7 +106,43 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
 
         });
     }
+    private void setupDefaultBusinessDelete(@NonNull ViewHolder holder, int position) {
 
+        UniversalDialog dialog = new UniversalDialog(context, false);
+
+        dialog.showLoadingDialog(context,context.getString(R.string.setting_default));
+
+        ApiClient.getApiDataService().setDefaultBusiness("delete", preferenceManager.getString(Constant.USER_ID), businessItems.get(position).businessid).
+                enqueue(new Callback<BusinessItem>() {
+                    @Override
+                    public void onResponse(Call<BusinessItem> call, Response<BusinessItem> response) {
+
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            BusinessItem businessItem = response.body();
+
+
+
+
+                           /* onItemClickListener.onItemClick(holder.itemView, position);
+
+
+                            Constant.setDefaultBusiness(context, businessItem);*/
+
+                            Toast.makeText(context,"Successfully Business Profile Delete. ", Toast.LENGTH_SHORT).show();
+
+                            dialog.dissmissLoadingDialog();
+
+                            notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BusinessItem> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+    }
 
     private void setupDefaultBusiness(@NonNull ViewHolder holder, int position) {
 
@@ -155,6 +199,8 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
         private LinearLayout rawLayout;
         private LinearLayout cvBusinessEdit;
 
+        private ImageView ivIvDelete;
+
         public ViewHolder(View v) {
 
             super(v);
@@ -165,6 +211,8 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
             cvBusinessEdit = v.findViewById(R.id.iv_edit);
             tvEdit = v.findViewById(R.id.tv_edit);
             rawLayout = v.findViewById(R.id.raw_layout);
+
+            ivIvDelete = v.findViewById(R.id.ivdelete);
 
         }
     }

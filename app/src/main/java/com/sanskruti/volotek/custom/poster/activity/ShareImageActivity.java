@@ -1,7 +1,7 @@
 package com.sanskruti.volotek.custom.poster.activity;
 
-import static com.sanskruti.volotek.utils.MyUtils.buttonClick;
 import static com.google.android.exoplayer2.ui.PlayerView.SHOW_BUFFERING_WHEN_PLAYING;
+import static com.sanskruti.volotek.utils.MyUtils.buttonClick;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -24,12 +24,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.sanskruti.volotek.AdsUtils.InterstitialsAdsManager;
-import com.sanskruti.volotek.BuildConfig;
-import com.sanskruti.volotek.R;
-import com.sanskruti.volotek.ui.activities.MainActivity;
-import com.sanskruti.volotek.ui.activities.SubsPlanActivity;
-import com.sanskruti.volotek.utils.PreferenceManager;
 import com.bumptech.glide.Glide;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -41,6 +35,13 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.sanskruti.volotek.AdsUtils.InterstitialsAdsManager;
+import com.sanskruti.volotek.BuildConfig;
+import com.sanskruti.volotek.R;
+import com.sanskruti.volotek.ui.activities.MainActivity;
+import com.sanskruti.volotek.ui.activities.SubsPlanActivity;
+import com.sanskruti.volotek.utils.PreferenceManager;
 import com.stepstone.apprating.AppRatingDialog;
 
 import java.io.File;
@@ -75,9 +76,9 @@ public class ShareImageActivity extends AppCompatActivity implements View.OnClic
 
         path = getIntent().getStringExtra("uri");
 
-        Log.d("dataexported","dataexported 0 :"+path);
+        Log.d("dataexported", "dataexported 0 :" + path);
 
-
+        Log.i("checkdatafilePath", "file Path = " + path);
         if (path != null && path.endsWith(".mp4")) {
             file_name = System.currentTimeMillis() + ".mp4";
             playerview.setVisibility(View.VISIBLE);
@@ -96,10 +97,12 @@ public class ShareImageActivity extends AppCompatActivity implements View.OnClic
 
                 Glide.with(this).load(path).placeholder(R.drawable.spaceholder).into(poster_iv);
 
-                Log.d("dataexported","dataexported 1 :"+path);
+                Log.d("dataexported", "dataexported 1 :" + path);
 
                 File root = new File(Environment.getExternalStorageDirectory() + File.separator
-                        + Environment.DIRECTORY_PICTURES + File.separator + getString(R.string.app_name) + File.separator +file_name);
+                        + Environment.DIRECTORY_PICTURES + File.separator + getString(R.string.app_name) + File.separator + file_name);
+
+                Log.i("checkdatafilePath", "root Path = " + root.getAbsolutePath());
 
            /*     try {
 
@@ -109,11 +112,13 @@ public class ShareImageActivity extends AppCompatActivity implements View.OnClic
                 } catch (Exception e) {
 
                     e.printStackTrace();
+                     FirebaseCrashlytics.getInstance().recordException(e);
 
                 }*/
 
             } catch (Exception e) {
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         }
 
@@ -190,7 +195,7 @@ public class ShareImageActivity extends AppCompatActivity implements View.OnClic
                 case R.id.more:
 
                     view.startAnimation(buttonClick);
-                    interstitialsAdsManager.showInterstitialAd(() -> shareMoreButton());
+                    interstitialsAdsManager.showInterstitialAd(() -> openGalleryForImage());
                     return;
 
 
@@ -199,7 +204,22 @@ public class ShareImageActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    private void openGalleryForImage() {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            File file = new File(path);
+            Uri uri = Uri.fromFile(file);
+            intent.setDataAndType(uri, "image/*");
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
+    }
+
     private void shareMoreButton() {
+
+
         try {
 
             Intent intent = new Intent(Intent.ACTION_SEND);
@@ -212,6 +232,7 @@ public class ShareImageActivity extends AppCompatActivity implements View.OnClic
 
         } catch (Exception e) {
             e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 
@@ -245,6 +266,7 @@ public class ShareImageActivity extends AppCompatActivity implements View.OnClic
                 startActivity(intent);
             } catch (Exception e) {
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
             Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show();
@@ -265,6 +287,7 @@ public class ShareImageActivity extends AppCompatActivity implements View.OnClic
                 startActivity(Intent.createChooser(intent, "Share Gif."));
             } catch (Exception e) {
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
             Toast.makeText(this, "Facebook not installed", Toast.LENGTH_SHORT).show();
@@ -284,6 +307,7 @@ public class ShareImageActivity extends AppCompatActivity implements View.OnClic
                 startActivity(intent);
             } catch (Exception e) {
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
             Toast.makeText(this, "Instagram not installed", Toast.LENGTH_SHORT).show();
@@ -318,10 +342,12 @@ public class ShareImageActivity extends AppCompatActivity implements View.OnClic
                     shareImageActivity.sendBroadcast(new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE", FileProvider.getUriForFile(shareImageActivity2, ShareImageActivity.this.getApplicationContext().getPackageName() + ".provider", ShareImageActivity.this.pictureFile)));
                 } catch (Exception e) {
                     e.printStackTrace();
+                    FirebaseCrashlytics.getInstance().recordException(e);
                 }
                 Thread.sleep(1000);
             } catch (Exception e) {
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
             progressDialog.dismiss();
         }).start();

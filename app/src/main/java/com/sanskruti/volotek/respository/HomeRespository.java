@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.Gson;
 import com.sanskruti.volotek.api.ApiClient;
 import com.sanskruti.volotek.api.ApiService;
 import com.sanskruti.volotek.api.ApiStatus;
@@ -147,12 +148,13 @@ public class HomeRespository {
         apiService.getSubscriptionsPlanList().enqueue(new Callback<List<SubsPlanItem>>() {
             @Override
             public void onResponse(Call<List<SubsPlanItem>> call, Response<List<SubsPlanItem>> response) {
-
+                Log.i("getPlanDtataLucky","body = "+String.valueOf(response.body()));
                 data.setValue(response.body());
             }
 
             @Override
             public void onFailure(Call<List<SubsPlanItem>> call, Throwable t) {
+                Log.i("getPlanDtataLucky","Message = "+String.valueOf(t.getMessage()));
                 Log.d("onResponse___", " E-> " + t.getMessage());
                 data.setValue(null);
             }
@@ -320,6 +322,7 @@ public class HomeRespository {
         apiService.getCustomFrames(user_id,type, ratio).enqueue(new Callback<FrameResponse>() {
             @Override
             public void onResponse(Call<FrameResponse> call, Response<FrameResponse> response) {
+                Log.i("checkframdata","data = "+new Gson().toJson(response.body()));
                 data.setValue(response.body());
             }
 

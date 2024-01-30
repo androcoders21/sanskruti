@@ -19,8 +19,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp"
             android:layout_margin="@dimen/_4sdp"
             app:cardCornerRadius="@dimen/_5sdp"
             app:cardElevation="@dimen/_2sdp"
@@ -63,25 +63,23 @@
                     tools:text="24, Jun 2022" />
 
 
-                <TextView
-                    android:id="@+id/txt_fest_name"
-                    android:layout_width="@dimen/_90sdp"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:text="@{festivalData.name}"
-                    android:textColor="@color/al_white"
-                    app:fonts='@{"bold"}'
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_fest_image"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/iv_fest_image"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:textSize='@{"font_body_xs_size"}' />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
-
+        <TextView
+            android:id="@+id/txt_fest_name"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:layout_marginTop="5dp"
+            android:text="@{festivalData.name}"
+            android:textColor="@color/black"
+            app:fonts='@{"bold"}'
+            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:textSize='@{"font_body_xxs_size"}' />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

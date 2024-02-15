@@ -8,16 +8,19 @@ import com.sanskruti.volotek.custom.animated_video.model.ModelAudio;
 import com.sanskruti.volotek.model.AppInfos;
 import com.sanskruti.volotek.model.CategoryItem;
 import com.sanskruti.volotek.model.CouponItem;
+import com.sanskruti.volotek.model.DeletePoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.DigitalCardModel;
 import com.sanskruti.volotek.model.FeatureItem;
 import com.sanskruti.volotek.model.FestivalItem;
 import com.sanskruti.volotek.model.FrameResponse;
 import com.sanskruti.volotek.model.HomeItem;
 import com.sanskruti.volotek.model.LanguageItem;
+import com.sanskruti.volotek.model.PoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.PostItem;
 import com.sanskruti.volotek.model.ServiceItem;
 import com.sanskruti.volotek.model.SliderItem;
 import com.sanskruti.volotek.model.SubsPlanItem;
+import com.sanskruti.volotek.model.politicalProfileModel;
 import com.sanskruti.volotek.respository.HomeRespository;
 
 import java.util.List;
@@ -68,6 +71,18 @@ public class HomeViewModel extends ViewModel {
         return respository.getCategories(type);
     }
 
+
+    public LiveData<PoliticalProfileBaseModel> getAllPoliticalProfile(String userId) {
+
+        return respository.getAllPoliticalProfile(userId);
+    }
+
+
+
+    public LiveData<DeletePoliticalProfileBaseModel> deletePoliticalProfile(String userId) {
+
+        return respository.deletePoliticalProfile(userId);
+    }
     public LiveData<FrameResponse> getFrames(String ratio, String type, String userId) {
 
         return respository.getCustomFrame(userId,type, ratio);

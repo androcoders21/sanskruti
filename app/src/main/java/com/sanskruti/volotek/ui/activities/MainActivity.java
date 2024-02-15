@@ -410,9 +410,9 @@ public class MainActivity extends BaseActivity {
                     return true;
                 case R.id.custom_menu:
 
-//                    navController.navigate(R.id.customFragment);
-//                    topBar(R.string.menu_custom, View.GONE, View.VISIBLE, View.VISIBLE, View.VISIBLE);
-                    Toast.makeText(activity, "Coming Soon", Toast.LENGTH_SHORT).show();
+                    navController.navigate(R.id.customFragment);
+                    topBar(R.string.menu_custom, View.GONE, View.VISIBLE, View.VISIBLE, View.VISIBLE);
+                 //   Toast.makeText(activity, "Coming Soon", Toast.LENGTH_SHORT).show();
                     return true;
                 case R.id.business_menu:
 

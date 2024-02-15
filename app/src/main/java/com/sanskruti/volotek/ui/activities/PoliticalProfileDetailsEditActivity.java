@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -25,9 +24,13 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.gson.Gson;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.sanskruti.volotek.AdsUtils.AdsUtils;
+import com.sanskruti.volotek.AdsUtils.InterstitialsAdsManager;
 import com.sanskruti.volotek.R;
 import com.sanskruti.volotek.binding.GlideDataBinding;
 import com.sanskruti.volotek.model.ItemPolitical;
@@ -36,18 +39,20 @@ import com.sanskruti.volotek.utils.ImageCropperFragment;
 import com.sanskruti.volotek.utils.NetworkConnectivity;
 import com.sanskruti.volotek.utils.PreferenceManager;
 import com.sanskruti.volotek.utils.Util;
+import com.sanskruti.volotek.viewmodel.UserViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
     PreferenceManager preferenceManager;
     List<ItemPolitical> items;
+    String Name = "NA",Phone = "NA",Email = "NA",Designation1 = "NA",Designation2 = "NA",Facebook = "NA", Instagram = "NA",Twitter = "NA", profileImage = "NA",
+            PartyImage = "NA", Leader1 = "NA", Leader2 = "NA", Leader3 = "NA", Leader4 = "NA", Leader5 = "NA", Leader6 = "NA";
     String profileImagePath = "", profileImagePathParty = "", profileImagePathLeader1 = "", profileImagePathLeader2 = "", profileImagePathLeader3 = "", profileImagePathLeader4 = "", profileImagePathLeader5 = "", profileImagePathLeader6 = "";
     CircularImageView ivAddImg, ivAddImgParty, ivAddImgLeader1, ivAddImgLeader2, ivAddImgLeader3, ivAddImgLeader4, ivAddImgLeader5, ivAddImgLeader6;
     private EditText etName, etEmail, etDesignation1, etDesignation2, etPhone, etFacebookUsername, etInstagramUsername, etTwitterUsername;
@@ -59,6 +64,10 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
     private String Action = "NA";
     private Dialog dialog;
     private boolean checkTwo = false;
+    InterstitialsAdsManager interstitialsAdsManager;
+
+
+    UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +86,10 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
     }
 
     private void init() {
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        // load Ads
+        new AdsUtils(this).showBannerAds(this);
+        interstitialsAdsManager = new InterstitialsAdsManager(this);
         preferenceManager = new PreferenceManager(this);
 
 
@@ -245,9 +258,9 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (validate()) {
+                    interstitialsAdsManager.showInterstitialAd(() -> makeJSON());
 
-
-                    makeJSON();
+                    /*  makeJSON();*/
                 }
             }
         });
@@ -257,9 +270,156 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
         Random random = new Random();
         return random.nextInt(max - min + 1) + min;
     }
+
     String profileIdOther = "";
+
     private void makeJSON() {
-        try {
+        prgDialog.show();
+
+
+        String name = etName.getText().toString();
+        String email = etEmail.getText().toString();
+        String designation1 = etDesignation1.getText().toString();
+        String designation2 = etDesignation2.getText().toString();
+        String phone = etPhone.getText().toString();
+        String facebookUsername = etFacebookUsername.getText().toString();
+        String twitterUsername = etTwitterUsername.getText().toString();
+        String instagramUsername = etInstagramUsername.getText().toString();
+
+
+        if (Action != null) {
+            if (Action.equalsIgnoreCase("update")) {
+                Log.i("getJSONDataUpdate", "RESPONSE profileIdOther -->" + String.valueOf(profileIdOther));
+
+                if(name.equalsIgnoreCase(Name)){
+                    name = null;
+                }
+                if(phone.equalsIgnoreCase(Phone)){
+                    phone = null;
+                }
+                if(email.equalsIgnoreCase(Email)){
+                    email = null;
+                }
+                if(designation1.equalsIgnoreCase(Designation1)){
+                    designation1 = null;
+                }
+                if(designation2.equalsIgnoreCase(Designation2)){
+                    designation2 = null;
+                }
+                if(facebookUsername.equalsIgnoreCase(Facebook)){
+                    facebookUsername = null;
+                }
+                if(twitterUsername.equalsIgnoreCase(Twitter)){
+                    twitterUsername = null;
+                }
+                if(instagramUsername.equalsIgnoreCase(Instagram)){
+                    instagramUsername = null;
+                }
+                if(profileImagePathLeader1.equalsIgnoreCase(Leader1)){
+                    profileImagePathLeader1 = null;
+                }
+                if(profileImagePathLeader2.equalsIgnoreCase(Leader2)){
+                    profileImagePathLeader2 = null;
+                }
+                if(profileImagePathLeader3.equalsIgnoreCase(Leader3)){
+                    profileImagePathLeader3 = null;
+                }
+                if(profileImagePathLeader4.equalsIgnoreCase(Leader4)){
+                    profileImagePathLeader4 = null;
+                }
+                if(profileImagePathLeader5.equalsIgnoreCase(Leader5)){
+                    profileImagePathLeader5 = null;
+                }
+                if(profileImagePathLeader6.equalsIgnoreCase(Leader6)){
+                    profileImagePathLeader6 = null;
+                }
+                if(profileImagePath.equalsIgnoreCase(profileImage)){
+                    profileImagePath = null;
+                }
+                if(profileImagePathParty.equalsIgnoreCase(PartyImage)){
+                    profileImagePathParty = null;
+                }
+                //    String profileId = Action.equalsIgnoreCase("update") ? profileIdOther : null;
+                userViewModel.updatePolitical(profileIdOther,preferenceManager.getString(Constant.USER_ID),
+                        profileImagePath,
+                        "",
+                        profileImagePathParty,
+                        profileImagePathLeader1,
+                        profileImagePathLeader2,
+                        profileImagePathLeader3,
+                        profileImagePathLeader4,
+                        profileImagePathLeader5,
+                        profileImagePathLeader6,
+                        name,
+                        phone,
+                        email,
+                        facebookUsername,
+                        twitterUsername,
+                        instagramUsername,
+                        designation1,
+                        designation2).observe(this, businessItem -> {
+
+                    if (businessItem != null) {
+                        prgDialog.dismiss();
+                        Log.i("getJSONDataUpdate", "RESPONSE-->" + new Gson().toJson(businessItem));
+
+                        //    Toast.makeText(PoliticalProfileDetailsEditActivity.this, "Successfully Added", Toast.LENGTH_SHORT).show();
+
+                        Util.showToast(PoliticalProfileDetailsEditActivity.this, "Political Profile Update Successfully.");
+
+
+//                        setResult(RESULT_OK);
+//                        finish();
+
+                    }
+
+
+                });
+            } else {
+
+
+                //    String profileId = Action.equalsIgnoreCase("update") ? profileIdOther : null;
+                userViewModel.submitPolitical(preferenceManager.getString(Constant.USER_ID),
+                        profileImagePath,
+                        "",
+                        profileImagePathParty,
+                        profileImagePathLeader1,
+                        profileImagePathLeader2,
+                        profileImagePathLeader3,
+                        profileImagePathLeader4,
+                        profileImagePathLeader5,
+                        profileImagePathLeader6,
+                        name,
+                        phone,
+                        email,
+                        facebookUsername,
+                        twitterUsername,
+                        instagramUsername,
+                        designation1,
+                        designation2).observe(this, businessItem -> {
+
+                    if (businessItem != null) {
+                        prgDialog.dismiss();
+                        Log.i("getJSONData", "RESPONSE-->" + new Gson().toJson(businessItem));
+                        Log.i("RESPONSE", "RESPONSE-->" + new Gson().toJson(businessItem));
+
+                    //    Toast.makeText(PoliticalProfileDetailsEditActivity.this, "Successfully Added", Toast.LENGTH_SHORT).show();
+                        prgDialog.dismiss();
+                        Util.showToast(PoliticalProfileDetailsEditActivity.this, "Political Profile Create Successfully.");
+
+
+                        setResult(RESULT_OK);
+                        finish();
+
+                    }
+
+
+                });
+
+
+            }
+        }
+      /*  try {
             if (!networkConnectivity.isConnected()) {
                 Util.showToast(this, getString(R.string.error_message__no_internet));
                 return;
@@ -333,35 +493,35 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             e.printStackTrace();
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.i("getJSONData", "error one = " + e.getMessage().toString());
-        }
+        }*/
     }
 
     private void getDataShare() {
-        String userDataString = preferenceManager.getStringTwo(Constant.USER_POLITICAL_PROFILE);
-        // Retrieve JSONArray string from SharedPreferences
-
-        // Convert JSONArray string back to List<User>
-        Log.i("getJSONData", " Step 1 userDataString = " + userDataString.toString());
-        if (!userDataString.isEmpty()) {
-            try {
-                JSONArray jsonArrayModel = new JSONArray(userDataString);
-                for (int i = 0; i < jsonArrayModel.length(); i++) {
-                    JSONObject userObject = jsonArrayModel.getJSONObject(i);
-                    String id = userObject.getString("pUserId");
-
-                    jsonArray.put(jsonArrayModel.getJSONObject(i));
-
-
-                }
-                Log.i("getJSONData", "Step 2 JSON Data = " + jsonArray.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-                FirebaseCrashlytics.getInstance().recordException(e);
-                Log.i("getJSONData", "error two = " + e.getMessage().toString());
-            }
-        } else {
-            Log.i("getJSONData", "Step 3 userDataString two = " + userDataString.toString());
-        }
+//        String userDataString = preferenceManager.getStringTwo(Constant.USER_POLITICAL_PROFILE);
+//        // Retrieve JSONArray string from SharedPreferences
+//
+//        // Convert JSONArray string back to List<User>
+//        Log.i("getJSONData", " Step 1 userDataString = " + userDataString.toString());
+//        if (!userDataString.isEmpty()) {
+//            try {
+//                JSONArray jsonArrayModel = new JSONArray(userDataString);
+//                for (int i = 0; i < jsonArrayModel.length(); i++) {
+//                    JSONObject userObject = jsonArrayModel.getJSONObject(i);
+//                    String id = userObject.getString("pUserId");
+//
+//                    jsonArray.put(jsonArrayModel.getJSONObject(i));
+//
+//
+//                }
+//                Log.i("getJSONData", "Step 2 JSON Data = " + jsonArray.toString());
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//                FirebaseCrashlytics.getInstance().recordException(e);
+//                Log.i("getJSONData", "error two = " + e.getMessage().toString());
+//            }
+//        } else {
+//            Log.i("getJSONData", "Step 3 userDataString two = " + userDataString.toString());
+//        }
 
 
         Bundle bundle = getIntent().getExtras();
@@ -371,9 +531,115 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             if (Action != null) {
                 if (Action.equalsIgnoreCase("update")) {
                     profileIdOther = bundle.getString("profileId");
-                    try {
+
+                    //    String profileId = Action.equalsIgnoreCase("update") ? profileIdOther : null;
+                    userViewModel.getPolitical(profileIdOther).observe(this, businessItem -> {
+
+                        if (businessItem != null) {
+                            prgDialog.dismiss();
+                            Log.i("getJSONData", "RESPONSE-->" + new Gson().toJson(businessItem));
+                            Log.i("RESPONSE", "RESPONSE-->" + new Gson().toJson(businessItem));
+
+                            //    Toast.makeText(PoliticalProfileDetailsEditActivity.this, "Successfully Added", Toast.LENGTH_SHORT).show();
+
+                            String id = businessItem.profiles.pUserId;
+
+
+
+                            if(businessItem.profiles.pName != null){
+                                Name = businessItem.profiles.pName;
+                                etName.setText(businessItem.profiles.pName);
+                            }
+                            if(businessItem.profiles.pPhone != null){
+                                Name = businessItem.profiles.pName;
+                                etPhone.setText(businessItem.profiles.pPhone);
+                            }
+
+                            if(businessItem.profiles.pEmail != null){
+                                Email = businessItem.profiles.pEmail;
+                                etEmail.setText(businessItem.profiles.pEmail);
+                            }
+                            if(businessItem.profiles.pDesignation1 != null){
+                                Designation1 = businessItem.profiles.pDesignation1;
+                                etDesignation1.setText(businessItem.profiles.pDesignation1);
+                            }
+                            if(businessItem.profiles.pDesignation2 != null){
+                                Designation2 = businessItem.profiles.pDesignation2;
+                                etDesignation2.setText(businessItem.profiles.pDesignation2);
+                            }
+
+                            if(businessItem.profiles.pFacebookUsername != null){
+                                Facebook = businessItem.profiles.pFacebookUsername;
+                                etFacebookUsername.setText(businessItem.profiles.pFacebookUsername);
+                            }
+                            if(businessItem.profiles.pInstagramUsername != null){
+                                Instagram = businessItem.profiles.pInstagramUsername;
+                                etInstagramUsername.setText(businessItem.profiles.pInstagramUsername);
+                            }
+                            if(businessItem.profiles.pTwitterUsername != null){
+                                Twitter = businessItem.profiles.pTwitterUsername;
+                                etTwitterUsername.setText(businessItem.profiles.pTwitterUsername);
+                            }
+
+                            if(businessItem.profiles.pInstagramUsername != null){
+                                profileImage = businessItem.profiles.pProfileImg;
+                                profileImagePath = businessItem.profiles.pProfileImg;
+                            }
+                            if(businessItem.profiles.pTwitterUsername != null){
+                                PartyImage = businessItem.profiles.pPartyImg;
+                                profileImagePathParty = businessItem.profiles.pPartyImg;
+                            }
+
+
+                            if(businessItem.profiles.pLeaderImg1 != null){
+                                Leader1 = businessItem.profiles.pLeaderImg1;
+                                profileImagePathLeader1 = businessItem.profiles.pLeaderImg1;
+                            }
+                            if(businessItem.profiles.pLeaderImg2 != null){
+                                Leader2 = businessItem.profiles.pLeaderImg2;
+                                profileImagePathLeader2 = businessItem.profiles.pLeaderImg2;
+                            }
+
+                            if(businessItem.profiles.pLeaderImg3 != null){
+                                Leader3 = businessItem.profiles.pLeaderImg3;
+                                profileImagePathLeader3 = businessItem.profiles.pLeaderImg3;
+                            }
+                            if(businessItem.profiles.pLeaderImg4 != null){
+                                Leader4 = businessItem.profiles.pLeaderImg4;
+                                profileImagePathLeader4 = businessItem.profiles.pLeaderImg4;
+                            }
+
+                            if(businessItem.profiles.pLeaderImg5 != null){
+                                Leader5 = businessItem.profiles.pLeaderImg5;
+                                profileImagePathLeader5 = businessItem.profiles.pLeaderImg5;
+                            }
+                            if(businessItem.profiles.pLeaderImg6 != null){
+                                Leader6 = businessItem.profiles.pLeaderImg6;
+                                profileImagePathLeader6 = businessItem.profiles.pLeaderImg6;
+                            }
+
+
+
+                            GlideDataBinding.bindImage(ivAddImg, profileImagePath);
+                            GlideDataBinding.bindImage(ivAddImgParty, profileImagePathParty);
+                            GlideDataBinding.bindImage(ivAddImgLeader1, profileImagePathLeader1);
+                            GlideDataBinding.bindImage(ivAddImgLeader2, profileImagePathLeader2);
+                            GlideDataBinding.bindImage(ivAddImgLeader3, profileImagePathLeader3);
+                            GlideDataBinding.bindImage(ivAddImgLeader4, profileImagePathLeader4);
+                            GlideDataBinding.bindImage(ivAddImgLeader5, profileImagePathLeader5);
+                            GlideDataBinding.bindImage(ivAddImgLeader6, profileImagePathLeader6);
+
+//
+//                            setResult(RESULT_OK);
+//                            finish();
+
+                        }
+
+
+                    });
+                   /* try {
                         JSONArray jsonArrayModel = new JSONArray(userDataString);
-                        /* JSONObject userObject = jsonArrayModel.getJSONObject(index);*/
+                        *//* JSONObject userObject = jsonArrayModel.getJSONObject(index);*//*
                         items = new ArrayList<>();
 
                         for (int i = 0; i < jsonArrayModel.length(); i++) {
@@ -437,7 +703,7 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
                         e.printStackTrace();
                         FirebaseCrashlytics.getInstance().recordException(e);
                         Log.i("getJSONData", "error two = " + e.getMessage().toString());
-                    }
+                    }*/
 
 
                 }
@@ -485,12 +751,12 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             etDesignation2.requestFocus();
             return false;
 
-        }*/ else if (etPhone.getText().toString().isEmpty()) {
+        } else if (etPhone.getText().toString().isEmpty()) {
             etPhone.setError(getResources().getString(R.string.hint_phone_number));
             etPhone.requestFocus();
             return false;
 
-        } /*else if (etFacebookUsername.getText().toString().isEmpty()) {
+        } else if (etFacebookUsername.getText().toString().isEmpty()) {
             etFacebookUsername.setError(getResources().getString(R.string.hint_facebook));
             etFacebookUsername.requestFocus();
             return false;

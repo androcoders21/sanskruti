@@ -7,26 +7,33 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.sanskruti.volotek.api.ApiClient;
+import com.sanskruti.volotek.api.ApiClientSecond;
 import com.sanskruti.volotek.api.ApiService;
 import com.sanskruti.volotek.api.ApiStatus;
 import com.sanskruti.volotek.custom.animated_video.model.ModelAudio;
 import com.sanskruti.volotek.model.AppInfos;
 import com.sanskruti.volotek.model.CategoryItem;
 import com.sanskruti.volotek.model.CouponItem;
+import com.sanskruti.volotek.model.DeletePoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.DigitalCardModel;
 import com.sanskruti.volotek.model.FeatureItem;
 import com.sanskruti.volotek.model.FestivalItem;
 import com.sanskruti.volotek.model.FrameResponse;
 import com.sanskruti.volotek.model.HomeItem;
 import com.sanskruti.volotek.model.LanguageItem;
+import com.sanskruti.volotek.model.PoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.PostItem;
 import com.sanskruti.volotek.model.ServiceItem;
 import com.sanskruti.volotek.model.SliderItem;
 import com.sanskruti.volotek.model.SubsPlanItem;
+import com.sanskruti.volotek.model.politicalProfileModel;
+import com.sanskruti.volotek.utils.Constant;
 
 
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -317,6 +324,41 @@ public class HomeRespository {
         return data;
     }
 
+    public LiveData<PoliticalProfileBaseModel> getAllPoliticalProfile(String user_id) {
+        MutableLiveData<PoliticalProfileBaseModel> data = new MutableLiveData<>();
+        ApiClientSecond.getApiDataService().getAllPoliticalData(user_id).enqueue(new Callback<PoliticalProfileBaseModel>() {
+            @Override
+            public void onResponse(Call<PoliticalProfileBaseModel> call, Response<PoliticalProfileBaseModel> response) {
+                Log.i("checkframdata","data = "+new Gson().toJson(response.body()));
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<PoliticalProfileBaseModel> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+
+
+    public LiveData<DeletePoliticalProfileBaseModel> deletePoliticalProfile(String profile_id) {
+        MutableLiveData<DeletePoliticalProfileBaseModel> data = new MutableLiveData<>();
+        ApiClientSecond.getApiDataService().deletePoliticalProfile(profile_id).enqueue(new Callback<DeletePoliticalProfileBaseModel>() {
+            @Override
+            public void onResponse(Call<DeletePoliticalProfileBaseModel> call, Response<DeletePoliticalProfileBaseModel> response) {
+                Log.i("checkframdata","data = "+new Gson().toJson(response.body()));
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<DeletePoliticalProfileBaseModel> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
     public LiveData<FrameResponse> getCustomFrame(String ratio, String type, String user_id) {
         MutableLiveData<FrameResponse> data = new MutableLiveData<>();
         apiService.getCustomFrames(user_id,type, ratio).enqueue(new Callback<FrameResponse>() {

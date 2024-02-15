@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.sanskruti.volotek.api.ApiStatus;
 import com.sanskruti.volotek.model.BusinessItem;
+import com.sanskruti.volotek.model.GetPoliticalCreateResponse;
+import com.sanskruti.volotek.model.PoliticalCreateResponse;
 import com.sanskruti.volotek.model.UserItem;
 import com.sanskruti.volotek.model.WhatsappOtpResponse;
+import com.sanskruti.volotek.model.politicalProfileModel;
 import com.sanskruti.volotek.respository.UserRespository;
 
 public class UserViewModel extends ViewModel {
@@ -58,6 +61,44 @@ public class UserViewModel extends ViewModel {
     public LiveData<BusinessItem> submitBusiness(String userId, String businessId, String businessImage, String name, String email, String phone, String website, String address, String insta, String youtube, String facebook, String twitter,String tagline, String type, String businesscategories1) {
 
         return respository.submitBusiness(userId, businessId, businessImage, name, email, phone, website, address, insta, youtube, facebook, twitter, tagline,  type, businesscategories1);
+
+
+    }
+
+
+    public LiveData<PoliticalCreateResponse> submitPolitical(String userId, String profileImage, String pSignatureImg, String pPartyImg, String pLeaderImg1, String pLeaderImg2,
+                                                             String pLeaderImg3, String pLeaderImg4, String pLeaderImg5, String pLeaderImg6,
+                                                             String pName, String pPhone, String pEmail,
+                                                             String pFacebookUsername, String pInstagramUsername, String pTwitterUsername,
+                                                             String pDesignation1, String pDesignation2) {
+
+        return respository.submitPolitical(userId, profileImage, pSignatureImg, pPartyImg,
+                pLeaderImg1, pLeaderImg2, pLeaderImg3, pLeaderImg4, pLeaderImg5, pLeaderImg6,
+                pName, pPhone, pEmail,
+                pFacebookUsername, pInstagramUsername, pTwitterUsername,
+                pDesignation1,pDesignation2 );
+
+
+    }
+
+    public LiveData<PoliticalCreateResponse> updatePolitical(String profileId,String userId, String profileImage, String pSignatureImg, String pPartyImg, String pLeaderImg1, String pLeaderImg2,
+                                                             String pLeaderImg3, String pLeaderImg4, String pLeaderImg5, String pLeaderImg6,
+                                                             String pName, String pPhone, String pEmail,
+                                                             String pFacebookUsername, String pInstagramUsername, String pTwitterUsername,
+                                                             String pDesignation1, String pDesignation2) {
+
+        return respository.updatePolitical(profileId,userId, profileImage, pSignatureImg, pPartyImg,
+                pLeaderImg1, pLeaderImg2, pLeaderImg3, pLeaderImg4, pLeaderImg5, pLeaderImg6,
+                pName, pPhone, pEmail,
+                pFacebookUsername, pInstagramUsername, pTwitterUsername,
+                pDesignation1,pDesignation2 );
+
+
+    }
+
+    public LiveData<GetPoliticalCreateResponse> getPolitical(String pProfileId) {
+
+        return respository.getPolitical(pProfileId);
 
 
     }

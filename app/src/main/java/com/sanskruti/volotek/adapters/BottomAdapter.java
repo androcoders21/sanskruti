@@ -44,21 +44,22 @@ public class BottomAdapter extends RecyclerView.Adapter<BottomAdapter.MyViewHold
         void onItemClick(int position);
 
 
+        void onDeleteClick(String pProfileId);
+
+
     }
 
     private OnItemClickListener onItemClickListener;
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
 
     JSONArray jsonArrayModel = new JSONArray();
 
-    public BottomAdapter(Activity context, String image_url, List<ItemPolitical> jsonArray, String type, JSONArray jsonArrayNew) {
+    public BottomAdapter(Activity context, String image_url, List<ItemPolitical> jsonArray, String type, JSONArray jsonArrayNew,OnItemClickListener onItemClickListener) {
         this.context = context;
         this.itemList = jsonArray;
         this.image_url = image_url;
         this.type = type;
+        this.onItemClickListener = onItemClickListener;
         if (jsonArrayNew != null) {
             addAllData(jsonArrayNew);
         }
@@ -144,6 +145,7 @@ public class BottomAdapter extends RecyclerView.Adapter<BottomAdapter.MyViewHold
                         Intent intent = new Intent(context, EditPoliticalProfileDetailsActivity.class);
                         intent.putExtra("index", String.valueOf(position));
                         intent.putExtra("img", image_url);
+                        intent.putExtra("profileId", item.profileId);
                         context.startActivity(intent);
                     }
 
@@ -160,8 +162,12 @@ public class BottomAdapter extends RecyclerView.Adapter<BottomAdapter.MyViewHold
             ivIvDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("getDataDelete", "ivIvDelete size = ");
-                    onDeleteData(item.profileId,position);
+
+                    Log.i("RESPONSEGetAllData", "RESPONSE profileId -->" + String.valueOf(item.profileId)+", type = "+type);
+                    if (onItemClickListener != null) {
+                        Log.i("RESPONSEGetAllData", "ivIvDelete size = ");
+                        onItemClickListener.onDeleteClick(item.profileId);
+                    }
 
                 }
             });

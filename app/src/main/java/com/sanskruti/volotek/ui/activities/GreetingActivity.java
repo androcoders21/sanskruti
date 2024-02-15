@@ -16,11 +16,13 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.sanskruti.volotek.AdsUtils.AdsUtils;
 import com.sanskruti.volotek.adapters.FeatureAdapter;
+import com.sanskruti.volotek.adapters.FeatureAdapterTwo;
 import com.sanskruti.volotek.adapters.SubCategoryAdapter;
 import com.sanskruti.volotek.custom.animated_video.adapters.TemplateListAdapter;
 import com.sanskruti.volotek.databinding.ActivityPhotoFrameBinding;
 import com.sanskruti.volotek.model.CategoryItem;
 import com.sanskruti.volotek.model.FeatureItem;
+import com.sanskruti.volotek.ui.fragments.MyBottomSheetFragment;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.MyUtils;
 import com.sanskruti.volotek.utils.PaginationListener;
@@ -41,7 +43,7 @@ public class GreetingActivity extends AppCompatActivity {
     private Activity context;
     private StaggeredGridLayoutManager layoutManager;
     private boolean isLoading = false;
-    FeatureAdapter featureAdapter;
+    FeatureAdapterTwo featureAdapter;
 
     List<FeatureItem> featureItemList;
 
@@ -63,7 +65,7 @@ public class GreetingActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         String name = intent.getStringExtra("name");
-        featureAdapter = new FeatureAdapter(context, "HOME");
+        featureAdapter = new FeatureAdapterTwo(context, "HOME",null);
         binding.allVideos.setAdapter(featureAdapter);
 
 

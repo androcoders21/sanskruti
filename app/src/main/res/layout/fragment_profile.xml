@@ -329,7 +329,7 @@
                             android:layout_marginStart="@dimen/_8sdp"
                             android:layout_marginTop="@dimen/_3sdp"
                             android:layout_toEndOf="@id/image_view_get_in_touch"
-                            android:text="Get in touch"
+                            android:text="Contact Us"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_13sdp" />
 

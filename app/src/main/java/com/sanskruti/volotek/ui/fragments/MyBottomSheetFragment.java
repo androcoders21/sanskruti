@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -42,6 +43,7 @@ import com.sanskruti.volotek.ui.activities.PoliticalProfileDetailsEditActivity;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.MyUtils;
 import com.sanskruti.volotek.utils.PreferenceManager;
+import com.sanskruti.volotek.viewmodel.UserViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,11 +60,13 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
     UserItem userItem;
     Activity context;
     String image_url;
+
+    RecyclerView rv;
     PreferenceManager preferenceManager;
     JSONArray jsonArrayModel;
     BottomAdapter featureAdapter;
     // Constructor to receive data
-    List<ItemPolitical> items;
+    List<ItemPolitical> items = new ArrayList<>();
     LinearLayout iv_edit_politicalll, iv_edit_per, iv_edit_politicalllbus, lineDataiv;
 
     RelativeLayout toolbarpm, toolbarbus, toolbarppm, toolbaspecSp;
@@ -81,6 +85,17 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
         dismiss();
     }
 
+    @Override
+    public void onDeleteClick(String pProfileId) {
+        Log.i("RESPONSEGetAllData", "onDeleteClick  = ");
+        Toast.makeText(context, pProfileId, Toast.LENGTH_SHORT).show();
+
+        deletePoliticalProfile(pProfileId);
+    }
+
+
+
+
 
 
 
@@ -94,7 +109,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
         preferenceManager = new PreferenceManager(this.context);
         this.type = typeOpen;
 
-        getDataShare();
+
     }
 
     private BusinessListAdapter getBusinessAdapter;
@@ -169,6 +184,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
     private RecyclerView rvbus, rvSpec;
     List<FrameModel> postItemList;
     private TextView bustv, potvtv;
+    private LinearLayout ll;
 
     @Nullable
     @Override
@@ -197,59 +213,19 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
         bustv = view.findViewById(R.id.title_tv);
         potvtv = view.findViewById(R.id.potv);
-        LinearLayout ll = view.findViewById(R.id.profilePoliciy);
+        ll = view.findViewById(R.id.profilePoliciy);
 
 
         rvbus = view.findViewById(R.id.recyclerViewTwo);
 
 
-        RecyclerView rv = view.findViewById(R.id.recyclerView);
+        rv = view.findViewById(R.id.recyclerView);
+        loadBusinessData();
 
+        getSpecialFrame(Constant.FRAME_TYPE_IMAGE);
+        getDataShare();
+        setVisibility();
 
-        if (type.equalsIgnoreCase("profile")) {
-
-            rvbus.setVisibility(View.GONE);
-            rv.setVisibility(View.VISIBLE);
-            bustv.setVisibility(View.GONE);
-            toolbarbus.setVisibility(View.GONE);
-            toolbarpm.setVisibility(View.VISIBLE);
-            toolbarppm.setVisibility(View.GONE);
-            ll.setVisibility(View.GONE);
-            toolbaspecSp.setVisibility(View.GONE);
-            rvSpec.setVisibility(View.GONE);
-
-            iv_edit_politicalll.setVisibility(View.VISIBLE);
-            lineDataiv.setVisibility(GONE);
-            iv_edit_politicalllbus.setVisibility(GONE);
-        } else if (type.equalsIgnoreCase("NA")) {
-            bustv.setVisibility(View.VISIBLE);
-            toolbarbus.setVisibility(View.VISIBLE);
-            rvbus.setVisibility(View.VISIBLE);
-            rv.setVisibility(View.VISIBLE);
-            toolbarpm.setVisibility(View.VISIBLE);
-            toolbarppm.setVisibility(GONE);
-            ll.setVisibility(GONE);
-            toolbaspecSp.setVisibility(View.VISIBLE);
-            rvSpec.setVisibility(View.VISIBLE);
-
-            iv_edit_politicalll.setVisibility(View.VISIBLE);
-            lineDataiv.setVisibility(View.VISIBLE);
-            iv_edit_politicalllbus.setVisibility(View.VISIBLE);
-        } else {
-            toolbarpm.setVisibility(View.GONE);
-            toolbarbus.setVisibility(View.VISIBLE);
-            bustv.setVisibility(View.VISIBLE);
-            rv.setVisibility(View.GONE);
-            rvbus.setVisibility(View.VISIBLE);
-            toolbarppm.setVisibility(View.GONE);
-            ll.setVisibility(View.GONE);
-            toolbaspecSp.setVisibility(View.GONE);
-            rvSpec.setVisibility(View.GONE);
-
-            iv_edit_politicalll.setVisibility(GONE);
-            lineDataiv.setVisibility(GONE);
-            iv_edit_politicalllbus.setVisibility(View.VISIBLE);
-        }
         //  Log.i("getJSONData", "userDataString length = " + String.valueOf(items.size()));
 
         iv_edit_per.setOnClickListener(new View.OnClickListener() {
@@ -258,46 +234,13 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
             }
         });
-        if (items != null) {
-            if (items.size() > 0) {
-                if (type.equalsIgnoreCase("profile")) {
-                    iv_edit_politicalll.setVisibility(View.VISIBLE);
-                    lineDataiv.setVisibility(View.GONE);
-                    iv_edit_politicalllbus.setVisibility(View.GONE);
-                } else if (type.equalsIgnoreCase("bus")) {
-                    iv_edit_politicalll.setVisibility(View.GONE);
-                    lineDataiv.setVisibility(View.GONE);
-                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
-                } else {
-                    iv_edit_politicalll.setVisibility(View.VISIBLE);
-                    lineDataiv.setVisibility(View.VISIBLE);
-                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
-                }
 
-            } else {
-                if (type.equalsIgnoreCase("NA")) {
-                    toolbarpm.setVisibility(View.GONE);
-                }
-                if (type.equalsIgnoreCase("profile")) {
-                    iv_edit_politicalll.setVisibility(View.VISIBLE);
-                    lineDataiv.setVisibility(View.GONE);
-                    iv_edit_politicalllbus.setVisibility(View.GONE);
-                } else if (type.equalsIgnoreCase("bus")) {
-                    iv_edit_politicalll.setVisibility(View.GONE);
-                    lineDataiv.setVisibility(View.GONE);
-                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
-                } else {
-                    iv_edit_politicalll.setVisibility(View.VISIBLE);
-                    lineDataiv.setVisibility(View.VISIBLE);
-                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
-                }
-            }
-        }
-        featureAdapter = new BottomAdapter(context, image_url, items, type,jsonArrayModel);
-        featureAdapter.notifyDataSetChanged();
-        rv.setLayoutManager(new LinearLayoutManager(context));
-        rv.setAdapter(featureAdapter);
-        rv.setNestedScrollingEnabled(false);
+
+
+
+
+
+
         rv.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
@@ -348,10 +291,89 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                 dismiss();
             }
         });*/
-        loadBusinessData();
-
-        getSpecialFrame(Constant.FRAME_TYPE_IMAGE);
         return view;
+    }
+
+    private void setVisibility(){
+        if (type.equalsIgnoreCase("profile")) {
+
+            rvbus.setVisibility(View.GONE);
+            rv.setVisibility(View.VISIBLE);
+            bustv.setVisibility(View.GONE);
+            toolbarbus.setVisibility(View.GONE);
+            toolbarpm.setVisibility(View.VISIBLE);
+            toolbarppm.setVisibility(View.VISIBLE);
+            ll.setVisibility(View.VISIBLE);
+            toolbaspecSp.setVisibility(View.GONE);
+            rvSpec.setVisibility(View.GONE);
+
+            iv_edit_politicalll.setVisibility(View.VISIBLE);
+            lineDataiv.setVisibility(GONE);
+            iv_edit_politicalllbus.setVisibility(GONE);
+        } else if (type.equalsIgnoreCase("NA")) {
+            bustv.setVisibility(View.VISIBLE);
+            toolbarbus.setVisibility(View.VISIBLE);
+            rvbus.setVisibility(View.VISIBLE);
+            rv.setVisibility(View.VISIBLE);
+            toolbarpm.setVisibility(View.VISIBLE);
+            toolbarppm.setVisibility(View.VISIBLE);
+            ll.setVisibility(View.VISIBLE);
+            toolbaspecSp.setVisibility(View.VISIBLE);
+            rvSpec.setVisibility(View.VISIBLE);
+
+            iv_edit_politicalll.setVisibility(View.VISIBLE);
+            lineDataiv.setVisibility(View.VISIBLE);
+            iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+        } else {
+            toolbarpm.setVisibility(View.GONE);
+            toolbarbus.setVisibility(View.VISIBLE);
+            bustv.setVisibility(View.VISIBLE);
+            rv.setVisibility(View.GONE);
+            rvbus.setVisibility(View.VISIBLE);
+            toolbarppm.setVisibility(View.VISIBLE);
+            ll.setVisibility(View.VISIBLE);
+            toolbaspecSp.setVisibility(View.GONE);
+            rvSpec.setVisibility(View.GONE);
+
+            iv_edit_politicalll.setVisibility(GONE);
+            lineDataiv.setVisibility(GONE);
+            iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+        }
+        if (items != null) {
+            if (items.size() > 0) {
+                if (type.equalsIgnoreCase("profile")) {
+                    iv_edit_politicalll.setVisibility(View.VISIBLE);
+                    lineDataiv.setVisibility(View.GONE);
+                    iv_edit_politicalllbus.setVisibility(View.GONE);
+                } else if (type.equalsIgnoreCase("bus")) {
+                    iv_edit_politicalll.setVisibility(View.GONE);
+                    lineDataiv.setVisibility(View.GONE);
+                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+                } else {
+                    iv_edit_politicalll.setVisibility(View.VISIBLE);
+                    lineDataiv.setVisibility(View.VISIBLE);
+                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+                }
+
+            } else {
+                if (type.equalsIgnoreCase("NA")) {
+                    toolbarpm.setVisibility(View.GONE);
+                }
+                if (type.equalsIgnoreCase("profile")) {
+                    iv_edit_politicalll.setVisibility(View.VISIBLE);
+                    lineDataiv.setVisibility(View.GONE);
+                    iv_edit_politicalllbus.setVisibility(View.GONE);
+                } else if (type.equalsIgnoreCase("bus")) {
+                    iv_edit_politicalll.setVisibility(View.GONE);
+                    lineDataiv.setVisibility(View.GONE);
+                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+                } else {
+                    iv_edit_politicalll.setVisibility(View.VISIBLE);
+                    lineDataiv.setVisibility(View.VISIBLE);
+                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     String actualRatio = "1:1";
@@ -409,8 +431,60 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
         });
     }
-
     private void getDataShare() {
+        Log.i("RESPONSEGetAllData", "USER_ID-->" + preferenceManager.getString(Constant.USER_ID));
+        Constant.getHomeViewModel(this).getAllPoliticalProfile(preferenceManager.getString(Constant.USER_ID)).observe(this, businessItem -> {
+
+
+            if (businessItem != null) {
+                if (items.size()>0){
+                    items.clear();
+                }
+                Log.i("RESPONSEGetAllData", "RESPONSE-->" + new Gson().toJson(businessItem));
+                Log.i("RESPONSEGetAllData", "RESPONSE-->" + new Gson().toJson(businessItem));
+
+                for(int i=0;i<businessItem.profiles.size();i++){
+                    String profileId = businessItem.profiles.get(i)._id;
+                    String id = businessItem.profiles.get(i).pUserId;
+
+                    String pName = businessItem.profiles.get(i).pName;
+                    String pPhone = businessItem.profiles.get(i).pPhone;
+                    String pEmail = businessItem.profiles.get(i).pEmail;
+                    String pFacebookUsername = businessItem.profiles.get(i).pFacebookUsername;
+                    String pInstagramUsername = businessItem.profiles.get(i).pInstagramUsername;
+                    String pTwitterUsername = businessItem.profiles.get(i).pTwitterUsername;
+
+                    String pDesignation1 = businessItem.profiles.get(i).pDesignation1;
+                    String pDesignation2 = businessItem.profiles.get(i).pDesignation2;
+
+                    String pProfileImg = businessItem.profiles.get(i).pProfileImg;
+                    String pPartyImg = businessItem.profiles.get(i).pPartyImg;
+                    String pLeaderImg1 = businessItem.profiles.get(i).pLeaderImg1;
+                    String pLeaderImg2 = businessItem.profiles.get(i).pLeaderImg2;
+                    String pLeaderImg3 = businessItem.profiles.get(i).pLeaderImg3;
+                    String pLeaderImg4 = businessItem.profiles.get(i).pLeaderImg4;
+                    String pLeaderImg5 = businessItem.profiles.get(i).pLeaderImg5;
+                    String pLeaderImg6 = businessItem.profiles.get(i).pLeaderImg6;
+
+
+                   items.add(new ItemPolitical(profileId,id, pName, pPhone, pEmail, pFacebookUsername, pInstagramUsername, pTwitterUsername,
+                                pDesignation1, pDesignation2, pProfileImg, pPartyImg, pLeaderImg1, pLeaderImg2,
+                                pLeaderImg3, pLeaderImg4, pLeaderImg5, pLeaderImg6));
+
+                }
+                Log.i("RESPONSEGetAllData", "RESPONSE Size-->" + String.valueOf(items.size())+", type = "+type);
+                featureAdapter = new BottomAdapter(context, image_url, items, type,jsonArrayModel,this);
+                featureAdapter.notifyDataSetChanged();
+                rv.setLayoutManager(new LinearLayoutManager(context));
+                rv.setAdapter(featureAdapter);
+                rv.setNestedScrollingEnabled(false);
+
+                setVisibility();
+            }
+
+        });
+
+       /* preferenceManager.getString(Constant.USER_ID);
         String userDataString = preferenceManager.getStringTwo(Constant.USER_POLITICAL_PROFILE);
         // Retrieve JSONArray string from SharedPreferences
         items = new ArrayList<>();
@@ -463,7 +537,84 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
         } else {
             Log.i("getJSONData", "userDataString two = " + userDataString.toString());
-        }
+        }*/
+
+    }
+
+
+
+
+
+    private void deletePoliticalProfile(String profileId) {
+        Log.i("RESPONSEGetAllData", "USER_ID-->" + preferenceManager.getString(Constant.USER_ID));
+        Constant.getHomeViewModel(this).deletePoliticalProfile(profileId).observe(this, businessItem -> {
+
+
+            if (businessItem != null) {
+                Log.i("RESPONSEGetAllData", "RESPONSE-->" + new Gson().toJson(businessItem));
+                Log.i("RESPONSEGetAllData", "RESPONSE-->" + new Gson().toJson(businessItem));
+
+               if(businessItem.success){
+                   getDataShare();
+               }
+            }
+
+        });
+
+       /* preferenceManager.getString(Constant.USER_ID);
+        String userDataString = preferenceManager.getStringTwo(Constant.USER_POLITICAL_PROFILE);
+        // Retrieve JSONArray string from SharedPreferences
+        items = new ArrayList<>();
+        // Convert JSONArray string back to List<User>
+        Log.i("getJSONData", "Bottom Sheet Get JSON Data = " + userDataString.toString());
+        Log.i("getJSONData", "Bottom Sheet Get User ID = " + String.valueOf(preferenceManager.getString(Constant.USER_ID)));
+        if (!userDataString.isEmpty()) {
+
+            Log.i("getJSONData", "size 2  = " + String.valueOf(items.size()));
+            try {
+                jsonArrayModel = new JSONArray(userDataString);
+                for (int i = 0; i < jsonArrayModel.length(); i++) {
+                    JSONObject userObject = jsonArrayModel.getJSONObject(i);
+                    String profileId = userObject.getString("profileId");
+                    String id = userObject.getString("pUserId");
+
+                    String pName = userObject.getString("pName");
+                    String pPhone = userObject.getString("pPhone");
+                    String pEmail = userObject.getString("pEmail");
+                    String pFacebookUsername = userObject.getString("pFacebookUsername");
+                    String pInstagramUsername = userObject.getString("pInstagramUsername");
+                    String pTwitterUsername = userObject.getString("pTwitterUsername");
+
+                    String pDesignation1 = userObject.getString("pDesignation1");
+                    String pDesignation2 = userObject.getString("pDesignation2");
+
+                    String pProfileImg = userObject.getString("pProfileImg");
+                    String pPartyImg = userObject.getString("pPartyImg");
+                    String pLeaderImg1 = userObject.getString("pLeaderImg1");
+                    String pLeaderImg2 = userObject.getString("pLeaderImg2");
+                    String pLeaderImg3 = userObject.getString("pLeaderImg3");
+                    String pLeaderImg4 = userObject.getString("pLeaderImg4");
+                    String pLeaderImg5 = userObject.getString("pLeaderImg5");
+                    String pLeaderImg6 = userObject.getString("pLeaderImg6");
+
+                    if(preferenceManager.getString(Constant.USER_ID).equalsIgnoreCase(id)){
+                        items.add(new ItemPolitical(profileId,id, pName, pPhone, pEmail, pFacebookUsername, pInstagramUsername, pTwitterUsername,
+                                pDesignation1, pDesignation2, pProfileImg, pPartyImg, pLeaderImg1, pLeaderImg2,
+                                pLeaderImg3, pLeaderImg4, pLeaderImg5, pLeaderImg6));
+                    }
+
+
+                }
+                Log.i("getJSONData", "JSON Size = " + String.valueOf(items.size()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
+                Log.i("getJSONData", "error two = " + e.getMessage().toString());
+            }
+
+        } else {
+            Log.i("getJSONData", "userDataString two = " + userDataString.toString());
+        }*/
 
     }
 

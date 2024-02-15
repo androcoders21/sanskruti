@@ -19,8 +19,8 @@
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/cv_cat_image"
-            android:layout_width="@dimen/_55sdp"
-            android:layout_height="@dimen/_55sdp"
+            android:layout_width="@dimen/_75sdp"
+            android:layout_height="@dimen/_75sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:src="@drawable/ic_profile"
             app:circle_imageURL="@{categoryData.image}"

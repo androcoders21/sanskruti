@@ -39,9 +39,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.gson.Gson;
 import com.jaredrummler.android.colorpicker.ColorPickerView;
 import com.sanskruti.volotek.R;
 import com.sanskruti.volotek.binding.GlideDataBinding;
@@ -55,6 +57,7 @@ import com.sanskruti.volotek.utils.Configure;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.MyUtils;
 import com.sanskruti.volotek.utils.PreferenceManager;
+import com.sanskruti.volotek.viewmodel.UserViewModel;
 import com.squareup.otto.Bus;
 
 import org.json.JSONArray;
@@ -306,7 +309,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             }
         }
     }
-    List<ItemPolitical> items;
+    List<ItemPolitical> items = new ArrayList<>();
+    UserViewModel userViewModel;
     private void getDataShare() {
 
 
@@ -336,10 +340,94 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             //    Toast.makeText(this, "null", Toast.LENGTH_SHORT).show();
         }
 
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+       String profileIdOther = getIntent().getStringExtra("profileId");
+
+
+        Log.i("getJSONDataLuc", "RESPONSE profileIdOther 777-->" + String.valueOf(profileIdOther));
+        //    String profileId = Action.equalsIgnoreCase("update") ? profileIdOther : null;
+        userViewModel.getPolitical(profileIdOther).observe(this, businessItem -> {
+
+            if (businessItem != null) {
+              //  prgDialog.dismiss();
+                Log.i("getJSONDataLuc", "RESPONSE 777-->" + new Gson().toJson(businessItem));
+
+
+                //    Toast.makeText(PoliticalProfileDetailsEditActivity.this, "Successfully Added", Toast.LENGTH_SHORT).show();
+
+                String id = businessItem.profiles.pUserId;
+
+                if(businessItem.profiles.pName != null){
+                    pName = businessItem.profiles.pName;
+                }
+                if(businessItem.profiles.pPhone != null){
+                    pPhone = businessItem.profiles.pPhone;
+                }
+                if(businessItem.profiles.pEmail != null){
+                    pEmail = businessItem.profiles.pEmail;
+                }
+                if(businessItem.profiles.pFacebookUsername != null){
+                    pFacebookUsername = businessItem.profiles.pFacebookUsername;
+                }
+
+                if(businessItem.profiles.pInstagramUsername != null){
+                    pInstagramUsername = businessItem.profiles.pInstagramUsername;
+                }
+                if(businessItem.profiles.pTwitterUsername != null){
+                    pTwitterUsername = businessItem.profiles.pTwitterUsername;
+                }
+
+                if(businessItem.profiles.pDesignation1 != null){
+                    pDesignation1 = businessItem.profiles.pDesignation1;
+                }
+                if(businessItem.profiles.pDesignation2 != null){
+                    pDesignation2 = businessItem.profiles.pDesignation2;
+                }
+
+                if(businessItem.profiles.pProfileImg != null){
+                    pProfileImg = businessItem.profiles.pProfileImg;
+                }
+                if(businessItem.profiles.pPartyImg != null){
+                    pPartyImg = businessItem.profiles.pPartyImg;
+                }
+
+                if(businessItem.profiles.pLeaderImg1 != null){
+                    pLeaderImg1 = businessItem.profiles.pLeaderImg1;
+                }
+                if(businessItem.profiles.pLeaderImg2 != null){
+                    pLeaderImg2 = businessItem.profiles.pLeaderImg2;
+                }
+                if(businessItem.profiles.pLeaderImg3 != null){
+                    pLeaderImg3 = businessItem.profiles.pLeaderImg3;
+                }
+                if(businessItem.profiles.pLeaderImg4 != null){
+                    pLeaderImg4 = businessItem.profiles.pLeaderImg4;
+                }
+
+                if(businessItem.profiles.pLeaderImg5 != null){
+                    pLeaderImg5 = businessItem.profiles.pLeaderImg5;
+                }
+                if(businessItem.profiles.pLeaderImg6 != null){
+                    pLeaderImg6 = businessItem.profiles.pLeaderImg6;
+                }
+
+
+
+
+                    setData();
+
+//                            setResult(RESULT_OK);
+//                            finish();
+
+            }
+
+
+        });
+
         // Load the image from the URL and set it as the background
         new DownloadImageTask().execute(imgUrl);
         int index = Integer.valueOf(position);
-        if (!userDataString.isEmpty()) {
+       /* if (!userDataString.isEmpty()) {
             try {
                 JSONArray jsonArrayModel = new JSONArray(userDataString);
 
@@ -413,7 +501,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             }
         } else {
             Log.i("getJSONData", "userDataString two = " + userDataString.toString());
-        }
+        }*/
 
     }
 

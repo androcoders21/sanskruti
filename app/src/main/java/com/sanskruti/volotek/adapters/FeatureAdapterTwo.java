@@ -110,12 +110,18 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
         intent.putExtra("sizeposition", "1:1");
         context.startActivity(intent);*/
 
-        MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(data.image_url,context,"NA");
+
 
         // Or using static method
         // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
 
-        bottomSheetFragment.show(fragmentManager.getParentFragmentManager(), bottomSheetFragment.getTag());
+        if(fragmentManager !=null){
+            MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(data.image_url,context,"NA");
+            bottomSheetFragment.show(fragmentManager.getParentFragmentManager(), bottomSheetFragment.getTag());
+        }else {
+
+        }
+
 
 
     }

@@ -9,14 +9,18 @@ import com.sanskruti.volotek.model.AppInfos;
 import com.sanskruti.volotek.model.BusinessItem;
 import com.sanskruti.volotek.model.CategoryItem;
 import com.sanskruti.volotek.model.CouponItem;
+import com.sanskruti.volotek.model.DeletePoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.DigitalCardModel;
 import com.sanskruti.volotek.model.FeatureItem;
 import com.sanskruti.volotek.model.FestivalItem;
 import com.sanskruti.volotek.model.FrameResponse;
+import com.sanskruti.volotek.model.GetPoliticalCreateResponse;
 import com.sanskruti.volotek.model.HomeItem;
 import com.sanskruti.volotek.model.LanguageItem;
 import com.sanskruti.volotek.model.ModelCreated;
 import com.sanskruti.volotek.model.PaytmResponse;
+import com.sanskruti.volotek.model.PoliticalCreateResponse;
+import com.sanskruti.volotek.model.PoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.PostItem;
 import com.sanskruti.volotek.model.ServiceItem;
 import com.sanskruti.volotek.model.SliderItem;
@@ -24,6 +28,7 @@ import com.sanskruti.volotek.model.StripeResponse;
 import com.sanskruti.volotek.model.SubsPlanItem;
 import com.sanskruti.volotek.model.UserItem;
 import com.sanskruti.volotek.model.WhatsappOtpResponse;
+import com.sanskruti.volotek.model.politicalProfileModel;
 import com.sanskruti.volotek.model.video.DashboardTemplateResponseMain;
 import com.sanskruti.volotek.model.video.TemplateResponse;
 
@@ -32,12 +37,15 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -107,6 +115,89 @@ public interface ApiService {
             @Part("business_tagline") RequestBody tagline,
             @Part("type") RequestBody type,
             @Part("business_category") RequestBody businesscategories);
+
+
+
+
+    @Multipart
+    @POST("create-profile")
+    Call<PoliticalCreateResponse> submitPoliticak(
+            @Part("pUserId") RequestBody userId,
+
+            @Part MultipartBody.Part logoFile,
+            @Part MultipartBody.Part signatureFile,
+
+            @Part MultipartBody.Part partyFile,
+
+            @Part MultipartBody.Part leader1File,
+
+            @Part MultipartBody.Part leader2File,
+
+            @Part MultipartBody.Part leader3File,
+
+            @Part MultipartBody.Part leader4File,
+
+
+            @Part MultipartBody.Part leader5File,
+
+            @Part MultipartBody.Part leader6File,
+
+            @Part("pName") RequestBody name,
+            @Part("pPhone") RequestBody phone,
+            @Part("pEmail") RequestBody email,
+            @Part("pInstagramUsername") RequestBody instagram,
+            @Part("pFacebookUsername") RequestBody facebook,
+            @Part("pTwitterUsername") RequestBody twitter,
+            @Part("pDesignation1") RequestBody designation1,
+            @Part("pDesignation2") RequestBody designation2);
+
+
+
+
+    @Multipart
+    @PATCH("profile/{profileId}")
+    Call<PoliticalCreateResponse> updatePolitical(
+            @Path("profileId") String profileId,
+            @Part("pUserId") RequestBody userId,
+
+            @Part MultipartBody.Part logoFile,
+            @Part MultipartBody.Part signatureFile,
+
+            @Part MultipartBody.Part partyFile,
+
+            @Part MultipartBody.Part leader1File,
+
+            @Part MultipartBody.Part leader2File,
+
+            @Part MultipartBody.Part leader3File,
+
+            @Part MultipartBody.Part leader4File,
+
+
+            @Part MultipartBody.Part leader5File,
+
+            @Part MultipartBody.Part leader6File,
+
+            @Part("pName") RequestBody name,
+            @Part("pPhone") RequestBody phone,
+            @Part("pEmail") RequestBody email,
+            @Part("pInstagramUsername") RequestBody instagram,
+            @Part("pFacebookUsername") RequestBody facebook,
+            @Part("pTwitterUsername") RequestBody twitter,
+            @Part("pDesignation1") RequestBody designation1,
+            @Part("pDesignation2") RequestBody designation2);
+
+    @GET("profile/{profileId}")
+    Call<GetPoliticalCreateResponse> getPolitical(
+            @Path("profileId") String profileId);
+    @GET("profiles/{userId}")
+    Call<PoliticalProfileBaseModel> getAllPoliticalData(
+            @Path("userId") String userId);
+
+
+    @DELETE("profile/{profileId}")
+    Call<DeletePoliticalProfileBaseModel> deletePoliticalProfile(
+            @Path("profileId") String profileId);
 
 
     //*** UPdate Business****

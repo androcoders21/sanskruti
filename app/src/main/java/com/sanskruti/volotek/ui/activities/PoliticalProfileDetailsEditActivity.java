@@ -336,10 +336,13 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
                 if(profileImagePath.equalsIgnoreCase(profileImage)){
                     profileImagePath = null;
                 }
+
                 if(profileImagePathParty.equalsIgnoreCase(PartyImage)){
                     profileImagePathParty = null;
                 }
                 //    String profileId = Action.equalsIgnoreCase("update") ? profileIdOther : null;
+                Log.i("getJSONDataUpdate", "profileImagePath-->" + String.valueOf(profileImagePath));
+                Log.i("getJSONDataUpdate", "profileImagePathParty-->" + String.valueOf(profileImagePathParty));
                 userViewModel.updatePolitical(profileIdOther,preferenceManager.getString(Constant.USER_ID),
                         profileImagePath,
                         "",
@@ -375,9 +378,12 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
 
 
                 });
-            } else {
+            }
+            else {
 
+                Log.i("getJSONDataCreate", "RESPONSE profileImagePathParty -->" + String.valueOf(profileImagePathParty));
 
+                Log.i("getJSONDataCreate", "RESPONSE profileImagePath -->" + String.valueOf(profileImagePath));
                 //    String profileId = Action.equalsIgnoreCase("update") ? profileIdOther : null;
                 userViewModel.submitPolitical(preferenceManager.getString(Constant.USER_ID),
                         profileImagePath,
@@ -400,8 +406,8 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
 
                     if (businessItem != null) {
                         prgDialog.dismiss();
-                        Log.i("getJSONData", "RESPONSE-->" + new Gson().toJson(businessItem));
-                        Log.i("RESPONSE", "RESPONSE-->" + new Gson().toJson(businessItem));
+                        Log.i("getJSONDataCreate", "RESPONSE-->" + new Gson().toJson(businessItem));
+                        Log.i("getJSONDataCreate", "RESPONSE-->" + new Gson().toJson(businessItem));
 
                     //    Toast.makeText(PoliticalProfileDetailsEditActivity.this, "Successfully Added", Toast.LENGTH_SHORT).show();
                         prgDialog.dismiss();
@@ -581,11 +587,11 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
                                 etTwitterUsername.setText(businessItem.profiles.pTwitterUsername);
                             }
 
-                            if(businessItem.profiles.pInstagramUsername != null){
+                            if(businessItem.profiles.pProfileImg != null){
                                 profileImage = businessItem.profiles.pProfileImg;
                                 profileImagePath = businessItem.profiles.pProfileImg;
                             }
-                            if(businessItem.profiles.pTwitterUsername != null){
+                            if(businessItem.profiles.pPartyImg != null){
                                 PartyImage = businessItem.profiles.pPartyImg;
                                 profileImagePathParty = businessItem.profiles.pPartyImg;
                             }

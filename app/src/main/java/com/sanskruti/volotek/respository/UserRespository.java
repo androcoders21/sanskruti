@@ -304,60 +304,84 @@ public class UserRespository {
         MultipartBody.Part leader6Body = null;
         RequestBody leaderImg6Uri = null;
 
-        if (profileImage != null) {
-            File file = new File(profileImage);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            profileBody = MultipartBody.Part.createFormData("pProfileImg", file.getName(), requestFile);
-            profileImageUri = RequestBody.create(MediaType.parse(Constant.multipart), profileImage);
+        if(!profileImage.isEmpty()){
+            if (profileImage != null) {
+                File file = new File(profileImage);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                profileBody = MultipartBody.Part.createFormData("pProfileImg", file.getName(), requestFile);
+                profileImageUri = RequestBody.create(MediaType.parse(Constant.multipart), profileImage);
+                Log.i("getJSONDataCreate", "RESPONSE profileBody 4 -->" + String.valueOf(profileBody));
+            }
         }
-        if (pPartyImg != null) {
-            File file = new File(pPartyImg);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            partyBody = MultipartBody.Part.createFormData("pPartyImg", file.getName(), requestFile);
-            pPartyImgUri = RequestBody.create(MediaType.parse(Constant.multipart), pPartyImg);
+
+        if(!pPartyImg.isEmpty()){
+            if (pPartyImg != null) {
+                File file = new File(pPartyImg);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                partyBody = MultipartBody.Part.createFormData("pPartyImg", file.getName(), requestFile);
+                pPartyImgUri = RequestBody.create(MediaType.parse(Constant.multipart), pPartyImg);
+                Log.i("getJSONDataCreate", "RESPONSE partyBody 4 -->" + String.valueOf(partyBody));
+            }
         }
-        if (pLeaderImg1 != null) {
-            File file = new File(pLeaderImg1);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            leader1Body = MultipartBody.Part.createFormData("pLeaderImg1", file.getName(), requestFile);
-            leaderImg1Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg1);
+        if(!pLeaderImg1.isEmpty()){
+            if (pLeaderImg1 != null) {
+                File file = new File(pLeaderImg1);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                leader1Body = MultipartBody.Part.createFormData("pLeaderImg1", file.getName(), requestFile);
+                leaderImg1Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg1);
+            }
         }
-        if (pLeaderImg2 != null) {
-            File file = new File(pLeaderImg2);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            leader2Body = MultipartBody.Part.createFormData("pLeaderImg2", file.getName(), requestFile);
-            leaderImg2Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg2);
+        if(!pLeaderImg2.isEmpty()){
+            if (pLeaderImg2 != null) {
+                File file = new File(pLeaderImg2);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                leader2Body = MultipartBody.Part.createFormData("pLeaderImg2", file.getName(), requestFile);
+                leaderImg2Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg2);
+            }
         }
-        if (pLeaderImg3 != null) {
-            File file = new File(pLeaderImg3);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            leader3Body = MultipartBody.Part.createFormData("pLeaderImg3", file.getName(), requestFile);
-            leaderImg3Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg3);
+
+        if(!pLeaderImg3.isEmpty()){
+            if (pLeaderImg3 != null) {
+                File file = new File(pLeaderImg3);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                leader3Body = MultipartBody.Part.createFormData("pLeaderImg3", file.getName(), requestFile);
+                leaderImg3Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg3);
+            }
         }
-        if (pLeaderImg4 != null) {
-            File file = new File(pLeaderImg4);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            leader4Body = MultipartBody.Part.createFormData("pLeaderImg4", file.getName(), requestFile);
-            leaderImg4Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg4);
+
+        if(!pLeaderImg4.isEmpty()){
+            if (pLeaderImg4 != null) {
+                File file = new File(pLeaderImg4);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                leader4Body = MultipartBody.Part.createFormData("pLeaderImg4", file.getName(), requestFile);
+                leaderImg4Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg4);
+            }
         }
-        if (pLeaderImg5 != null) {
-            File file = new File(pLeaderImg5);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            leader5Body = MultipartBody.Part.createFormData("pLeaderImg5", file.getName(), requestFile);
-            leaderImg5Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg5);
+
+        if(!pLeaderImg5.isEmpty()){
+            if (pLeaderImg5 != null) {
+                File file = new File(pLeaderImg5);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                leader5Body = MultipartBody.Part.createFormData("pLeaderImg5", file.getName(), requestFile);
+                leaderImg5Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg5);
+            }
         }
-        if (pLeaderImg6 != null) {
-            File file = new File(pLeaderImg6);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            leader6Body = MultipartBody.Part.createFormData("pLeaderImg6", file.getName(), requestFile);
-            leaderImg6Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg6);
+
+        if(!pLeaderImg6.isEmpty()){
+            if (pLeaderImg6 != null) {
+                File file = new File(pLeaderImg6);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                leader6Body = MultipartBody.Part.createFormData("pLeaderImg6", file.getName(), requestFile);
+                leaderImg6Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg6);
+            }
         }
 
 
 
 
 
-        Log.i("getJSONData", "profileImageUri: "+profileImageUri+
+
+        Log.i("getJSONDataCreate", "profileImageUri: "+profileImageUri+
                 " , profileBody : "+profileBody);
 
 
@@ -371,7 +395,9 @@ public class UserRespository {
         RequestBody politicalDesignation1 = RequestBody.create(MediaType.parse(Constant.multipart), pDesignation1);
         RequestBody politicalDesignation2 = RequestBody.create(MediaType.parse(Constant.multipart), pDesignation2);
 
+        Log.i("getJSONDataCreate", "RESPONSE partyBody -->" + String.valueOf(partyBody));
 
+        Log.i("getJSONDataCreate", "RESPONSE profileBody -->" + String.valueOf(profileBody));
         ApiClientSecond.getApiDataService().submitPoliticak(userid,
                          profileBody,
 
@@ -385,15 +411,15 @@ public class UserRespository {
                 enqueue(new Callback<PoliticalCreateResponse>() {
                     @Override
                     public void onResponse(Call<PoliticalCreateResponse> call, Response<PoliticalCreateResponse> response) {
-                        Log.i("getJSONData", "first RESPONSE CODE-->" + String.valueOf(response.code()));
-                        Log.i("getJSONData", "first RESPONSE-->" + new Gson().toJson(response.body()));
+                        Log.i("getJSONDataCreate", "first RESPONSE CODE-->" + String.valueOf(response.code()));
+                        Log.i("getJSONDataCreate", "first RESPONSE-->" + new Gson().toJson(response.body()));
 
                         data.setValue(response.body());
                     }
 
                     @Override
                     public void onFailure(Call<PoliticalCreateResponse> call, Throwable t) {
-
+                        Log.i("getJSONDataCreate", "first RESPONSE CODE-->" + String.valueOf(t.getMessage()));
                         t.printStackTrace();
 
                         data.setValue(null);
@@ -443,54 +469,79 @@ public class UserRespository {
         MultipartBody.Part leader6Body = null;
         RequestBody leaderImg6Uri = null;
 
-        if (profileImage != null) {
-            File file = new File(profileImage);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            profileBody = MultipartBody.Part.createFormData("pProfileImg", file.getName(), requestFile);
-            profileImageUri = RequestBody.create(MediaType.parse(Constant.multipart), profileImage);
+
+        if(!profileImage.isEmpty()){
+            if (profileImage != null) {
+                File file = new File(profileImage);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                profileBody = MultipartBody.Part.createFormData("pProfileImg", file.getName(), requestFile);
+                profileImageUri = RequestBody.create(MediaType.parse(Constant.multipart), profileImage);
+                Log.i("getJSONDataUpdate", "RESPONSE profileBody 4 -->" + String.valueOf(profileBody));
+            }
         }
-        if (pPartyImg != null) {
-            File file = new File(pPartyImg);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            partyBody = MultipartBody.Part.createFormData("pPartyImg", file.getName(), requestFile);
-            pPartyImgUri = RequestBody.create(MediaType.parse(Constant.multipart), pPartyImg);
+
+        if(!pPartyImg.isEmpty()){
+            if (pPartyImg != null) {
+                File file = new File(pPartyImg);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                partyBody = MultipartBody.Part.createFormData("pPartyImg", file.getName(), requestFile);
+                pPartyImgUri = RequestBody.create(MediaType.parse(Constant.multipart), pPartyImg);
+                Log.i("getJSONDataUpdate", "RESPONSE partyBody 4 -->" + String.valueOf(partyBody));
+            }
         }
-        if (pLeaderImg1 != null) {
-            File file = new File(pLeaderImg1);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            leader1Body = MultipartBody.Part.createFormData("pLeaderImg1", file.getName(), requestFile);
-            leaderImg1Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg1);
+        if(!pLeaderImg1.isEmpty()){
+            if (pLeaderImg1 != null) {
+                File file = new File(pLeaderImg1);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                leader1Body = MultipartBody.Part.createFormData("pLeaderImg1", file.getName(), requestFile);
+                leaderImg1Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg1);
+            }
         }
-        if (pLeaderImg2 != null) {
-            File file = new File(pLeaderImg2);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            leader2Body = MultipartBody.Part.createFormData("pLeaderImg2", file.getName(), requestFile);
-            leaderImg2Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg2);
+        if(!pLeaderImg2.isEmpty()){
+            if (pLeaderImg2 != null) {
+                File file = new File(pLeaderImg2);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                leader2Body = MultipartBody.Part.createFormData("pLeaderImg2", file.getName(), requestFile);
+                leaderImg2Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg2);
+            }
         }
-        if (pLeaderImg3 != null) {
-            File file = new File(pLeaderImg3);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            leader3Body = MultipartBody.Part.createFormData("pLeaderImg3", file.getName(), requestFile);
-            leaderImg3Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg3);
+
+        if(!pLeaderImg3.isEmpty()){
+            if (pLeaderImg3 != null) {
+                File file = new File(pLeaderImg3);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                leader3Body = MultipartBody.Part.createFormData("pLeaderImg3", file.getName(), requestFile);
+                leaderImg3Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg3);
+            }
         }
-        if (pLeaderImg4 != null) {
-            File file = new File(pLeaderImg4);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            leader4Body = MultipartBody.Part.createFormData("pLeaderImg4", file.getName(), requestFile);
-            leaderImg4Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg4);
+
+        if(!pLeaderImg4.isEmpty()){
+            if (pLeaderImg4 != null) {
+                File file = new File(pLeaderImg4);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                leader4Body = MultipartBody.Part.createFormData("pLeaderImg4", file.getName(), requestFile);
+                leaderImg4Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg4);
+            }
         }
-        if (pLeaderImg5 != null) {
-            File file = new File(pLeaderImg5);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            leader5Body = MultipartBody.Part.createFormData("pLeaderImg5", file.getName(), requestFile);
-            leaderImg5Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg5);
+
+        if(!pLeaderImg5.isEmpty()){
+            if (pLeaderImg5 != null) {
+                File file = new File(pLeaderImg5);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                leader5Body = MultipartBody.Part.createFormData("pLeaderImg5", file.getName(), requestFile);
+                leaderImg5Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg5);
+            }
         }
-        if (pLeaderImg6 != null) {
-            File file = new File(pLeaderImg6);
-            RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
-            leader6Body = MultipartBody.Part.createFormData("pLeaderImg6", file.getName(), requestFile);
-            leaderImg6Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg6);
+
+        if(!pLeaderImg6.isEmpty()){
+            if (pLeaderImg6 != null) {
+                File file = new File(pLeaderImg6);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
+                leader6Body = MultipartBody.Part.createFormData("pLeaderImg6", file.getName(), requestFile);
+                leaderImg6Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg6);
+            }
         }
+
 
 
 

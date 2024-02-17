@@ -61,7 +61,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
     Activity context;
     String image_url;
 
-    RecyclerView rv;
+    RecyclerView political_RV;
     PreferenceManager preferenceManager;
     JSONArray jsonArrayModel;
     BottomAdapter featureAdapter;
@@ -126,7 +126,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
                             businessItemArrayList.addAll(response.body());
                             recyclerViewLayoutManager = new StaggeredGridLayoutManager(1, 1);
-                            rvbus.setLayoutManager(recyclerViewLayoutManager);
+                            business_rvbus.setLayoutManager(recyclerViewLayoutManager);
 
 
                         /*    if (businessItemArrayList.size() == 0) {
@@ -157,7 +157,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                             });
 
 
-                            rvbus.setAdapter(getBusinessAdapter);
+                            business_rvbus.setAdapter(getBusinessAdapter);
                             getBusinessAdapter.notifyDataSetChanged();
                         } else {
 
@@ -181,7 +181,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                 });
     }
 
-    private RecyclerView rvbus, rvSpec;
+    private RecyclerView business_rvbus, rvSpec;
     List<FrameModel> postItemList;
     private TextView bustv, potvtv;
     private LinearLayout ll;
@@ -216,10 +216,13 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
         ll = view.findViewById(R.id.profilePoliciy);
 
 
-        rvbus = view.findViewById(R.id.recyclerViewTwo);
+
+        // Business Profiles
+        business_rvbus = view.findViewById(R.id.recyclerViewTwo);
 
 
-        rv = view.findViewById(R.id.recyclerView);
+        // Political Profiles
+        political_RV = view.findViewById(R.id.recyclerView);
         loadBusinessData();
 
         getSpecialFrame(Constant.FRAME_TYPE_IMAGE);
@@ -241,7 +244,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
 
 
-        rv.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+        political_RV.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
                 return false;
@@ -297,8 +300,8 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
     private void setVisibility(){
         if (type.equalsIgnoreCase("profile")) {
 
-            rvbus.setVisibility(View.GONE);
-            rv.setVisibility(View.VISIBLE);
+            business_rvbus.setVisibility(View.GONE);
+            political_RV.setVisibility(View.VISIBLE);
             bustv.setVisibility(View.GONE);
             toolbarbus.setVisibility(View.GONE);
             toolbarpm.setVisibility(View.VISIBLE);
@@ -313,8 +316,8 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
         } else if (type.equalsIgnoreCase("NA")) {
             bustv.setVisibility(View.VISIBLE);
             toolbarbus.setVisibility(View.VISIBLE);
-            rvbus.setVisibility(View.VISIBLE);
-            rv.setVisibility(View.VISIBLE);
+            business_rvbus.setVisibility(View.VISIBLE);
+            political_RV.setVisibility(View.VISIBLE);
             toolbarpm.setVisibility(View.VISIBLE);
             toolbarppm.setVisibility(View.VISIBLE);
             ll.setVisibility(View.VISIBLE);
@@ -328,8 +331,8 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             toolbarpm.setVisibility(View.GONE);
             toolbarbus.setVisibility(View.VISIBLE);
             bustv.setVisibility(View.VISIBLE);
-            rv.setVisibility(View.GONE);
-            rvbus.setVisibility(View.VISIBLE);
+            political_RV.setVisibility(View.GONE);
+            business_rvbus.setVisibility(View.VISIBLE);
             toolbarppm.setVisibility(View.VISIBLE);
             ll.setVisibility(View.VISIBLE);
             toolbaspecSp.setVisibility(View.GONE);
@@ -475,9 +478,9 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                 Log.i("RESPONSEGetAllData", "RESPONSE Size-->" + String.valueOf(items.size())+", type = "+type);
                 featureAdapter = new BottomAdapter(context, image_url, items, type,jsonArrayModel,this);
                 featureAdapter.notifyDataSetChanged();
-                rv.setLayoutManager(new LinearLayoutManager(context));
-                rv.setAdapter(featureAdapter);
-                rv.setNestedScrollingEnabled(false);
+                political_RV.setLayoutManager(new LinearLayoutManager(context));
+                political_RV.setAdapter(featureAdapter);
+                political_RV.setNestedScrollingEnabled(false);
 
                 setVisibility();
             }

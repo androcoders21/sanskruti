@@ -162,22 +162,13 @@ public interface ApiService {
 
             @Part MultipartBody.Part logoFile,
             @Part MultipartBody.Part signatureFile,
-
             @Part MultipartBody.Part partyFile,
-
             @Part MultipartBody.Part leader1File,
-
             @Part MultipartBody.Part leader2File,
-
             @Part MultipartBody.Part leader3File,
-
             @Part MultipartBody.Part leader4File,
-
-
             @Part MultipartBody.Part leader5File,
-
             @Part MultipartBody.Part leader6File,
-
             @Part("pName") RequestBody name,
             @Part("pPhone") RequestBody phone,
             @Part("pEmail") RequestBody email,

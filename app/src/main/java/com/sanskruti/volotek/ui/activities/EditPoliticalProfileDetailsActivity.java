@@ -132,11 +132,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         onClick();
         onShowHide();
         getDataShare();
-
-
         showBackDialog();
     }
-
     private void showColorPickerDialog(TextView tv) {
         // Inflate the custom layout for the color picker
         View view = LayoutInflater.from(this).inflate(R.layout.color_picker_layout, null);
@@ -161,7 +158,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         // Show the AlertDialog
         colorPickerDialog.show();
     }
-
     private void showFontFamilyBottomSheet(TextView textView) {
         FontFamilyBottomSheetDialogFragment bottomSheetFragment = new FontFamilyBottomSheetDialogFragment();
         bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
@@ -175,7 +171,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             }
         });
     }
-
     public void onBackPressed() {
 
         if (!dialog.isShowing()) {
@@ -184,7 +179,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         }
 
     }
-
     private void showBackDialog() {
 
         dialog = new Dialog(this);
@@ -217,7 +211,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         });
 
     }
-
     private void applyFontFamily(String fontFamily, TextView textView) {
         Typeface typeface;
         Log.i("checkfontFamily", "fontFamily 7 = " + String.valueOf(fontFamily));
@@ -248,7 +241,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         // Apply the selected font family to the TextView
         textView.setTypeface(typeface);
     }
-
     private class DownloadImageTaskThum extends AsyncTask<String, Void, Bitmap> {
         protected Bitmap doInBackground(String... urls) {
             String url = urls[0];
@@ -279,7 +271,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             }
         }
     }
-
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         protected Bitmap doInBackground(String... urls) {
             String url = urls[0];
@@ -504,7 +495,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         }*/
 
     }
-
     private void setData() {
         tvNameTv.setText(pName);
         tvDesignation1Tv.setText(pDesignation1);
@@ -1178,7 +1168,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
 
     }
-
     private void onClick() {
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1416,7 +1405,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             }
         });
     }
-
     public void setTextFont(String str, TextView autoResizeTextView) {
         try {
             if (str.equals(Bus.DEFAULT_IDENTIFIER)) {
@@ -1461,7 +1449,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
         }
     }
-
     SeekBar.OnSeekBarChangeListener seekBarChangeListenerProfilePhoto = new SeekBar.OnSeekBarChangeListener() {
 
         @Override
@@ -1606,7 +1593,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             // called after the user finishes moving the SeekBar
         }
     };
-
     private void flipImage(ImageView imageView) {
         if (!isMirrored) {
             // Flip the image horizontally
@@ -1738,7 +1724,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         initView(newToolbar);
         getDataShare();
     }
-
     private void initView(View newToolbar) {
         tvNameTv = (TextView) newToolbar.findViewById(R.id.tvName);
 
@@ -1756,7 +1741,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivAddImgLeader6 = (ImageView) newToolbar.findViewById(R.id.iv_logoL6);
         ivSocialMediaIv = (ImageView) newToolbar.findViewById(R.id.socialMediaIv);
     }
-
     RelativeLayout ivBack;
     private void init() {
         ivBack = (RelativeLayout)findViewById(R.id.btn_bckprass);
@@ -1889,7 +1873,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
 
     }
-
     private void saveImage(Bitmap bitmap, boolean z) {
 
         universalDialog.showLoadingDialog(this, "Saving Post...");
@@ -1918,7 +1901,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         }
 
     }
-
     private boolean isSaved(Bitmap bitmap, String filePath) {
 
 
@@ -1970,7 +1952,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         }
         return success;
     }
-
     public void openShareActivity(String filePath) {
 
         Log.i("checkdatafilePath", "1 files path = " + filePath);
@@ -1988,7 +1969,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         intent.putExtra("way", "Poster");
         startActivity(intent);*/
     }
-
     private Bitmap viewToBitmap(View view) {
 
         //  tvEdit.setVisibility(GONE);

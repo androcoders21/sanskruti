@@ -38,8 +38,11 @@ import com.sanskruti.volotek.model.FrameModel;
 import com.sanskruti.volotek.model.ItemPolitical;
 import com.sanskruti.volotek.model.UserItem;
 import com.sanskruti.volotek.ui.activities.AddBusinessActivity;
+import com.sanskruti.volotek.ui.activities.EditBusinessProfileDetailsActivity;
+import com.sanskruti.volotek.ui.activities.EditPersonalProfileDetailsActivity;
 import com.sanskruti.volotek.ui.activities.EditPoliticalProfileDetailsActivity;
 import com.sanskruti.volotek.ui.activities.PoliticalProfileDetailsEditActivity;
+import com.sanskruti.volotek.ui.activities.ProfileEditActivity;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.MyUtils;
 import com.sanskruti.volotek.utils.PreferenceManager;
@@ -145,10 +148,19 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                                     context.startActivity(intent);
                                     dismiss();
                                 } else {
-                                    Intent intent = new Intent(context, ThumbnailActivity.class);
+                                    Intent intent = new Intent(context, EditBusinessProfileDetailsActivity/*ThumbnailActivity*/.class);
                                     intent.putExtra("backgroundImage", image_url);
                                     intent.putExtra("type", "images");
                                     intent.putExtra("sizeposition", "1:1");
+
+                                    intent.putExtra("index", String.valueOf(0));
+                                    intent.putExtra("img", image_url);
+                                //    intent.putExtra("profileId", /*item.profileId*/222);
+
+                                    intent.putExtra("party", Constant.businessItem.logo);
+                                    intent.putExtra("mobile", Constant.businessItem.phone);
+                                    intent.putExtra("name", Constant.businessItem.name);
+                                    intent.putExtra("address",  Constant.businessItem.address);
                                     context.startActivity(intent);
                                     dismiss();
                                 }
@@ -184,7 +196,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
     private RecyclerView business_rvbus, rvSpec;
     List<FrameModel> postItemList;
     private TextView bustv, potvtv;
-    private LinearLayout ll;
+    private LinearLayout ll, linearLayout10ll;
 
     @Nullable
     @Override
@@ -195,6 +207,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
         // Set up your bottom sheet views and buttons here
         CircularImageView profileImg = view.findViewById(R.id.circularImageView);
 
+        linearLayout10ll = view.findViewById(R.id.linearLayout10);
         TextView txtName = view.findViewById(R.id.txt_name);
         postItemList = new ArrayList<>();
         toolbarpm = view.findViewById(R.id.toolbarp);
@@ -234,11 +247,29 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
         iv_edit_per.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(context, ProfileEditActivity.class));
             }
         });
 
+        linearLayout10ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, EditPersonalProfileDetailsActivity.class);
+                intent.putExtra("backgroundImage", image_url);
+                intent.putExtra("type", "images");
+                intent.putExtra("sizeposition", "1:1");
 
+                intent.putExtra("index", String.valueOf(0));
+                intent.putExtra("img", image_url);
+                //    intent.putExtra("profileId", /*item.profileId*/222);
+
+                intent.putExtra("userImg", userItem.getUserImage());
+                intent.putExtra("name", userItem.getUserName());
+                intent.putExtra("email",  userItem.getEmail());
+                context.startActivity(intent);
+                dismiss();
+            }
+        });
 
 
 

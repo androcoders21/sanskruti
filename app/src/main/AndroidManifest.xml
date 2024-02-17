@@ -18,6 +18,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
     <queries>
         <package android:name="com.whatsapp" />
         <package android:name="com.facebook.katana" />
@@ -36,6 +37,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.activities.EditPersonalProfileDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.EditBusinessProfileDetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.EditPoliticalProfileDetailsActivity"
             android:exported="false" />

@@ -12,86 +12,102 @@
         android:layout_gravity="bottom|end">
 
         <LinearLayout
-            android:id="@+id/linearLogo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom"
-            android:layout_gravity="bottom"
-            android:padding="1dp"
-            android:visibility="visible">
-
-            <ImageView
-                android:id="@+id/iv_party"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="@dimen/_70sdp"
-                android:layout_gravity="bottom"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher_foreground"
-                android:visibility="gone" />
-
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_weight="1"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:textStyle="bold"
-                    android:textColor="@color/red"
-                    android:text="Name"
-                    android:textSize="@dimen/_13sdp" />
-
-                <TextView
-                    android:id="@+id/tvDesignation1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Designation1"
-                    android:textSize="@dimen/_7sdp" />
-
-                <TextView
-                    android:id="@+id/tvDesignation2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Designation2"
-                    android:textSize="@dimen/_7sdp" />
-                <TextView
-                    android:id="@+id/tvMobileNo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Mobile Number"
-                    android:textSize="@dimen/_7sdp" />
+                android:id="@+id/linearLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingVertical="10dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:layout_gravity="bottom"
+                android:background="#0b446d"
+                android:visibility="visible">
 
                 <ImageView
-                    android:id="@+id/socialMediaIv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_8sdp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginTop="3dp"
-                    android:elevation="1dp"
-                    android:src="@drawable/ic_all_social"
-                    android:visibility="visible" />
-            </LinearLayout>
+                    android:id="@+id/iv_logo"
 
-            <ImageView
-                android:id="@+id/iv_logo"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="@dimen/_70sdp"
-                android:layout_gravity="bottom"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher_foreground"
-                android:visibility="visible" />
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_70sdp"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_launcher_foreground"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/red"
+                        android:text="Name"
+                        android:textSize="@dimen/_20sdp" />
+
+                    <TextView
+                        android:id="@+id/tvDesignation1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:text="Designation1"
+                        android:textSize="@dimen/_7sdp" />
+
+                    <TextView
+                        android:id="@+id/tvMobileNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:text="Designation2"
+                        android:textSize="@dimen/_7sdp" />
+                    <TextView
+                        android:id="@+id/tvDesignation2"
+                        android:layout_width="wrap_content"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:text="Mobile Number"
+                        android:textSize="@dimen/_7sdp" />
+
+                    <ImageView
+                        android:id="@+id/socialMediaIv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_8sdp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="3dp"
+                        android:elevation="1dp"
+                        android:src="@drawable/ic_all_social"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/iv_party"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_70sdp"
+
+                    android:layout_gravity="bottom"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_launcher_foreground"
+                    android:visibility="gone" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#eb8322"/>
         </LinearLayout>
+
 
     </FrameLayout>
 
@@ -116,6 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="10dp"
+                android:visibility="gone"
                 android:background="@drawable/rounded_corners"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
@@ -134,6 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="10dp"
+                android:visibility="gone"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
 
@@ -151,6 +169,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
+
                 app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
@@ -169,6 +189,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
@@ -188,6 +209,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="10dp"
+                android:visibility="gone"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
 
@@ -205,6 +227,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">

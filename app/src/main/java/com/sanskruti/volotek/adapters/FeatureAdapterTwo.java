@@ -104,11 +104,11 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
         context.startActivity(intent);*/
         Log.i("checkAdapterStatus","check details in this type = "+featureItemList.get(position).type);
 
-/*        Intent intent = new Intent(context, ThumbnailActivity.class);
+        Intent intent = new Intent(context, ThumbnailActivity.class);
         intent.putExtra("backgroundImage", data.image_url);
         intent.putExtra("type", "images");
         intent.putExtra("sizeposition", "1:1");
-        context.startActivity(intent);*/
+        context.startActivity(intent);
 
 
 

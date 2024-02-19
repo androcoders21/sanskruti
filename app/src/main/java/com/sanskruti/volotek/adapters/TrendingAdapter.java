@@ -13,6 +13,7 @@ import com.sanskruti.volotek.databinding.ItemPostBinding;
 import com.sanskruti.volotek.listener.ClickListener;
 import com.sanskruti.volotek.model.PostItem;
 import com.sanskruti.volotek.utils.MyUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         holder.binding.setPostdata(postItemList.get(position));
+        Picasso.get().load(postItemList.get(position).image_url).placeholder(R.drawable.bg_card).into(holder.binding.ivPost);
 
 
         MyUtils.showResponse(postItemList.get(position));

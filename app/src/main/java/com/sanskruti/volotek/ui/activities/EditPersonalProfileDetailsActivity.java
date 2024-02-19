@@ -1723,8 +1723,6 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 
         tvDesignation1Tv = (TextView) newToolbar.findViewById(R.id.tvDesignation1);
         tvDesignation2Tv = (TextView) newToolbar.findViewById(R.id.tvDesignation2);
-        tvDesignation1Tv.setVisibility(View.GONE);
-        tvDesignation2Tv.setVisibility(View.GONE);
         tvMobileNoTv = (TextView) newToolbar.findViewById(R.id.tvMobileNo);
 
         ivAddImg = (ImageView) newToolbar.findViewById(R.id.iv_logo);

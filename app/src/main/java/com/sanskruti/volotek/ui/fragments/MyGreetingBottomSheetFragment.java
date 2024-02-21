@@ -507,7 +507,7 @@ public class MyGreetingBottomSheetFragment extends BottomSheetDialogFragment imp
 
                 }
                 Log.i("RESPONSEGetAllData", "RESPONSE Size-->" + String.valueOf(items.size())+", type = "+type);
-                featureAdapter = new BottomAdapter(context, image_url, items, type,jsonArrayModel,this);
+                featureAdapter = new BottomAdapter(context, image_url, items, type,jsonArrayModel,this,false);
                 featureAdapter.notifyDataSetChanged();
                 political_RV.setLayoutManager(new LinearLayoutManager(context));
                 political_RV.setAdapter(featureAdapter);

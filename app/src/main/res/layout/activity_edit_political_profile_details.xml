@@ -140,31 +140,41 @@
         </RelativeLayout>
     </RelativeLayout>
     <RelativeLayout
-        android:id="@+id/constraint"
-        android:layout_width="fill_parent"
+        android:id="@+id/constraintTwo"
+        android:layout_width="match_parent"
         android:layout_height="390dp"
         android:layout_below="@id/header"
         android:layout_margin="10dp"
         android:layout_marginBottom="3dp">
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/photoView"
+            android:layout_width="match_parent"
+            android:layout_height="390dp"/>
         <RelativeLayout
-            android:id="@+id/constraintThum"
+            android:id="@+id/constraint"
             android:layout_width="fill_parent"
             android:layout_height="390dp">
-            <LinearLayout
-                android:id="@+id/parent_layout"
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:id="@+id/constraintThum"
+                android:layout_width="fill_parent"
                 android:layout_height="390dp">
+                <LinearLayout
+                    android:id="@+id/parent_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="390dp">
 
-                
-                <include
-                    android:id="@+id/toolbar"
-                    layout="@layout/political_frame_1"/>
-            </LinearLayout>
+
+                    <include
+                        android:id="@+id/toolbar"
+                        layout="@layout/political_frame_1"/>
+                </LinearLayout>
+
+            </RelativeLayout>
+
 
         </RelativeLayout>
-
-
     </RelativeLayout>
+
     <View
         android:layout_width="wrap_content"
         android:layout_height="0dp"

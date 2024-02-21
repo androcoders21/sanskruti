@@ -3,6 +3,7 @@ package com.sanskruti.volotek.ui.activities;
 import static android.view.View.VISIBLE;
 import static com.sanskruti.volotek.MyApplication.context;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -24,6 +25,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.gson.Gson;
 import com.jaredrummler.android.colorpicker.ColorPickerView;
 import com.sanskruti.volotek.R;
@@ -92,7 +95,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 
     private TextView tvProfilePhotoShowTv, tvPartyPhotoShowTv, tvNameShowTv, tvDesignation1ShowTv, tvDesignation2ShowTv, tvMobileShowTv, tvSocialMediaShowTv;
     UniversalDialog universalDialog;
-    RelativeLayout constraint;
+    RelativeLayout constraint, constraintTwo;
     PreferenceManager preferenceManager;
     JSONArray jsonArray = new JSONArray();
     ImageView ivAddImg, ivAddImgParty, ivAddImgLeader1, ivAddImgLeader2, ivAddImgLeader3, ivAddImgLeader4, ivAddImgLeader5, ivAddImgLeader6, ivSocialMediaIv;
@@ -107,7 +110,27 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             pDesignation1="", pDesignation2="", pProfileImg="", pPartyImg="", pLeaderImg1 = "", pLeaderImg2="",
             pLeaderImg3="", pLeaderImg4="", pLeaderImg5="", pLeaderImg6="";
     private Dialog dialog;
+    private PhotoView photoView;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+    private boolean greeting = false;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            // Get the image URI
+            Uri imageUri = data.getData();
+            /*    photoView.setImageResource(R.drawable.demo_img);*/
+            photoView.setImageURI(imageUri);
+
+            // Now you can use the imageUri to do further processing (e.g., upload the image)
+            // You might want to display the selected image in an ImageView
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +138,24 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_personal_profile_details);
 
 
+        photoView = findViewById(R.id.photoView);
+        // Load your image into the PhotoView
+        photoView.setImageResource(R.drawable.bgremove);
+
+        // Enable zoom and pan gestures
+        photoView.setMaximumScale(5.0f);
+        photoView.setMediumScale(2.5f);
+        photoView.setMinimumScale(0.5f);
+        photoView.setZoomable(true);
+
+        photoView.setVisibility(View.GONE);
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Open gallery when a button or some UI element is clicked
+                openGallery();
+            }
+        });
         init();
 
 
@@ -304,7 +345,14 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 
         position = getIntent().getStringExtra("index");
         String imgUrl = getIntent().getStringExtra("img");
+        greeting = getIntent().getBooleanExtra("greeting", false);
 
+        //     Toast.makeText(this, "greeting = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
+        if (greeting) {
+            photoView.setVisibility(VISIBLE);
+        } else {
+            photoView.setVisibility(View.GONE);
+        }
         if (getIntent().getStringExtra("imgThum") != null) {
             //    Toast.makeText(this, "not null", Toast.LENGTH_SHORT).show();
             LinearLayout layout = (LinearLayout) findViewById(R.id.bottomLay);
@@ -1265,7 +1313,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveImage(viewToBitmap(constraint), true);
+                saveImage(viewToBitmap(constraintTwo), true);
             }
         });
 
@@ -1849,7 +1897,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 
 
         constraint = (RelativeLayout) findViewById(R.id.constraint);
-
+        constraintTwo = (RelativeLayout) findViewById(R.id.constraintTwo);
 
         ivAddImgLeader11 = (ImageView) findViewById(R.id.iv_logoL11);
         ivAddImgLeader22 = (ImageView) findViewById(R.id.iv_logoL12);

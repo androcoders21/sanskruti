@@ -39,6 +39,7 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
     RecyclerItemClickListener.OnItemClickListener onItemClickListener;
     PreferenceManager preferenceManager;
 
+
     public BusinessListAdapter(Activity context, ArrayList<BusinessItem> businessItems, RecyclerItemClickListener.OnItemClickListener onItemClickListener) {
 
         this.businessItems = businessItems;

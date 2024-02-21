@@ -3,11 +3,6 @@ package com.sanskruti.volotek.ui.activities;
 import static android.view.View.VISIBLE;
 import static com.sanskruti.volotek.MyApplication.context;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -24,6 +19,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +33,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.github.chrisbanes.photoview.PhotoView;
 import com.jaredrummler.android.colorpicker.ColorPickerView;
 import com.sanskruti.volotek.R;
 import com.sanskruti.volotek.binding.GlideDataBinding;
@@ -80,6 +82,8 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
 
     private String position;
 
+    private boolean greeting = false;
+
     private ImageView ivbtnBoldFontName, ivbtnItalicFontName, ivbtnUnderlineFontName,
             ivbtnBoldFontDesignation1, ivbtnItalicFontDesignation1, ivbtnUnderlineFontDesignation1,
             ivbtnBoldFontDesignation2, ivbtnItalicFontDesignation2, ivbtnUnderlineFontDesignation2,
@@ -92,7 +96,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
 
     private TextView tvProfilePhotoShowTv, tvPartyPhotoShowTv, tvNameShowTv, tvDesignation1ShowTv, tvDesignation2ShowTv, tvMobileShowTv, tvSocialMediaShowTv;
     UniversalDialog universalDialog;
-    RelativeLayout constraint;
+    RelativeLayout constraint, constraintTwo;
     PreferenceManager preferenceManager;
     JSONArray jsonArray = new JSONArray();
     ImageView ivAddImg, ivAddImgParty, ivAddImgLeader1, ivAddImgLeader2, ivAddImgLeader3, ivAddImgLeader4, ivAddImgLeader5, ivAddImgLeader6, ivSocialMediaIv;
@@ -103,15 +107,58 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
     ImageView ivFrames00, ivFrames11, ivFrames22/*, ivFrames33*/;
     private TextView tvNameTv, tvDesignation1Tv, tvDesignation2Tv, tvMobileNoTv;
 
-    private String pName="", pPhone="", pEmail="", pFacebookUsername="", pInstagramUsername="", pTwitterUsername="",
-            pDesignation1="", pDesignation2="", pProfileImg="", pPartyImg="", pLeaderImg1 = "", pLeaderImg2="",
-            pLeaderImg3="", pLeaderImg4="", pLeaderImg5="", pLeaderImg6="";
+    private String pName = "", pPhone = "", pEmail = "", pFacebookUsername = "", pInstagramUsername = "", pTwitterUsername = "",
+            pDesignation1 = "", pDesignation2 = "", pProfileImg = "", pPartyImg = "", pLeaderImg1 = "", pLeaderImg2 = "",
+            pLeaderImg3 = "", pLeaderImg4 = "", pLeaderImg5 = "", pLeaderImg6 = "";
     private Dialog dialog;
+    private PhotoView photoView;
+    private static final int PICK_IMAGE_REQUEST = 1;
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            // Get the image URI
+            Uri imageUri = data.getData();
+            /*    photoView.setImageResource(R.drawable.demo_img);*/
+            photoView.setImageURI(imageUri);
+
+            // Now you can use the imageUri to do further processing (e.g., upload the image)
+            // You might want to display the selected image in an ImageView
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_business_profile_details);
+
+
+        photoView = findViewById(R.id.photoView);
+        // Load your image into the PhotoView
+        photoView.setImageResource(R.drawable.bgremove);
+
+        // Enable zoom and pan gestures
+        photoView.setMaximumScale(5.0f);
+        photoView.setMediumScale(2.5f);
+        photoView.setMinimumScale(0.5f);
+        photoView.setZoomable(true);
+
+        photoView.setVisibility(View.GONE);
+
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Open gallery when a button or some UI element is clicked
+                openGallery();
+            }
+        });
         init();
 
 
@@ -295,8 +342,10 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             }
         }
     }
+
     List<ItemPolitical> items = new ArrayList<>();
     UserViewModel userViewModel;
+
     private void getDataShare() {
 
 
@@ -307,6 +356,13 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         Log.i("getJSONData", "userDataString = " + userDataString.toString());
 
         position = getIntent().getStringExtra("index");
+        greeting = getIntent().getBooleanExtra("greeting", false);
+
+        if (greeting) {
+            photoView.setVisibility(VISIBLE);
+        } else {
+            photoView.setVisibility(View.GONE);
+        }
         String imgUrl = getIntent().getStringExtra("img");
 
         if (getIntent().getStringExtra("imgThum") != null) {
@@ -339,7 +395,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
 
 //        String id = businessItem.profiles.pUserId;
 
-        if(nameOther != null){
+        if (nameOther != null) {
             pName = nameOther;
         }
 //        if(businessItem.profiles.pPhone != null){
@@ -359,18 +415,18 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
 //            pTwitterUsername = businessItem.profiles.pTwitterUsername;
 //        }
 
-        if(addressOther != null){
-            pDesignation1 = "व्यवसायाचा पत्ता : "+ addressOther;
+        if (addressOther != null) {
+            pDesignation1 = "व्यवसायाचा पत्ता : " + addressOther;
         }
-        if(mobileOther != null){
-            pPhone = "मो. : "+mobileOther;
+        if (mobileOther != null) {
+            pPhone = "मो. : " + mobileOther;
         }
 
 //        if(businessItem.profiles.pProfileImg != null){
 //            pPartyImg = businessItem.profiles.pProfileImg;
 //        }
-        if(profileOther != null){
-            pProfileImg    = profileOther;
+        if (profileOther != null) {
+            pProfileImg = profileOther;
         }
 //
 //        if(businessItem.profiles.pLeaderImg1 != null){
@@ -392,8 +448,6 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
 //        if(businessItem.profiles.pLeaderImg6 != null){
 //            pLeaderImg6 = businessItem.profiles.pLeaderImg6;
 //        }
-
-
 
 
         setData();
@@ -510,76 +564,76 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         tvMobileNoTv.setText(pPhone);
 
 
-        if (pProfileImg.equalsIgnoreCase("")){
+        if (pProfileImg.equalsIgnoreCase("")) {
             ivAddImg.setVisibility(View.GONE);
 
-        }else {
+        } else {
             ivAddImg.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImg, pProfileImg);
         }
-        if (pPartyImg.equalsIgnoreCase("")){
+        if (pPartyImg.equalsIgnoreCase("")) {
             ivAddImgParty.setVisibility(View.GONE);
 
-        }else {
+        } else {
             ivAddImgParty.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgParty, pPartyImg);
         }
 
-        if (pLeaderImg1.equalsIgnoreCase("")){
+        if (pLeaderImg1.equalsIgnoreCase("")) {
             ivAddImgLeader1.setVisibility(View.GONE);
             ivAddImgLeader11.setVisibility(View.GONE);
 
-        }else {
+        } else {
             ivAddImgLeader1.setVisibility(VISIBLE);
             ivAddImgLeader11.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader1, pLeaderImg1);
             GlideDataBinding.bindImage(ivAddImgLeader11, pLeaderImg1);
         }
 
-        if (pLeaderImg2.equalsIgnoreCase("")){
+        if (pLeaderImg2.equalsIgnoreCase("")) {
             ivAddImgLeader2.setVisibility(View.GONE);
             ivAddImgLeader22.setVisibility(View.GONE);
-        }else {
+        } else {
             ivAddImgLeader2.setVisibility(VISIBLE);
             ivAddImgLeader22.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader2, pLeaderImg2);
             GlideDataBinding.bindImage(ivAddImgLeader22, pLeaderImg2);
         }
 
-        if (pLeaderImg3.equalsIgnoreCase("")){
+        if (pLeaderImg3.equalsIgnoreCase("")) {
             ivAddImgLeader3.setVisibility(View.GONE);
             ivAddImgLeader33.setVisibility(View.GONE);
-        }else {
+        } else {
             ivAddImgLeader3.setVisibility(VISIBLE);
             ivAddImgLeader33.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader3, pLeaderImg3);
             GlideDataBinding.bindImage(ivAddImgLeader33, pLeaderImg3);
         }
 
-        if (pLeaderImg4.equalsIgnoreCase("")){
+        if (pLeaderImg4.equalsIgnoreCase("")) {
             ivAddImgLeader4.setVisibility(View.GONE);
             ivAddImgLeader44.setVisibility(View.GONE);
-        }else {
+        } else {
             ivAddImgLeader4.setVisibility(VISIBLE);
             ivAddImgLeader44.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader4, pLeaderImg4);
             GlideDataBinding.bindImage(ivAddImgLeader44, pLeaderImg4);
         }
 
-        if (pLeaderImg5.equalsIgnoreCase("")){
+        if (pLeaderImg5.equalsIgnoreCase("")) {
             ivAddImgLeader5.setVisibility(View.GONE);
             ivAddImgLeader55.setVisibility(View.GONE);
-        }else {
+        } else {
             ivAddImgLeader5.setVisibility(VISIBLE);
             ivAddImgLeader55.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader5, pLeaderImg5);
             GlideDataBinding.bindImage(ivAddImgLeader55, pLeaderImg5);
         }
 
-        if (pLeaderImg6.equalsIgnoreCase("")){
+        if (pLeaderImg6.equalsIgnoreCase("")) {
             ivAddImgLeader6.setVisibility(View.GONE);
             ivAddImgLeader66.setVisibility(View.GONE);
-        }else {
+        } else {
             ivAddImgLeader6.setVisibility(VISIBLE);
             ivAddImgLeader66.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader6, pLeaderImg6);
@@ -587,13 +641,10 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         }
 
 
-
-
-
-
-
     }
+
     private boolean isMirrored = false;
+
     private void onShowHide() {
         ivFlipIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -607,10 +658,10 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         profilePhotoShowLLll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (pProfileImg.equalsIgnoreCase("")){
+                if (pProfileImg.equalsIgnoreCase("")) {
                     ivAddImg.setVisibility(View.GONE);
 
-                }else {
+                } else {
                     if (checkProfilePhoto) {
                         ivAddImg.setVisibility(View.GONE);
 
@@ -639,10 +690,10 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (pPartyImg.equalsIgnoreCase("")){
+                if (pPartyImg.equalsIgnoreCase("")) {
                     ivAddImgParty.setVisibility(View.GONE);
 
-                }else {
+                } else {
                     if (checkPartyPhoto) {
 
                         ivAddImgParty.setVisibility(View.GONE);
@@ -1028,9 +1079,9 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         socialMediaShowLLll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("checkdatamethdo","step 1");
+                Log.i("checkdatamethdo", "step 1");
                 if (checkSocialMedia) {
-                    Log.i("checkdatamethdo","step 2");
+                    Log.i("checkdatamethdo", "step 2");
                     ivSocialMediaIv.setVisibility(View.GONE);
 
 
@@ -1040,7 +1091,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
                     checkSocialMedia = false;
                 } else {
                     ivSocialMediaIv.setVisibility(View.VISIBLE);
-                    Log.i("checkdatamethdo","step 3");
+                    Log.i("checkdatamethdo", "step 3");
 
                     tvSocialMediaShowTv.setText("Hide");
                     visibleSocialMediaKyeIconIv.setVisibility(View.GONE);
@@ -1058,7 +1109,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
                 ivFrames00.setBackground(getDrawable(R.drawable.images_background));
                 ivFrames11.setBackground(null);
                 ivFrames22.setBackground(null);
-               /* ivFrames33.setBackground(null);*/
+                /* ivFrames33.setBackground(null);*/
             }
         });
 
@@ -1280,7 +1331,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveImage(viewToBitmap(constraint), true);
+                saveImage(viewToBitmap(constraintTwo), true);
             }
         });
 
@@ -1650,10 +1701,11 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         // Start the animation
         objectAnimator.start();*/
     }
+
     private void switchToPoliticalFrame0() {
 
         // Assuming you have a reference to the parent ViewGroup
-        ViewGroup parentLayout  = findViewById(R.id.parent_layout);
+        ViewGroup parentLayout = findViewById(R.id.parent_layout);
 
         // Remove the current toolbar from the parent layout
         View currentToolbar = findViewById(R.id.toolbar);
@@ -1673,9 +1725,10 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         initView(newToolbar);
         getDataShare();
     }
+
     private void switchToPoliticalFrame1() {
         // Assuming you have a reference to the parent ViewGroup
-        ViewGroup parentLayout  = findViewById(R.id.parent_layout);
+        ViewGroup parentLayout = findViewById(R.id.parent_layout);
 
         // Remove the current toolbar from the parent layout
         View currentToolbar = findViewById(R.id.toolbar);
@@ -1694,9 +1747,10 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         initView(newToolbar);
         getDataShare();
     }
+
     private void switchToPoliticalFrame2() {
         // Assuming you have a reference to the parent ViewGroup
-        ViewGroup parentLayout  = findViewById(R.id.parent_layout);
+        ViewGroup parentLayout = findViewById(R.id.parent_layout);
 
         // Remove the current toolbar from the parent layout
         View currentToolbar = findViewById(R.id.toolbar);
@@ -1715,9 +1769,10 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         initView(newToolbar);
         getDataShare();
     }
+
     private void switchToPoliticalFrame3() {
         // Assuming you have a reference to the parent ViewGroup
-        ViewGroup parentLayout  = findViewById(R.id.parent_layout);
+        ViewGroup parentLayout = findViewById(R.id.parent_layout);
 
         // Remove the current toolbar from the parent layout
         View currentToolbar = findViewById(R.id.toolbar);
@@ -1756,13 +1811,14 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
     }
 
     RelativeLayout ivBack;
+
     private void init() {
-        ivBack = (RelativeLayout)findViewById(R.id.btn_bckprass);
+        ivBack = (RelativeLayout) findViewById(R.id.btn_bckprass);
         preferenceManager = new PreferenceManager(this);
         universalDialog = new UniversalDialog(this, false);
         btnDownload = (LinearLayout) findViewById(R.id.ll_save);
 
-        ivFlipIv = (ImageView)findViewById(R.id.flipIv);
+        ivFlipIv = (ImageView) findViewById(R.id.flipIv);
 
         llcolorMobilell = (LinearLayout) findViewById(R.id.llcolorMobile);
         llcolord2ll = (LinearLayout) findViewById(R.id.llcolord2);
@@ -1866,6 +1922,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         constraint = (RelativeLayout) findViewById(R.id.constraint);
 
 
+                constraintTwo = (RelativeLayout) findViewById(R.id.constraintTwo);
         ivAddImgLeader11 = (ImageView) findViewById(R.id.iv_logoL11);
         ivAddImgLeader22 = (ImageView) findViewById(R.id.iv_logoL12);
         ivAddImgLeader33 = (ImageView) findViewById(R.id.iv_logoL13);
@@ -1877,10 +1934,6 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         ivFrames11 = (ImageView) findViewById(R.id.iv_logoL111);
         ivFrames22 = (ImageView) findViewById(R.id.iv_logoL121);
         /*ivFrames33 = (ImageView) findViewById(R.id.iv_logoL131);*/
-
-
-
-
 
 
         switchToPoliticalFrame0();
@@ -1902,7 +1955,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         String fileName = System.currentTimeMillis() + extension;
         String filePath = file.getPath() + File.separator + fileName;
 //        String filePath = file.getAbsolutePath();
-        Log.i("checkdatafilePath", "0 files path = " + filePath+" , path file = "+file.getPath());
+        Log.i("checkdatafilePath", "0 files path = " + filePath + " , path file = " + file.getPath());
 //        this.filePath = filePath;
 
 
@@ -1925,10 +1978,6 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             FileOutputStream fileOutputStream = new FileOutputStream(filePath);
 
 
-
-
-
-
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
             bitmap.recycle();
             fileOutputStream.flush();
@@ -1944,7 +1993,6 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
                         });*/
 
 
-
                 // Use FileProvider to get a content URI for the file
                 Uri contentUri;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -1956,7 +2004,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
                 // Send broadcast to scan the file
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, contentUri);
                 context.sendBroadcast(mediaScanIntent);
-            }else {
+            } else {
                 Log.i("checkdatafilePath", "1111 else files path = ");
             }
 
@@ -1979,7 +2027,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(filePath))));
 
 
-        Log.i("checkdatafilePath","11 file Path = "+filePath);
+        Log.i("checkdatafilePath", "11 file Path = " + filePath);
         Toast.makeText(EditBusinessProfileDetailsActivity.this, "Download Successfully", Toast.LENGTH_SHORT).show();
        /* Intent intent = new Intent(context, ShareImageActivity.class);
         intent.putExtra("uri", filePath);

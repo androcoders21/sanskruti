@@ -217,7 +217,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        featureAdapter = new FeatureAdapterTwo(activity, "HOME",this);
+
+        featureAdapter = new FeatureAdapterTwo(activity, "HOME",getChildFragmentManager(),false);
         binding.rvHomeFeature.setAdapter(featureAdapter);
         binding.rvHomeFeature.setNestedScrollingEnabled(false);
         binding.rvHomeFeature.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {

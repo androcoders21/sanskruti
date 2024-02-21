@@ -40,16 +40,19 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
     Activity context;
     PreferenceManager preferenceManager;
     private String From;
-    private HomeFragment fragmentManager;
+    private FragmentManager fragmentManager;
     private InterstitialsAdsManager interstitialsAdsManager;
 
-    public FeatureAdapterTwo(Activity context, String From, HomeFragment fragmentManager) {
+    private boolean greeting = false;
+
+    public FeatureAdapterTwo(Activity context, String From, FragmentManager fragmentManager,boolean greetingNew) {
         this.context = context;
         this.From = From;
         preferenceManager = new PreferenceManager(context);
 
         interstitialsAdsManager = new InterstitialsAdsManager(context);
         this.fragmentManager = fragmentManager;
+        this.greeting = greetingNew;
 
     }
 
@@ -104,11 +107,11 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
         context.startActivity(intent);*/
         Log.i("checkAdapterStatus","check details in this type = "+featureItemList.get(position).type);
 
-        Intent intent = new Intent(context, ThumbnailActivity.class);
-        intent.putExtra("backgroundImage", data.image_url);
-        intent.putExtra("type", "images");
-        intent.putExtra("sizeposition", "1:1");
-        context.startActivity(intent);
+//        Intent intent = new Intent(context, ThumbnailActivity.class);
+//        intent.putExtra("backgroundImage", data.image_url);
+//        intent.putExtra("type", "images");
+//        intent.putExtra("sizeposition", "1:1");
+//        context.startActivity(intent);
 
 
 
@@ -116,8 +119,8 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
         // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
 
         if(fragmentManager !=null){
-            MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(data.image_url,context,"NA");
-            bottomSheetFragment.show(fragmentManager.getParentFragmentManager(), bottomSheetFragment.getTag());
+            MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(data.image_url,context,"NA",greeting);
+            bottomSheetFragment.show(fragmentManager, bottomSheetFragment.getTag());
         }else {
 
         }

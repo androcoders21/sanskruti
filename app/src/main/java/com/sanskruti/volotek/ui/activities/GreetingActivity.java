@@ -65,7 +65,7 @@ public class GreetingActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         String name = intent.getStringExtra("name");
-        featureAdapter = new FeatureAdapterTwo(context, "HOME",null);
+        featureAdapter = new FeatureAdapterTwo(context, "HOME",getSupportFragmentManager(),true);
         binding.allVideos.setAdapter(featureAdapter);
 
 

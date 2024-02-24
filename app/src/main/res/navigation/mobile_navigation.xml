@@ -17,11 +17,11 @@
 
     <fragment
         android:id="@+id/customFragment"
-        android:name="com.sanskruti.volotek.ui.fragments.CustomFragment"
+        android:name="com.sanskruti.volotek.ui.fragments.GreetingFragment"
         android:label="Custom"
         tools:layout="@layout/fragment_custom">
         <action
-            android:id="@+id/action_customFragment_to_myBusinessFragment"
+            android:id="@+id/action_greetingFragment_to_myBusinessFragment"
             app:destination="@id/myBusinessFragment" />
     </fragment>
 

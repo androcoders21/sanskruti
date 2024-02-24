@@ -185,6 +185,23 @@
 
 
         </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/movableImageView"
+            android:layout_width="150dp"
+            android:layout_height="150dp">
+            <ImageView
+                android:id="@+id/movableImageViewClose"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_close"/>
+            <ImageView
+
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/sticker_01" />
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
 

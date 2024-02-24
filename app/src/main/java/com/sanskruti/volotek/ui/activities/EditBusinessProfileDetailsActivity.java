@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -133,13 +134,47 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             // You might want to display the selected image in an ImageView
         }
     }
+    private RelativeLayout movableImageView;
 
+    private ImageView ivclose;
+    private float xDelta, yDelta;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_business_profile_details);
 
+        movableImageView = findViewById(R.id.movableImageView);
+        ivclose = findViewById(R.id.movableImageViewClose);
+        ivclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                movableImageView.setVisibility(View.GONE);
+            }
+        });
+        // Set touch listener to the image view
+        movableImageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                final float x = event.getRawX();
+                final float y = event.getRawY();
 
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Save the initial touch coordinates
+                        xDelta = x - view.getX();
+                        yDelta = y - view.getY();
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        // Update the image view's position based on finger movement
+                        view.setX(x - xDelta);
+                        view.setY(y - yDelta);
+                        break;
+                }
+
+                return true;
+            }
+        });
         photoView = findViewById(R.id.photoView);
         // Load your image into the PhotoView
         photoView.setImageResource(R.drawable.bgremove);

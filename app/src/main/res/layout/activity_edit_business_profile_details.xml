@@ -195,10 +195,9 @@
                 android:layout_height="24dp"
                 android:src="@drawable/icon_close"/>
             <ImageView
-
+                android:id="@+id/stickerImg"
                 android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:src="@drawable/sticker_01" />
+                android:layout_height="150dp" />
 
         </RelativeLayout>
 
@@ -1183,6 +1182,7 @@
             android:id="@+id/lay_frames"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:visibility="visible"
             android:layout_above="@+id/nsw"
             android:layout_centerHorizontal="true"
             android:background="@color/dialog_color"
@@ -1250,6 +1250,139 @@
 
 
         </LinearLayout>
+        <!--Sticker-->
+        <LinearLayout
+            android:id="@+id/lay_sticker"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/nsw"
+            android:layout_centerHorizontal="true"
+            android:background="@color/dialog_color"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+                    <ImageView
+                        android:id="@+id/iv_sticker_01"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:adjustViewBounds="true"
+                        android:padding="3dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sticker_01"
+                        android:visibility="visible"/>
+                    <ImageView
+                        android:id="@+id/iv_sticker_02"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:adjustViewBounds="true"
+                        android:padding="3dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sticker_02"
+                        android:visibility="visible"/>
+                    <ImageView
+                        android:id="@+id/iv_sticker_03"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:adjustViewBounds="true"
+                        android:padding="3dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sticker_03"
+                        android:visibility="visible"/>
+                     <ImageView
+                         android:id="@+id/iv_sticker_04"
+                         android:layout_width="100dp"
+                         android:layout_height="100dp"
+                         android:layout_marginHorizontal="5dp"
+                         android:adjustViewBounds="true"
+                         android:padding="3dp"
+                         android:scaleType="centerCrop"
+                         android:src="@drawable/sticker_04"
+                         android:visibility="visible"/>
+                    <ImageView
+                        android:id="@+id/iv_sticker_05"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:adjustViewBounds="true"
+                        android:padding="3dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sticker_05"
+                        android:visibility="visible"/>
+
+                    <ImageView
+                        android:id="@+id/iv_sticker_06"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:adjustViewBounds="true"
+                        android:padding="3dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sticker_06"
+                        android:visibility="visible"/>
+
+                    <ImageView
+                        android:id="@+id/iv_sticker_07"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:adjustViewBounds="true"
+                        android:padding="3dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sticker_07"
+                        android:visibility="visible"/>
+                    <ImageView
+                        android:id="@+id/iv_sticker_08"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:adjustViewBounds="true"
+                        android:padding="3dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sticker_08"
+                        android:visibility="visible"/>
+
+                    <ImageView
+                        android:id="@+id/iv_sticker_09"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:adjustViewBounds="true"
+                        android:padding="3dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sticker_09"
+                        android:visibility="visible"/>
+                    <ImageView
+                        android:id="@+id/iv_sticker_10"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:adjustViewBounds="true"
+                        android:padding="3dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sticker_10"
+                        android:visibility="visible"/>
+
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+
+        </LinearLayout>
 
 
         <HorizontalScrollView
@@ -1287,6 +1420,32 @@
                             android:layout_height="wrap_content"
                             android:paddingHorizontal="10dp"
                             android:text="Frames" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Sticker -->
+                <LinearLayout
+                    android:id="@+id/stickerLl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="@dimen/_5sdp">
+
+                    <LinearLayout
+                        android:id="@+id/stickerLine"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/box_shape_show_gray"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/stickerTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="10dp"
+                            android:text="Sticker" />
                     </LinearLayout>
 
                 </LinearLayout>

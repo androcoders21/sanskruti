@@ -19,8 +19,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
-            android:layout_width="@dimen/_95sdp"
-            android:layout_height="@dimen/_95sdp"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
             android:layout_margin="@dimen/_4sdp"
             app:cardCornerRadius="@dimen/_5sdp"
             app:cardElevation="@dimen/_2sdp"
@@ -73,7 +73,7 @@
             android:gravity="center"
             android:maxLines="1"
             android:layout_marginTop="5dp"
-            android:text="@{festivalData.name}"
+            android:text="@{festivalData.date}"
             android:textColor="@color/active_color"
             app:fonts='@{"bold"}'
             app:layout_constraintTop_toBottomOf="@+id/txt_fest_name"

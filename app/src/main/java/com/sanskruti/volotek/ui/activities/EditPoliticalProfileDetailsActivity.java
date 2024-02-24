@@ -25,6 +25,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -78,12 +79,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
-    LinearLayout llFramesLl, llProfilePhotoLl, llNameLl, btnDownload, llDesignation1Ll, llDesignation2Ll, llMobileLl,
+    LinearLayout llFramesLl, llProfilePhotoLl, llNameLl, btnDownload, llDesignation1Ll, llDesignation2Ll, llMobileLl,llStickerLl,
             llLeadersPhotoLl, llSocialMediaIconsLl, llPartyIconLayout, llcolorll, llcolord1ll, llcolord2ll, llcolorMobilell;
     FontAdapter adapter;
     LinearLayout llfontll, llfontd1ll, llfontd2ll, llfontMobilell;
 
-    LinearLayout lay_profile_photo_ll, lay_party_photo_ll, lay_name_ll, lay_Designation1_ll, lay_Designation2_ll, lay_Mobile_ll, lay_SocialMedia_ll, lay_LeadersPhoto_ll, lay_frames_ll;
+    LinearLayout lay_profile_photo_ll, lay_party_photo_ll, lay_name_ll, lay_Designation1_ll, lay_Designation2_ll, lay_Mobile_ll, lay_SocialMedia_ll, lay_LeadersPhoto_ll, lay_frames_ll, lay_sticker_ll;
 
     LinearLayout profilePhotoShowLLll, partyPhotoShowLLll, nameShowLLll, designation1ShowLLll, designation2ShowLLll, mobileShowLLll, socialMediaShowLLll;
 
@@ -92,7 +93,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
     private SeekBar btnseekBarProfilePhoto, btnseekBarPartyPhoto, btnseekBarName, btnseekBarDesignation1, btnseekBarDesignation2, btnseekBarMobile;
 
     private String position;
-
+    ImageView ivSticker00, ivSticker01, ivSticker02, ivSticker03, ivSticker04, ivSticker05, ivSticker06, ivSticker07, ivSticker08, ivSticker09;
     private ImageView ivbtnBoldFontName, ivbtnItalicFontName, ivbtnUnderlineFontName,
             ivbtnBoldFontDesignation1, ivbtnItalicFontDesignation1, ivbtnUnderlineFontDesignation1,
             ivbtnBoldFontDesignation2, ivbtnItalicFontDesignation2, ivbtnUnderlineFontDesignation2,
@@ -141,12 +142,77 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             // You might want to display the selected image in an ImageView
         }
     }
+    private RelativeLayout movableImageView;
 
+    private ImageView ivclose,ivStickerImg;
+    private float xDelta, yDelta;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_political_profile_details);
+        movableImageView = findViewById(R.id.movableImageView);
+        llStickerLl = (LinearLayout)findViewById(R.id.stickerLl);
+        ivclose = findViewById(R.id.movableImageViewClose);
+        lay_sticker_ll  = (LinearLayout) findViewById(R.id.lay_sticker);
+        ivSticker00 = (ImageView) findViewById(R.id.iv_sticker_01);
+        ivSticker01 = (ImageView) findViewById(R.id.iv_sticker_02);
+        ivSticker02 = (ImageView) findViewById(R.id.iv_sticker_03);
+        ivSticker03 = (ImageView) findViewById(R.id.iv_sticker_04);
+        ivSticker04 = (ImageView) findViewById(R.id.iv_sticker_05);
+        ivSticker05 = (ImageView) findViewById(R.id.iv_sticker_06);
+        ivSticker06 = (ImageView) findViewById(R.id.iv_sticker_07);
+        ivSticker07 = (ImageView) findViewById(R.id.iv_sticker_08);
+        ivSticker08 = (ImageView) findViewById(R.id.iv_sticker_09);
+        ivSticker09 = (ImageView) findViewById(R.id.iv_sticker_10);
+        ivStickerImg = (ImageView)findViewById(R.id.stickerImg);
+        movableImageView.setVisibility(View.GONE);
+        ivclose.setVisibility(View.GONE);
+        ivclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                movableImageView.setVisibility(View.GONE);
+            }
+        });
+        // Set touch listener to the image view
+        movableImageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                final float x = event.getRawX();
+                final float y = event.getRawY();
 
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Save the initial touch coordinates
+                        xDelta = x - view.getX();
+                        yDelta = y - view.getY();
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        // Update the image view's position based on finger movement
+                        view.setX(x - xDelta);
+                        view.setY(y - yDelta);
+                        break;
+                }
+
+                return true;
+            }
+        });
+
+        llStickerLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_name_ll.setVisibility(View.GONE);
+                lay_Designation1_ll.setVisibility(View.GONE);
+                lay_party_photo_ll.setVisibility(View.GONE);
+                lay_Designation2_ll.setVisibility(View.GONE);
+                lay_Mobile_ll.setVisibility(View.GONE);
+                lay_SocialMedia_ll.setVisibility(View.GONE);
+                lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                lay_sticker_ll.setVisibility(VISIBLE);
+                lay_frames_ll.setVisibility(View.GONE);
+            }
+        });
 
         photoView = findViewById(R.id.photoView);
         // Load your image into the PhotoView
@@ -358,8 +424,12 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
    //     Toast.makeText(this, "greeting = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
         if (greeting) {
             photoView.setVisibility(VISIBLE);
+            movableImageView.setVisibility(VISIBLE);
+            llStickerLl.setVisibility(VISIBLE);
         } else {
             photoView.setVisibility(View.GONE);
+            movableImageView.setVisibility(View.GONE);
+            llStickerLl.setVisibility(View.GONE);
         }
         if (getIntent().getStringExtra("imgThum") != null) {
             //    Toast.makeText(this, "not null", Toast.LENGTH_SHORT).show();
@@ -1089,7 +1159,206 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             }
         });
 
+        ivSticker00.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivclose.setVisibility(VISIBLE);
+                movableImageView.setVisibility(VISIBLE);
+                ivStickerImg.setImageResource(R.drawable.sticker_01);
+                ivSticker00.setBackground(getDrawable(R.drawable.images_background));
+                ivSticker01.setBackground(null);
+                ivSticker02.setBackground(null);
+                ivSticker03.setBackground(null);
+                ivSticker04.setBackground(null);
 
+                ivSticker05.setBackground(null);
+                ivSticker06.setBackground(null);
+                ivSticker07.setBackground(null);
+                ivSticker08.setBackground(null);
+
+                ivSticker09.setBackground(null);
+            }
+        });
+        ivSticker01.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivclose.setVisibility(VISIBLE);
+                movableImageView.setVisibility(VISIBLE);
+                ivStickerImg.setImageResource(R.drawable.sticker_02);
+                ivSticker00.setBackground(null);
+                ivSticker01.setBackground(getDrawable(R.drawable.images_background));
+
+                ivSticker02.setBackground(null);
+                ivSticker03.setBackground(null);
+                ivSticker04.setBackground(null);
+
+                ivSticker05.setBackground(null);
+                ivSticker06.setBackground(null);
+                ivSticker07.setBackground(null);
+                ivSticker08.setBackground(null);
+
+                ivSticker09.setBackground(null);
+            }
+        });
+        ivSticker02.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivclose.setVisibility(VISIBLE);
+                movableImageView.setVisibility(VISIBLE);
+                ivStickerImg.setImageResource(R.drawable.sticker_03);
+                ivSticker00.setBackground(null);
+                ivSticker01.setBackground(null);
+                ivSticker02.setBackground(getDrawable(R.drawable.images_background));
+
+
+                ivSticker03.setBackground(null);
+                ivSticker04.setBackground(null);
+
+                ivSticker05.setBackground(null);
+                ivSticker06.setBackground(null);
+                ivSticker07.setBackground(null);
+                ivSticker08.setBackground(null);
+
+                ivSticker09.setBackground(null);
+            }
+        });
+        ivSticker03.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivclose.setVisibility(VISIBLE);
+                movableImageView.setVisibility(VISIBLE);
+                ivStickerImg.setImageResource(R.drawable.sticker_04);
+                ivSticker00.setBackground(null);
+                ivSticker01.setBackground(null);
+                ivSticker02.setBackground(null);
+                ivSticker03.setBackground(getDrawable(R.drawable.images_background));
+
+                ivSticker04.setBackground(null);
+
+                ivSticker05.setBackground(null);
+                ivSticker06.setBackground(null);
+                ivSticker07.setBackground(null);
+                ivSticker08.setBackground(null);
+
+                ivSticker09.setBackground(null);
+            }
+        });
+        ivSticker04.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivclose.setVisibility(VISIBLE);
+                movableImageView.setVisibility(VISIBLE);
+                ivStickerImg.setImageResource(R.drawable.sticker_05);
+                ivSticker00.setBackground(null);
+                ivSticker01.setBackground(null);
+                ivSticker02.setBackground(null);
+                ivSticker03.setBackground(null);
+                ivSticker04.setBackground(getDrawable(R.drawable.images_background));
+
+
+                ivSticker05.setBackground(null);
+                ivSticker06.setBackground(null);
+                ivSticker07.setBackground(null);
+                ivSticker08.setBackground(null);
+
+                ivSticker09.setBackground(null);
+            }
+        });
+        ivSticker05.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivclose.setVisibility(VISIBLE);
+                movableImageView.setVisibility(VISIBLE);
+                ivStickerImg.setImageResource(R.drawable.sticker_06);
+                ivSticker00.setBackground(null);
+                ivSticker01.setBackground(null);
+                ivSticker02.setBackground(null);
+                ivSticker03.setBackground(null);
+                ivSticker04.setBackground(null);
+                ivSticker05.setBackground(getDrawable(R.drawable.images_background));
+
+                ivSticker06.setBackground(null);
+                ivSticker07.setBackground(null);
+                ivSticker08.setBackground(null);
+                ivSticker09.setBackground(null);
+            }
+        });
+        ivSticker06.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivclose.setVisibility(VISIBLE);
+                movableImageView.setVisibility(VISIBLE);
+                ivStickerImg.setImageResource(R.drawable.sticker_07);
+                ivSticker00.setBackground(null);
+                ivSticker01.setBackground(null);
+                ivSticker02.setBackground(null);
+                ivSticker03.setBackground(null);
+                ivSticker04.setBackground(null);
+                ivSticker05.setBackground(null);
+                ivSticker06.setBackground(getDrawable(R.drawable.images_background));
+
+                ivSticker07.setBackground(null);
+                ivSticker08.setBackground(null);
+                ivSticker09.setBackground(null);
+            }
+        });
+        ivSticker07.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivclose.setVisibility(VISIBLE);
+                movableImageView.setVisibility(VISIBLE);
+                ivStickerImg.setImageResource(R.drawable.sticker_08);
+                ivSticker00.setBackground(null);
+                ivSticker01.setBackground(null);
+                ivSticker02.setBackground(null);
+                ivSticker03.setBackground(null);
+                ivSticker04.setBackground(null);
+                ivSticker05.setBackground(null);
+                ivSticker06.setBackground(null);
+                ivSticker07.setBackground(getDrawable(R.drawable.images_background));
+
+                ivSticker08.setBackground(null);
+                ivSticker09.setBackground(null);
+            }
+        });
+        ivSticker08.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivclose.setVisibility(VISIBLE);
+                movableImageView.setVisibility(VISIBLE);
+                ivStickerImg.setImageResource(R.drawable.sticker_09);
+                ivSticker00.setBackground(null);
+                ivSticker01.setBackground(null);
+                ivSticker02.setBackground(null);
+                ivSticker03.setBackground(null);
+                ivSticker04.setBackground(null);
+                ivSticker05.setBackground(null);
+                ivSticker06.setBackground(null);
+                ivSticker07.setBackground(null);
+                ivSticker08.setBackground(getDrawable(R.drawable.images_background));
+
+                ivSticker09.setBackground(null);
+            }
+        });
+        ivSticker09.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivclose.setVisibility(VISIBLE);
+                movableImageView.setVisibility(VISIBLE);
+                ivStickerImg.setImageResource(R.drawable.sticker_10);
+                ivSticker00.setBackground(null);
+                ivSticker01.setBackground(null);
+                ivSticker02.setBackground(null);
+                ivSticker03.setBackground(null);
+                ivSticker04.setBackground(null);
+                ivSticker05.setBackground(null);
+                ivSticker06.setBackground(null);
+                ivSticker07.setBackground(null);
+                ivSticker08.setBackground(null);
+                ivSticker09.setBackground(getDrawable(R.drawable.images_background));
+
+            }
+        });
         ivFrames00.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1318,6 +1587,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ivclose.setVisibility(View.GONE);
                 saveImage(viewToBitmap(constraintTwo), true);
             }
         });
@@ -1334,6 +1604,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_SocialMedia_ll.setVisibility(View.GONE);
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(VISIBLE);
+                lay_sticker_ll.setVisibility(View.GONE);
             }
         });
         llProfilePhotoLl.setOnClickListener(new View.OnClickListener() {
@@ -1348,6 +1619,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_SocialMedia_ll.setVisibility(View.GONE);
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(View.GONE);
+                lay_sticker_ll.setVisibility(View.GONE);
             }
         });
         llNameLl.setOnClickListener(new View.OnClickListener() {
@@ -1362,6 +1634,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_SocialMedia_ll.setVisibility(View.GONE);
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(View.GONE);
+                lay_sticker_ll.setVisibility(View.GONE);
             }
         });
         llDesignation1Ll.setOnClickListener(new View.OnClickListener() {
@@ -1376,6 +1649,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_SocialMedia_ll.setVisibility(View.GONE);
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(View.GONE);
+                lay_sticker_ll.setVisibility(View.GONE);
             }
         });
         llDesignation2Ll.setOnClickListener(new View.OnClickListener() {
@@ -1390,6 +1664,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_SocialMedia_ll.setVisibility(View.GONE);
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(View.GONE);
+                lay_sticker_ll.setVisibility(View.GONE);
             }
         });
         llMobileLl.setOnClickListener(new View.OnClickListener() {
@@ -1404,6 +1679,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_SocialMedia_ll.setVisibility(View.GONE);
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(View.GONE);
+                lay_sticker_ll.setVisibility(View.GONE);
             }
         });
 
@@ -1419,6 +1695,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_SocialMedia_ll.setVisibility(View.GONE);
                 lay_LeadersPhoto_ll.setVisibility(View.VISIBLE);
                 lay_frames_ll.setVisibility(View.GONE);
+                lay_sticker_ll.setVisibility(View.GONE);
             }
         });
         llSocialMediaIconsLl.setOnClickListener(new View.OnClickListener() {
@@ -1434,6 +1711,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_SocialMedia_ll.setVisibility(View.VISIBLE);
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(View.GONE);
+                lay_sticker_ll.setVisibility(View.GONE);
             }
         });
 
@@ -1449,6 +1727,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_SocialMedia_ll.setVisibility(View.GONE);
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(View.GONE);
+                lay_sticker_ll.setVisibility(View.GONE);
             }
         });
     }
@@ -2015,6 +2294,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         intent.putExtra("uri", filePath);
         intent.putExtra("way", "Poster");
         startActivity(intent);*/
+        ivclose.setVisibility(VISIBLE);
     }
     private Bitmap viewToBitmap(View view) {
 

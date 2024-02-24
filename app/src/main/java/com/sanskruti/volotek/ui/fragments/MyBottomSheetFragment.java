@@ -451,9 +451,13 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
                 if (frameResponse.framecategories.size() > 0 && frameResponse.framecategories.get(0).getFrameModels().size() > 0) {
 
+                    FrameModel frameModel = new FrameModel();
+                  frameModel.setThumbnail("https://androcoders.com/temp/sanskruti/common_desired_frame.png");
+                    postItemList.add(frameModel);
                     for (int i = 0; i < frameResponse.framecategories.size(); i++) {
                         if (frameResponse.framecategories.get(i).getName().equalsIgnoreCase("Custom")) {
                             Log.i("checkframdata", "frameResponse inside = " + new Gson().toJson(frameResponse.framecategories.get(i)));
+
                             postItemList.addAll(frameResponse.framecategories.get(i).getFrameModels());
                             Log.i("checkframdata", "frameResponse size = " + String.valueOf(postItemList.size()));
 

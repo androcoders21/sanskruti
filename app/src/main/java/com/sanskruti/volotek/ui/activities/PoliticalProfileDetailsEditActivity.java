@@ -258,7 +258,7 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (validate()) {
-                    interstitialsAdsManager.showInterstitialAd(() -> makeJSON());
+                     makeJSON();
 
                     /*  makeJSON();*/
                 }

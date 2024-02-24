@@ -19,7 +19,7 @@
     <item
         android:id="@+id/download_menu"
         android:icon="@drawable/category_new"
-        android:title="My Category" />
+        android:title="Categories" />
 
     <item
         android:id="@+id/profile_menu"

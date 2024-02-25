@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.Gson;
 import com.sanskruti.volotek.api.ApiClient;
 import com.sanskruti.volotek.api.ApiClientSecond;
 import com.sanskruti.volotek.api.ApiService;
@@ -12,12 +13,9 @@ import com.sanskruti.volotek.api.ApiStatus;
 import com.sanskruti.volotek.model.BusinessItem;
 import com.sanskruti.volotek.model.GetPoliticalCreateResponse;
 import com.sanskruti.volotek.model.PoliticalCreateResponse;
-import com.sanskruti.volotek.model.PoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.UserItem;
 import com.sanskruti.volotek.model.WhatsappOtpResponse;
-import com.sanskruti.volotek.model.politicalProfileModel;
 import com.sanskruti.volotek.utils.Constant;
-import com.google.gson.Gson;
 
 import java.io.File;
 
@@ -72,7 +70,7 @@ public class UserRespository {
     }
 
 
-    public LiveData<UserItem> profileUpdate(String userId, String profileImagePath,  String userName, String userEmail, String phoneNo, String userDesignation) {
+    public LiveData<UserItem> profileUpdate(String userId, String profileImagePath, String userName, String userEmail, String phoneNo, String userDesignation) {
 
         MutableLiveData<UserItem> data = new MutableLiveData<>();
 
@@ -144,7 +142,7 @@ public class UserRespository {
     public LiveData<ApiStatus> storeTransaction(String userId, String planId, String paymentId, String planPrice, String couponCode, String type) {
         MutableLiveData<ApiStatus> data = new MutableLiveData<>();
 
-        apiService.storeTransaction(userId, planId, paymentId, planPrice, couponCode,type).enqueue(new Callback<ApiStatus>() {
+        apiService.storeTransaction(userId, planId, paymentId, planPrice, couponCode, type).enqueue(new Callback<ApiStatus>() {
             @Override
             public void onResponse(Call<ApiStatus> call, Response<ApiStatus> response) {
                 data.setValue(response.body());
@@ -192,14 +190,14 @@ public class UserRespository {
         return data;
     }
 
-    public LiveData<BusinessItem> submitBusiness(String userId, String businessId, String businessImage, String name, String email, String phone, String website, String address,  String insta, String youtube, String facebook, String twitter, String tagline, String type, String businesscategories1) {
+    public LiveData<BusinessItem> submitBusiness(String userId, String businessId, String businessImage, String name, String email, String phone, String website, String address, String insta, String youtube, String facebook, String twitter, String tagline, String type, String businesscategories1) {
 
         MutableLiveData<BusinessItem> data = new MutableLiveData<>();
 
 
         MultipartBody.Part body = null;
         RequestBody businessid = null;
-        RequestBody imageuri =null;
+        RequestBody imageuri = null;
 
         if (businessImage != null) {
 
@@ -210,20 +208,20 @@ public class UserRespository {
 
         }
 
-        if (businessId !=null && !businessId.isEmpty()){
+        if (businessId != null && !businessId.isEmpty()) {
 
             businessid = RequestBody.create(MediaType.parse(Constant.multipart), businessId);
 
         }
 
 
-        Log.d("usersss", "id: "+userId+
-                "name"+name+
-                "email:"+email+
-                "website:"+website+
-                "address:"+address+
-                "type:"+type+
-                "bus id:"+businesscategories1);
+        Log.d("usersss", "id: " + userId +
+                "name" + name +
+                "email:" + email +
+                "website:" + website +
+                "address:" + address +
+                "type:" + type +
+                "bus id:" + businesscategories1);
 
 
         RequestBody userid = RequestBody.create(MediaType.parse(Constant.multipart), userId);
@@ -267,45 +265,43 @@ public class UserRespository {
     }
 
 
-
-
     public LiveData<PoliticalCreateResponse> submitPolitical(String userId, String profileImage, String pSignatureImg, String pPartyImg,
-                                                  String pLeaderImg1, String pLeaderImg2, String pLeaderImg3, String pLeaderImg4,  String pLeaderImg5, String pLeaderImg6,
-                                                  String pName, String pPhone, String pEmail,
-                                                  String pFacebookUsername, String pInstagramUsername,String pTwitterUsername,
-                                                  String pDesignation1, String pDesignation2) {
+                                                             String pLeaderImg1, String pLeaderImg2, String pLeaderImg3, String pLeaderImg4, String pLeaderImg5, String pLeaderImg6,
+                                                             String pName, String pPhone, String pEmail,
+                                                             String pFacebookUsername, String pInstagramUsername, String pTwitterUsername,
+                                                             String pDesignation1, String pDesignation2) {
 
         MutableLiveData<PoliticalCreateResponse> data = new MutableLiveData<>();
 
         MultipartBody.Part body = null;
-        RequestBody signatureImageUri =null;
+        RequestBody signatureImageUri = null;
 
         MultipartBody.Part profileBody = null;
-        RequestBody profileImageUri =null;
+        RequestBody profileImageUri = null;
 
         MultipartBody.Part partyBody = null;
         RequestBody pPartyImgUri = null;
 
         MultipartBody.Part leader1Body = null;
-        RequestBody leaderImg1Uri =null;
+        RequestBody leaderImg1Uri = null;
 
         MultipartBody.Part leader2Body = null;
         RequestBody leaderImg2Uri = null;
 
         MultipartBody.Part leader3Body = null;
-        RequestBody leaderImg3Uri =null;
+        RequestBody leaderImg3Uri = null;
 
         MultipartBody.Part leader4Body = null;
         RequestBody leaderImg4Uri = null;
 
         MultipartBody.Part leader5Body = null;
-        RequestBody leaderImg5Uri =null;
+        RequestBody leaderImg5Uri = null;
 
         MultipartBody.Part leader6Body = null;
         RequestBody leaderImg6Uri = null;
+        if (profileImage != null) {
+            if (!profileImage.isEmpty()) {
 
-        if(!profileImage.isEmpty()){
-            if (profileImage != null) {
                 File file = new File(profileImage);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 profileBody = MultipartBody.Part.createFormData("pProfileImg", file.getName(), requestFile);
@@ -313,9 +309,9 @@ public class UserRespository {
                 Log.i("getJSONDataCreate", "RESPONSE profileBody 4 -->" + String.valueOf(profileBody));
             }
         }
+        if (pPartyImg != null) {
+            if (!pPartyImg.isEmpty()) {
 
-        if(!pPartyImg.isEmpty()){
-            if (pPartyImg != null) {
                 File file = new File(pPartyImg);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 partyBody = MultipartBody.Part.createFormData("pPartyImg", file.getName(), requestFile);
@@ -323,52 +319,54 @@ public class UserRespository {
                 Log.i("getJSONDataCreate", "RESPONSE partyBody 4 -->" + String.valueOf(partyBody));
             }
         }
-        if(!pLeaderImg1.isEmpty()){
-            if (pLeaderImg1 != null) {
+        if (pLeaderImg1 != null) {
+            if (!pLeaderImg1.isEmpty()) {
+
                 File file = new File(pLeaderImg1);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 leader1Body = MultipartBody.Part.createFormData("pLeaderImg1", file.getName(), requestFile);
                 leaderImg1Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg1);
             }
         }
-        if(!pLeaderImg2.isEmpty()){
-            if (pLeaderImg2 != null) {
+        if (pLeaderImg2 != null) {
+            if (!pLeaderImg2.isEmpty()) {
+
                 File file = new File(pLeaderImg2);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 leader2Body = MultipartBody.Part.createFormData("pLeaderImg2", file.getName(), requestFile);
                 leaderImg2Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg2);
             }
         }
+        if (pLeaderImg3 != null) {
+            if (!pLeaderImg3.isEmpty()) {
 
-        if(!pLeaderImg3.isEmpty()){
-            if (pLeaderImg3 != null) {
                 File file = new File(pLeaderImg3);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 leader3Body = MultipartBody.Part.createFormData("pLeaderImg3", file.getName(), requestFile);
                 leaderImg3Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg3);
             }
         }
+        if (pLeaderImg4 != null) {
+            if (!pLeaderImg4.isEmpty()) {
 
-        if(!pLeaderImg4.isEmpty()){
-            if (pLeaderImg4 != null) {
                 File file = new File(pLeaderImg4);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 leader4Body = MultipartBody.Part.createFormData("pLeaderImg4", file.getName(), requestFile);
                 leaderImg4Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg4);
             }
         }
+        if (pLeaderImg5 != null) {
+            if (!pLeaderImg5.isEmpty()) {
 
-        if(!pLeaderImg5.isEmpty()){
-            if (pLeaderImg5 != null) {
                 File file = new File(pLeaderImg5);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 leader5Body = MultipartBody.Part.createFormData("pLeaderImg5", file.getName(), requestFile);
                 leaderImg5Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg5);
             }
         }
+        if (pLeaderImg6 != null) {
+            if (!pLeaderImg6.isEmpty()) {
 
-        if(!pLeaderImg6.isEmpty()){
-            if (pLeaderImg6 != null) {
                 File file = new File(pLeaderImg6);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 leader6Body = MultipartBody.Part.createFormData("pLeaderImg6", file.getName(), requestFile);
@@ -377,35 +375,66 @@ public class UserRespository {
         }
 
 
+        Log.i("getJSONDataCreate", "profileImageUri: " + profileImageUri +
+                " , profileBody : " + profileBody);
 
 
-
-
-        Log.i("getJSONDataCreate", "profileImageUri: "+profileImageUri+
-                " , profileBody : "+profileBody);
 
 
         RequestBody userid = RequestBody.create(MediaType.parse(Constant.multipart), userId);
-        RequestBody politicalName = RequestBody.create(MediaType.parse(Constant.multipart), pName);
-        RequestBody politicalPhone = RequestBody.create(MediaType.parse(Constant.multipart), pPhone);
-        RequestBody politicalEmail = RequestBody.create(MediaType.parse(Constant.multipart), pEmail);
-        RequestBody politicalInstagram = RequestBody.create(MediaType.parse(Constant.multipart), pInstagramUsername);
-        RequestBody politicalFacebook = RequestBody.create(MediaType.parse(Constant.multipart), pFacebookUsername);
-        RequestBody politicalTwitter = RequestBody.create(MediaType.parse(Constant.multipart), pTwitterUsername);
-        RequestBody politicalDesignation1 = RequestBody.create(MediaType.parse(Constant.multipart), pDesignation1);
-        RequestBody politicalDesignation2 = RequestBody.create(MediaType.parse(Constant.multipart), pDesignation2);
+
+        RequestBody politicalName = null;
+        RequestBody politicalPhone = null;
+        RequestBody politicalEmail = null;
+        RequestBody politicalInstagram = null;
+        RequestBody politicalFacebook = null;
+        RequestBody politicalTwitter = null;
+        RequestBody politicalDesignation1 = null;
+        RequestBody politicalDesignation2 = null;
+
+        if (pName != null) {
+            politicalName = RequestBody.create(MediaType.parse(Constant.multipart), pName);
+        }
+
+        if (pPhone != null) {
+            politicalPhone = RequestBody.create(MediaType.parse(Constant.multipart), pPhone);
+        }
+
+        if (pEmail != null) {
+            politicalEmail = RequestBody.create(MediaType.parse(Constant.multipart), pEmail);
+        }
+
+        if (pInstagramUsername != null) {
+            politicalInstagram = RequestBody.create(MediaType.parse(Constant.multipart), pInstagramUsername);
+        }
+
+        if (pFacebookUsername != null) {
+            politicalFacebook = RequestBody.create(MediaType.parse(Constant.multipart), pFacebookUsername);
+        }
+
+        if (pTwitterUsername != null) {
+            politicalTwitter = RequestBody.create(MediaType.parse(Constant.multipart), pTwitterUsername);
+        }
+
+        if (pDesignation1 != null) {
+            politicalDesignation1 = RequestBody.create(MediaType.parse(Constant.multipart), pDesignation1);
+        }
+
+        if (pDesignation2 != null) {
+            politicalDesignation2 = RequestBody.create(MediaType.parse(Constant.multipart), pDesignation2);
+        }
 
         Log.i("getJSONDataCreate", "RESPONSE partyBody -->" + String.valueOf(partyBody));
 
         Log.i("getJSONDataCreate", "RESPONSE profileBody -->" + String.valueOf(profileBody));
         ApiClientSecond.getApiDataService().submitPoliticak(userid,
-                         profileBody,
+                        profileBody,
 
                         body,
-                         partyBody,
-                        leader1Body,   leader2Body,
-                        leader3Body,   leader4Body,
-                         leader5Body,   leader6Body,
+                        partyBody,
+                        leader1Body, leader2Body,
+                        leader3Body, leader4Body,
+                        leader5Body, leader6Body,
                         politicalName, politicalPhone, politicalEmail, politicalInstagram, politicalFacebook, politicalTwitter,
                         politicalDesignation1, politicalDesignation2).
                 enqueue(new Callback<PoliticalCreateResponse>() {
@@ -431,57 +460,54 @@ public class UserRespository {
     }
 
 
-
-
-
-    public LiveData<PoliticalCreateResponse> updatePolitical(String profileId,String userId, String profileImage, String pSignatureImg, String pPartyImg,
-                                                             String pLeaderImg1, String pLeaderImg2, String pLeaderImg3, String pLeaderImg4,  String pLeaderImg5, String pLeaderImg6,
+    public LiveData<PoliticalCreateResponse> updatePolitical(String profileId, String userId, String profileImage, String pSignatureImg, String pPartyImg,
+                                                             String pLeaderImg1, String pLeaderImg2, String pLeaderImg3, String pLeaderImg4, String pLeaderImg5, String pLeaderImg6,
                                                              String pName, String pPhone, String pEmail,
-                                                             String pFacebookUsername, String pInstagramUsername,String pTwitterUsername,
+                                                             String pFacebookUsername, String pInstagramUsername, String pTwitterUsername,
                                                              String pDesignation1, String pDesignation2) {
 
         MutableLiveData<PoliticalCreateResponse> data = new MutableLiveData<>();
 
         MultipartBody.Part body = null;
-        RequestBody signatureImageUri =null;
+        RequestBody signatureImageUri = null;
 
         MultipartBody.Part profileBody = null;
-        RequestBody profileImageUri =null;
+        RequestBody profileImageUri = null;
 
         MultipartBody.Part partyBody = null;
         RequestBody pPartyImgUri = null;
 
         MultipartBody.Part leader1Body = null;
-        RequestBody leaderImg1Uri =null;
+        RequestBody leaderImg1Uri = null;
 
         MultipartBody.Part leader2Body = null;
         RequestBody leaderImg2Uri = null;
 
         MultipartBody.Part leader3Body = null;
-        RequestBody leaderImg3Uri =null;
+        RequestBody leaderImg3Uri = null;
 
         MultipartBody.Part leader4Body = null;
         RequestBody leaderImg4Uri = null;
 
         MultipartBody.Part leader5Body = null;
-        RequestBody leaderImg5Uri =null;
+        RequestBody leaderImg5Uri = null;
 
         MultipartBody.Part leader6Body = null;
         RequestBody leaderImg6Uri = null;
 
-
-        if(!profileImage.isEmpty()){
-            if (profileImage != null) {
+        if (profileImage != null) {
+            if (!profileImage.isEmpty()) {
                 File file = new File(profileImage);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 profileBody = MultipartBody.Part.createFormData("pProfileImg", file.getName(), requestFile);
                 profileImageUri = RequestBody.create(MediaType.parse(Constant.multipart), profileImage);
                 Log.i("getJSONDataUpdate", "RESPONSE profileBody 4 -->" + String.valueOf(profileBody));
+
             }
         }
 
-        if(!pPartyImg.isEmpty()){
-            if (pPartyImg != null) {
+        if (pPartyImg != null) {
+            if (!pPartyImg.isEmpty()) {
                 File file = new File(pPartyImg);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 partyBody = MultipartBody.Part.createFormData("pPartyImg", file.getName(), requestFile);
@@ -489,52 +515,55 @@ public class UserRespository {
                 Log.i("getJSONDataUpdate", "RESPONSE partyBody 4 -->" + String.valueOf(partyBody));
             }
         }
-        if(!pLeaderImg1.isEmpty()){
-            if (pLeaderImg1 != null) {
+        if (pLeaderImg1 != null) {
+            if (!pLeaderImg1.isEmpty()) {
                 File file = new File(pLeaderImg1);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 leader1Body = MultipartBody.Part.createFormData("pLeaderImg1", file.getName(), requestFile);
                 leaderImg1Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg1);
+
             }
         }
-        if(!pLeaderImg2.isEmpty()){
-            if (pLeaderImg2 != null) {
+        if (pLeaderImg2 != null) {
+            if (!pLeaderImg2.isEmpty()) {
                 File file = new File(pLeaderImg2);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 leader2Body = MultipartBody.Part.createFormData("pLeaderImg2", file.getName(), requestFile);
                 leaderImg2Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg2);
+
             }
         }
-
-        if(!pLeaderImg3.isEmpty()){
-            if (pLeaderImg3 != null) {
+        if (pLeaderImg3 != null) {
+            if (!pLeaderImg3.isEmpty()) {
                 File file = new File(pLeaderImg3);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 leader3Body = MultipartBody.Part.createFormData("pLeaderImg3", file.getName(), requestFile);
                 leaderImg3Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg3);
+
             }
         }
+        if (pLeaderImg4 != null) {
+            if (!pLeaderImg4.isEmpty()) {
 
-        if(!pLeaderImg4.isEmpty()){
-            if (pLeaderImg4 != null) {
                 File file = new File(pLeaderImg4);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 leader4Body = MultipartBody.Part.createFormData("pLeaderImg4", file.getName(), requestFile);
                 leaderImg4Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg4);
+
             }
         }
+        if (pLeaderImg5 != null) {
+            if (!pLeaderImg5.isEmpty()) {
 
-        if(!pLeaderImg5.isEmpty()){
-            if (pLeaderImg5 != null) {
                 File file = new File(pLeaderImg5);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 leader5Body = MultipartBody.Part.createFormData("pLeaderImg5", file.getName(), requestFile);
                 leaderImg5Uri = RequestBody.create(MediaType.parse(Constant.multipart), pLeaderImg5);
             }
         }
+        if (pLeaderImg6 != null) {
+            if (!pLeaderImg6.isEmpty()) {
 
-        if(!pLeaderImg6.isEmpty()){
-            if (pLeaderImg6 != null) {
                 File file = new File(pLeaderImg6);
                 RequestBody requestFile = RequestBody.create(MediaType.parse(Constant.multipart), file);
                 leader6Body = MultipartBody.Part.createFormData("pLeaderImg6", file.getName(), requestFile);
@@ -543,12 +572,8 @@ public class UserRespository {
         }
 
 
-
-
-
-
-        Log.i("getJSONData", "profileImageUri: "+profileImageUri+
-                " , profileBody : "+profileBody);
+        Log.i("getJSONData", "profileImageUri: " + profileImageUri +
+                " , profileBody : " + profileBody);
 
 
         RequestBody userid = RequestBody.create(MediaType.parse(Constant.multipart), userId);
@@ -561,47 +586,47 @@ public class UserRespository {
         RequestBody politicalTwitter = null;
         RequestBody politicalDesignation1 = null;
         RequestBody politicalDesignation2 = null;
-        if(pName !=null){
+        if (pName != null) {
             politicalName = RequestBody.create(MediaType.parse(Constant.multipart), pName);
         }
 
-        if(pPhone !=null){
+        if (pPhone != null) {
             politicalPhone = RequestBody.create(MediaType.parse(Constant.multipart), pPhone);
         }
 
-        if(pEmail !=null){
+        if (pEmail != null) {
             politicalEmail = RequestBody.create(MediaType.parse(Constant.multipart), pEmail);
         }
 
-        if(pInstagramUsername !=null){
+        if (pInstagramUsername != null) {
             politicalInstagram = RequestBody.create(MediaType.parse(Constant.multipart), pInstagramUsername);
         }
 
-        if(pFacebookUsername !=null){
+        if (pFacebookUsername != null) {
             politicalFacebook = RequestBody.create(MediaType.parse(Constant.multipart), pFacebookUsername);
         }
 
-        if(pTwitterUsername !=null){
+        if (pTwitterUsername != null) {
             politicalTwitter = RequestBody.create(MediaType.parse(Constant.multipart), pTwitterUsername);
         }
 
-        if(pDesignation1 !=null){
+        if (pDesignation1 != null) {
             politicalDesignation1 = RequestBody.create(MediaType.parse(Constant.multipart), pDesignation1);
         }
 
-        if(pDesignation2 !=null){
+        if (pDesignation2 != null) {
             politicalDesignation2 = RequestBody.create(MediaType.parse(Constant.multipart), pDesignation2);
         }
 
         Log.i("getJSONDataUpdate", "RESPONSE second profileIdOther -->" + String.valueOf(profileId));
-        ApiClientSecond.getApiDataService().updatePolitical(profileId,userid,
+        ApiClientSecond.getApiDataService().updatePolitical(profileId, userid,
                         profileBody,
 
                         body,
                         partyBody,
-                        leader1Body,   leader2Body,
-                        leader3Body,   leader4Body,
-                        leader5Body,   leader6Body,
+                        leader1Body, leader2Body,
+                        leader3Body, leader4Body,
+                        leader5Body, leader6Body,
                         politicalName, politicalPhone, politicalEmail, politicalInstagram, politicalFacebook, politicalTwitter,
                         politicalDesignation1, politicalDesignation2).
                 enqueue(new Callback<PoliticalCreateResponse>() {
@@ -654,7 +679,6 @@ public class UserRespository {
 
         return data;
     }
-
 
 
     public LiveData<WhatsappOtpResponse> createWhatsappOtp(String number) {

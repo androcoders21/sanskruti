@@ -636,9 +636,13 @@ public class PreviewActivity extends AppCompatActivity {
         setupPreviewAdapter();
         // Hide video tab on greetings type.
         if (type.equals(Constant.GREETING)) {
+            if(tabLayout !=null){
 
-            tabLayout.removeTabAt(1);
-            typePost = Constant.GREETING;
+              //  tabLayout.removeTabAt(1);
+                typePost = Constant.GREETING;
+            }
+
+
         }
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

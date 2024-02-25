@@ -210,7 +210,7 @@ public class AddBusinessActivity extends AppCompatActivity {
         binding.btnSave.setOnClickListener(v ->  {
 
             if (validate()) {
-            interstitialsAdsManager.showInterstitialAd(() -> save());
+           /* interstitialsAdsManager.showInterstitialAd(() ->*/ save()/*)*/;
 
         }
 
@@ -301,7 +301,7 @@ public class AddBusinessActivity extends AppCompatActivity {
             binding.etBusinessName.setError(getResources().getString(R.string.hint_business_name));
             binding.etBusinessName.requestFocus();
             return false;
-        } else if (binding.etBusinessNumber.getText().toString().trim().isEmpty()) {
+        } else /*if (binding.etBusinessNumber.getText().toString().trim().isEmpty()) {
             binding.etBusinessNumber.setError(getResources().getString(R.string.hint_business_number));
             binding.etBusinessNumber.requestFocus();
             return false;
@@ -331,7 +331,7 @@ public class AddBusinessActivity extends AppCompatActivity {
 
             return false;
 
-        } else {
+        } else */{
             return true;
         }
     }

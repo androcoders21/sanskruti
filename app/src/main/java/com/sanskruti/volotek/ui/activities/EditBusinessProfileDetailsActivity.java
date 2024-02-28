@@ -2194,7 +2194,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
 
 
         // Get the width of the screen or the parent layout
-        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int screenWidth = getResources().getDisplayMetrics().widthPixels-56;
         constraintTwo.getLayoutParams().height = screenWidth;
         // Request layout to make sure changes are applied
         constraintTwo.requestLayout();

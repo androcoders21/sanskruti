@@ -150,19 +150,19 @@
         <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/photoView"
             android:layout_width="match_parent"
-            android:layout_height="390dp"/>
+            android:layout_height="match_parent"/>
         <RelativeLayout
             android:id="@+id/constraint"
             android:layout_width="fill_parent"
-            android:layout_height="390dp">
+            android:layout_height="match_parent">
             <RelativeLayout
                 android:id="@+id/constraintThum"
                 android:layout_width="fill_parent"
-                android:layout_height="390dp">
+                android:layout_height="match_parent">
                 <LinearLayout
                     android:id="@+id/parent_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="390dp">
+                    android:layout_height="match_parent">
 
 
                     <include

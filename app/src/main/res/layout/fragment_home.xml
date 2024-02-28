@@ -164,6 +164,7 @@
                             android:fontFamily="@font/nunito_sans_semibold"
                             android:text="Today’s Special"
                             android:textColor="@color/black"
+                            android:textStyle="bold"
                             android:textSize="@dimen/_12sdp" />
 
                         <androidx.recyclerview.widget.RecyclerView
@@ -207,6 +208,7 @@
                                 android:fontFamily="@font/nunito_sans_semibold"
                                 android:text="@string/upcoming_festivals"
                                 android:textColor="@color/black"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/_12sdp" />
 
                             <View

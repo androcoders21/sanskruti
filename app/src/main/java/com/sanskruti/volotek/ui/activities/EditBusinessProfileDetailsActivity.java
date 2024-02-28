@@ -68,7 +68,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
-    LinearLayout llFramesLl, llProfilePhotoLl, llNameLl, btnDownload, llDesignation1Ll, llDesignation2Ll, llMobileLl,llStickerLl,
+    LinearLayout llFramesLl, llProfilePhotoLl, llNameLl, btnDownload, llDesignation1Ll, llDesignation2Ll, llMobileLl, llStickerLl,
             llLeadersPhotoLl, llSocialMediaIconsLl, llPartyIconLayout, llcolorll, llcolord1ll, llcolord2ll, llcolorMobilell;
     FontAdapter adapter;
     LinearLayout llfontll, llfontd1ll, llfontd2ll, llfontMobilell;
@@ -135,10 +135,12 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             // You might want to display the selected image in an ImageView
         }
     }
+
     private RelativeLayout movableImageView;
 
-    private ImageView ivclose,ivStickerImg;
+    private ImageView ivclose, ivStickerImg;
     private float xDelta, yDelta;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,7 +148,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
 
         movableImageView = findViewById(R.id.movableImageView);
         ivclose = findViewById(R.id.movableImageViewClose);
-        ivStickerImg = (ImageView)findViewById(R.id.stickerImg);
+        ivStickerImg = (ImageView) findViewById(R.id.stickerImg);
         movableImageView.setVisibility(View.GONE);
         ivclose.setVisibility(View.GONE);
         ivclose.setOnClickListener(new View.OnClickListener() {
@@ -2167,9 +2169,9 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
 
         lay_LeadersPhoto_ll = (LinearLayout) findViewById(R.id.lay_leadersPhoto);
         lay_frames_ll = (LinearLayout) findViewById(R.id.lay_frames);
-        lay_sticker_ll  = (LinearLayout) findViewById(R.id.lay_sticker);
+        lay_sticker_ll = (LinearLayout) findViewById(R.id.lay_sticker);
 
-        llStickerLl = (LinearLayout)findViewById(R.id.stickerLl);
+        llStickerLl = (LinearLayout) findViewById(R.id.stickerLl);
         llFramesLl = (LinearLayout) findViewById(R.id.framesLl);
         llProfilePhotoLl = (LinearLayout) findViewById(R.id.profilePhotoLl);
         llNameLl = (LinearLayout) findViewById(R.id.nameLl);
@@ -2188,7 +2190,14 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         constraint = (RelativeLayout) findViewById(R.id.constraint);
 
 
-                constraintTwo = (RelativeLayout) findViewById(R.id.constraintTwo);
+        constraintTwo = (RelativeLayout) findViewById(R.id.constraintTwo);
+
+
+        // Get the width of the screen or the parent layout
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        constraintTwo.getLayoutParams().height = screenWidth;
+        // Request layout to make sure changes are applied
+        constraintTwo.requestLayout();
         ivAddImgLeader11 = (ImageView) findViewById(R.id.iv_logoL11);
         ivAddImgLeader22 = (ImageView) findViewById(R.id.iv_logoL12);
         ivAddImgLeader33 = (ImageView) findViewById(R.id.iv_logoL13);

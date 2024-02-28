@@ -2178,6 +2178,12 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         constraint = (RelativeLayout) findViewById(R.id.constraint);
         constraintTwo = (RelativeLayout) findViewById(R.id.constraintTwo);
 
+
+        // Get the width of the screen or the parent layout
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        constraintTwo.getLayoutParams().height = screenWidth;
+        // Request layout to make sure changes are applied
+        constraintTwo.requestLayout();
         ivAddImgLeader11 = (ImageView) findViewById(R.id.iv_logoL11);
         ivAddImgLeader22 = (ImageView) findViewById(R.id.iv_logoL12);
         ivAddImgLeader33 = (ImageView) findViewById(R.id.iv_logoL13);

@@ -223,21 +223,58 @@ public class UserRespository {
                 "type:" + type +
                 "bus id:" + businesscategories1);
 
-
-        RequestBody userid = RequestBody.create(MediaType.parse(Constant.multipart), userId);
-        RequestBody businessname = RequestBody.create(MediaType.parse(Constant.multipart), name);
-        RequestBody businessemail = RequestBody.create(MediaType.parse(Constant.multipart), email);
-        RequestBody businessphone = RequestBody.create(MediaType.parse(Constant.multipart), phone);
-        RequestBody businesswebsite = RequestBody.create(MediaType.parse(Constant.multipart), website);
-        RequestBody businessaddress = RequestBody.create(MediaType.parse(Constant.multipart), address);
-        RequestBody businessinsta = RequestBody.create(MediaType.parse(Constant.multipart), insta);
-        RequestBody businessyoutube = RequestBody.create(MediaType.parse(Constant.multipart), youtube);
-        RequestBody businessfacebook = RequestBody.create(MediaType.parse(Constant.multipart), facebook);
-        RequestBody businesstwitter = RequestBody.create(MediaType.parse(Constant.multipart), twitter);
-        RequestBody businesstype = RequestBody.create(MediaType.parse(Constant.multipart), type);
-        RequestBody businesscategories = RequestBody.create(MediaType.parse(Constant.multipart), businesscategories1);
-
-        RequestBody businessTagliness = RequestBody.create(MediaType.parse(Constant.multipart), tagline);
+        RequestBody userid = null;
+        RequestBody businessname = null;
+        RequestBody businessemail = null;
+        RequestBody businessphone = null;
+        RequestBody businesswebsite = null;
+        RequestBody businessaddress = null;
+        RequestBody businessinsta = null;
+        RequestBody businessyoutube = null;
+        RequestBody businessfacebook = null;
+        RequestBody businesstwitter = null;
+        RequestBody businesstype = null;
+        RequestBody businesscategories = null;
+        RequestBody businessTagliness = null;
+        if(userId !=null){
+            userid = RequestBody.create(MediaType.parse(Constant.multipart), userId);
+        }
+        if(name !=null){
+            businessname = RequestBody.create(MediaType.parse(Constant.multipart), name);
+        }
+        if(email !=null){
+            businessemail = RequestBody.create(MediaType.parse(Constant.multipart), email);
+        }
+        if(phone !=null){
+            businessphone = RequestBody.create(MediaType.parse(Constant.multipart), phone);
+        }
+        if(website !=null){
+            businesswebsite = RequestBody.create(MediaType.parse(Constant.multipart), website);
+        }
+        if(address !=null){
+            businessaddress = RequestBody.create(MediaType.parse(Constant.multipart), address);
+        }
+        if(insta !=null){
+            businessinsta = RequestBody.create(MediaType.parse(Constant.multipart), insta);
+        }
+        if(youtube !=null){
+            businessyoutube = RequestBody.create(MediaType.parse(Constant.multipart), youtube);
+        }
+        if(facebook !=null){
+            businessfacebook = RequestBody.create(MediaType.parse(Constant.multipart), facebook);
+        }
+        if(twitter !=null){
+            businesstwitter = RequestBody.create(MediaType.parse(Constant.multipart), twitter);
+        }
+        if(type !=null){
+            businesstype = RequestBody.create(MediaType.parse(Constant.multipart), type);
+        }
+        if(businesscategories1 !=null){
+            businesscategories = RequestBody.create(MediaType.parse(Constant.multipart), businesscategories1);
+        }
+        if(tagline !=null){
+            businessTagliness = RequestBody.create(MediaType.parse(Constant.multipart), tagline);
+        }
 
 
         ApiClient.getApiDataService().submitBusiness(userid, businessid, imageuri, body, businessname, businessemail, businessphone, businesswebsite, businessaddress, businessinsta, businessyoutube, businessfacebook, businesstwitter,

@@ -2,67 +2,66 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/frameNew"
-    android:background="@drawable/rounded_corners"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/rounded_corners">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="@color/white"
-            android:layout_gravity="bottom"/>
+            android:layout_gravity="bottom"
+            android:background="@color/white" />
+
         <LinearLayout
             android:id="@+id/linearLogo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom"
             android:layout_gravity="bottom"
+            android:gravity="bottom"
             android:padding="1dp"
             android:visibility="visible">
 
-            <ImageView
-                android:id="@+id/iv_logo"
-                android:layout_width="@dimen/_90sdp"
-                android:layout_height="@dimen/_90sdp"
-                android:layout_gravity="bottom"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher_foreground" />
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="1dp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
-                android:layout_marginBottom="25dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginBottom="25dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textColor="#f27f16"
                     android:text="Name"
-                    android:textSize="@dimen/_13sdp" />
+                    android:textColor="#f27f16"
+                    android:textSize="@dimen/_13sdp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
+
                     <LinearLayout
                         android:layout_width="5dp"
                         android:layout_height="5dp"
-                        android:layout_marginRight="5dp"
-                        android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/circle_shape"/>
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/circle_shape"
+                        android:gravity="center_vertical" />
 
                     <TextView
                         android:id="@+id/tvDesignation1"
@@ -79,16 +78,17 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="Designation2"
-                    android:visibility="gone"
-                    android:textSize="@dimen/_7sdp" />
+                    android:textSize="@dimen/_7sdp"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/tvMobileNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="Mobile Number"
-                    android:visibility="gone"
-                    android:textSize="@dimen/_7sdp" />
+                    android:textSize="@dimen/_7sdp"
+                    android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/socialMediaIv"
@@ -104,18 +104,39 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom"
+            android:gravity="bottom">
+            <ImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="@dimen/_90sdp"
+                android:layout_height="@dimen/_90sdp"
+                android:layout_gravity="bottom|left"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher_foreground" />
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="1dp"/>
             <ImageView
                 android:id="@+id/iv_party"
-
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:layout_gravity="bottom"
+                android:layout_gravity="bottom|right"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/ic_launcher_foreground"
                 android:visibility="visible" />
         </LinearLayout>
+
 
     </FrameLayout>
 
@@ -139,10 +160,10 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
+                android:layout_margin="@dimen/_1sdp"
                 android:background="@drawable/rounded_corners"
-                app:cardElevation="4dp"
-                android:layout_margin="@dimen/_1sdp">
+                app:cardCornerRadius="10dp"
+                app:cardElevation="4dp">
 
                 <ImageView
                     android:id="@+id/iv_logoL1"
@@ -157,9 +178,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_1sdp"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="4dp"
-                android:layout_margin="@dimen/_1sdp">
+                app:cardElevation="4dp">
 
                 <ImageView
                     android:id="@+id/iv_logoL2"
@@ -175,9 +196,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_1sdp"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="4dp"
-                android:layout_margin="@dimen/_1sdp">
+                app:cardElevation="4dp">
 
                 <ImageView
                     android:id="@+id/iv_logoL3"
@@ -193,9 +214,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_1sdp"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="4dp"
-                android:layout_margin="@dimen/_1sdp">
+                app:cardElevation="4dp">
 
                 <ImageView
                     android:id="@+id/iv_logoL4"
@@ -211,9 +232,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_1sdp"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="4dp"
-                android:layout_margin="@dimen/_1sdp">
+                app:cardElevation="4dp">
 
                 <ImageView
                     android:id="@+id/iv_logoL5"
@@ -229,9 +250,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_1sdp"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="4dp"
-                android:layout_margin="@dimen/_1sdp">
+                app:cardElevation="4dp">
 
                 <ImageView
                     android:id="@+id/iv_logoL6"

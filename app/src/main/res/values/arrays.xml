@@ -164,5 +164,32 @@
         <item>steelfish rg.ttf</item>
         <item>times_0.ttf</item>
         <item>timesbd_0.ttf</item>
+
+        <item>palanquindark_bold.ttf</item>
+        <item>palanquindark_medium.ttf</item>
+        <item>palanquindark_semiBold.ttf</item>
+
+        <item>poppins_bold.ttf</item>
+        <item>poppins_semibold.ttf</item>
+        <item>poppins_extrabolditalic.ttf</item>
+
+        <item>rajdhani_semibold.ttf</item>
+        <item>rajdhani_medium.ttf</item>
+        <item>rajdhani_bold.ttf</item>
+
+        <item>teko_semibold.ttf</item>
+        <item>teko_regular.ttf</item>
+        <item>teko_medium.ttf</item>
+
+        <item>tillana_semibold.ttf</item>
+        <item>tillana_extrabold.ttf</item>
+        <item>tillana_bold.ttf</item>
+
+        <item>vesperlibre_medium.ttf</item>
+        <item>vesperlibre_bold.ttf</item>
+        <item>vesperlibre_black.ttf</item>
+
+        <item>BakbakOne-Regular.ttf</item>
+
     </string-array>
 </resources>

@@ -87,7 +87,8 @@
 
     <!-- cyan -->
 
-    <!-- teal -->
+    <!-- whatsapp-color -->
+    <color name="whats_app">#45C153</color>
 
     <!-- green -->
     <color name="green_600">#43a047</color>

@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -36,15 +38,18 @@ import com.sanskruti.volotek.binding.GlideDataBinding;
 import com.sanskruti.volotek.model.ItemPolitical;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.ImageCropperFragment;
+import com.sanskruti.volotek.utils.MyUtils;
 import com.sanskruti.volotek.utils.NetworkConnectivity;
 import com.sanskruti.volotek.utils.PreferenceManager;
 import com.sanskruti.volotek.utils.Util;
 import com.sanskruti.volotek.viewmodel.UserViewModel;
+import com.yalantis.ucrop.UCrop;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 
@@ -54,6 +59,8 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
     String Name = "NA",Phone = "NA",Email = "NA",Designation1 = "NA",Designation2 = "NA",Facebook = "NA", Instagram = "NA",Twitter = "NA", profileImage = "NA",
             PartyImage = "NA", Leader1 = "NA", Leader2 = "NA", Leader3 = "NA", Leader4 = "NA", Leader5 = "NA", Leader6 = "NA";
     String profileImagePath = "", profileImagePathParty = "", profileImagePathLeader1 = "", profileImagePathLeader2 = "", profileImagePathLeader3 = "", profileImagePathLeader4 = "", profileImagePathLeader5 = "", profileImagePathLeader6 = "";
+
+    public static final int PROFILE_PHOTO = 6,PARTY_ICON = 7;
     CircularImageView ivAddImg, ivAddImgParty, ivAddImgLeader1, ivAddImgLeader2, ivAddImgLeader3, ivAddImgLeader4, ivAddImgLeader5, ivAddImgLeader6;
     private EditText etName, etEmail, etDesignation1, etDesignation2, etPhone, etFacebookUsername, etInstagramUsername, etTwitterUsername;
     private TextView btnSave;
@@ -68,6 +75,17 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
 
 
     UserViewModel userViewModel;
+
+    private static int PROFILE_PHOTO_TYPE = 100;
+
+    // Getter method for PROFILE_PHOTO
+    public static int getProfileType() {
+        return PROFILE_PHOTO_TYPE;
+    }
+
+    public static void setProfileType(int profilePhoto) {
+        PROFILE_PHOTO_TYPE = profilePhoto;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +200,7 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(
                         Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
+                setProfileType(6);
                 someActivityResultLauncher.launch(i);
             }
         });
@@ -192,8 +210,8 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(
                         Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                someActivityResultLauncherParty.launch(i);
+                setProfileType(7);
+                someActivityResultLauncher.launch(i);
             }
         });
 
@@ -202,17 +220,20 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(
                         Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                someActivityResultLauncherLeader1.launch(i);
+                setProfileType(1);
+//                someActivityResultLauncherLeader1.launch(i);
+                someActivityResultLauncher.launch(i);
             }
+
         });
         ivAddImgLeader2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(
                         Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                someActivityResultLauncherLeader2.launch(i);
+                setProfileType(2);
+//                someActivityResultLauncherLeader2.launch(i);
+                someActivityResultLauncher.launch(i);
             }
         });
         ivAddImgLeader3.setOnClickListener(new View.OnClickListener() {
@@ -220,8 +241,9 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(
                         Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                someActivityResultLauncherLeader3.launch(i);
+                setProfileType(3);
+//                someActivityResultLauncherLeader3.launch(i);
+                someActivityResultLauncher.launch(i);
             }
         });
         ivAddImgLeader4.setOnClickListener(new View.OnClickListener() {
@@ -229,8 +251,9 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(
                         Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                someActivityResultLauncherLeader4.launch(i);
+                setProfileType(4);
+                someActivityResultLauncher.launch(i);
+//                someActivityResultLauncherLeader4.launch(i);
             }
         });
         ivAddImgLeader5.setOnClickListener(new View.OnClickListener() {
@@ -238,8 +261,9 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(
                         Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                someActivityResultLauncherLeader5.launch(i);
+                setProfileType(5);
+                someActivityResultLauncher.launch(i);
+//                someActivityResultLauncherLeader5.launch(i);
             }
         });
         ivAddImgLeader6.setOnClickListener(new View.OnClickListener() {
@@ -807,45 +831,182 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
     }
 
     // profile photo
+//    Lucky bro's code
+//    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+//            new ActivityResultContracts.StartActivityForResult(),
+//            new ActivityResultCallback<ActivityResult>() {
+//                @Override
+//                public void onActivityResult(ActivityResult result) {
+//                    if (result.getResultCode() == Activity.RESULT_OK) {
+//                        // Here, no request code
+//                        if (result.getData() != null) {
+//                            Uri selectedImage = result.getData().getData();
+//                            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//
+//                            if (selectedImage != null) {
+//                                Cursor cursor = getContentResolver().query(selectedImage,
+//                                        null, null, null, null);
+//
+//                                if (cursor != null) {
+//                                    cursor.moveToFirst();
+//
+//                                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                                    profileImagePath = cursor.getString(columnIndex);
+//
+//                                    new ImageCropperFragment(0, profileImagePath, (id, out) -> {
+//
+//                                        profileImagePath = out;
+//                                        imageUri = Uri.parse(out);
+//
+//                                        GlideDataBinding.bindImage(ivAddImg, out);
+//
+//
+//                                    }).show(getSupportFragmentManager(), "");
+//
+//                                    cursor.close();
+//
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            });
+
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        // Here, no request code
-                        if (result.getData() != null) {
-                            Uri selectedImage = result.getData().getData();
-                            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                            if (selectedImage != null) {
-                                Cursor cursor = getContentResolver().query(selectedImage,
-                                        null, null, null, null);
-
-                                if (cursor != null) {
-                                    cursor.moveToFirst();
-
-                                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                                    profileImagePath = cursor.getString(columnIndex);
-
-                                    new ImageCropperFragment(0, profileImagePath, (id, out) -> {
-
-                                        profileImagePath = out;
-                                        imageUri = Uri.parse(out);
-
-                                        GlideDataBinding.bindImage(ivAddImg, out);
-
-
-                                    }).show(getSupportFragmentManager(), "");
-
-                                    cursor.close();
-
-                                }
-                            }
-                        }
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    // Here, no request code
+                    if (result.getData() != null) {
+                        getImageFromURI(result);
                     }
                 }
             });
+    private void getImageFromURI(ActivityResult result) {
+        Uri selectedImage = result.getData().getData();
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+        if (selectedImage != null) {
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    null, null, null, null);
+
+            if (cursor != null) {
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                switch (getProfileType()) {
+                    case 6:
+                        profileImagePath = cursor.getString(columnIndex);
+                        break;
+                    case 7:
+                        profileImagePathParty = cursor.getString(columnIndex);
+                        break;
+                    case 1:
+                        profileImagePathLeader1 = cursor.getString(columnIndex);
+                        break;
+                    case 2:
+                        profileImagePathLeader2 = cursor.getString(columnIndex);
+                        break;
+                    case 3:
+                        profileImagePathLeader3 = cursor.getString(columnIndex);
+                        break;
+                    case 4:
+                        profileImagePathLeader4 = cursor.getString(columnIndex);
+                        break;
+                    case 5:
+                        profileImagePathLeader5 = cursor.getString(columnIndex);
+                        break;
+                    default:
+                        // Handle default case (if necessary)
+                        break;
+                }
+//                profileImagePath = cursor.getString(columnIndex);
+                cursor.close();
+
+                imageUri = selectedImage;
+
+                beginCrop(imageUri);
+
+
+            }
+        }
+    }
+
+    private void beginCrop(Uri uri) {
+        if (uri != null) {
+            try {
+
+                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), new File(uri.getPath()).getName()));
+                UCrop.Options options2 = new UCrop.Options();
+                options2.setCompressionFormat(Bitmap.CompressFormat.PNG);
+                options2.setFreeStyleCropEnabled(true);
+
+                UCrop.of(uri, destinationUri)
+                        .withOptions(options2)
+                        .start(this);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+ if (requestCode == UCrop.REQUEST_CROP) {
+
+            if (data != null) {
+                new ImageCropperFragment(0, MyUtils.getPathFromURI(this, UCrop.getOutput(data)), (id, out) -> {
+
+//                    profileImagePath = out;
+                    Log.i("saqlain",out);
+                    imageUri = Uri.parse(out);
+                    switch (getProfileType()) {
+                        case 6:
+                            GlideDataBinding.bindImage(ivAddImg, out);
+                            profileImagePath = out;
+                            break;
+                        case 7:
+                            GlideDataBinding.bindImage(ivAddImgParty, out);
+                            profileImagePathParty = out;
+                            break;
+                        case 1:
+                            GlideDataBinding.bindImage(ivAddImgLeader1, out);
+                            profileImagePathLeader1 = out;
+                            break;
+                        case 2:
+                            GlideDataBinding.bindImage(ivAddImgLeader2, out);
+                            profileImagePathLeader2 = out;
+                            break;
+                        case 3:
+                            GlideDataBinding.bindImage(ivAddImgLeader3, out);
+                            profileImagePathLeader3 = out;
+                            break;
+                        case 4:
+                            GlideDataBinding.bindImage(ivAddImgLeader4, out);
+                            profileImagePathLeader4 = out;
+                            break;
+                        case 5:
+                            GlideDataBinding.bindImage(ivAddImgLeader5, out);
+                            profileImagePathLeader5 = out;
+                            break;
+                        default:
+                            // Handle default case (if necessary)
+                            break;
+                    }
+
+//                    GlideDataBinding.bindImage(ivAddImg, out);
+
+                }).show(getSupportFragmentManager(), "");
+            }
+
+        }
+
+
+    }
 
 
     ActivityResultLauncher<Intent> someActivityResultLauncherParty = registerForActivityResult(
@@ -909,18 +1070,21 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
 
                                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                                     profileImagePathLeader1 = cursor.getString(columnIndex);
-
-                                    new ImageCropperFragment(0, profileImagePathLeader1, (id, out) -> {
-
-                                        profileImagePathLeader1 = out;
-                                        imageUri = Uri.parse(out);
-
-                                        GlideDataBinding.bindImage(ivAddImgLeader1, out);
-
-
-                                    }).show(getSupportFragmentManager(), "");
-
                                     cursor.close();
+
+                                    // First, initiate UCrop
+//                                    beginUCrop(selectedImage);
+//                                    new ImageCropperFragment(0, profileImagePathLeader1, (id, out) -> {
+//
+//                                        profileImagePathLeader1 = out;
+//                                        imageUri = Uri.parse(out);
+//
+//                                        GlideDataBinding.bindImage(ivAddImgLeader1, out);
+//                                        beginUCrop(imageUri);
+//
+//                                    }).show(getSupportFragmentManager(), "");
+
+//                                    cursor.close();
 
                                 }
                             }
@@ -1036,8 +1200,9 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
                                     new ImageCropperFragment(0, profileImagePathLeader4, (id, out) -> {
 
                                         profileImagePathLeader4 = out;
-                                        imageUri = Uri.parse(out);
 
+                                        imageUri = Uri.parse(out);
+                                        Log.i("saqlain",out);
                                         GlideDataBinding.bindImage(ivAddImgLeader4, out);
 
 
@@ -1133,4 +1298,22 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
                     }
                 }
             });
+
+//    private void beginUCrop(Uri uri) {
+//        Log.i("saqlain","In begin crop");
+//        if (uri != null) {
+//            try {
+//                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), new File(uri.getPath()).getName()));
+//                UCrop.Options options2 = new UCrop.Options();
+//                options2.setCompressionFormat(Bitmap.CompressFormat.PNG);
+//                options2.setFreeStyleCropEnabled(true);
+//
+//                UCrop.of(uri, destinationUri)
+//                        .withOptions(options2)
+//                        .start(this);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }

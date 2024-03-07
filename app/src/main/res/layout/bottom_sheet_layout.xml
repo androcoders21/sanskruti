@@ -20,6 +20,59 @@
                 android:background="@drawable/round_bg"
                 android:backgroundTint="@color/gray" />
 
+
+            <RelativeLayout
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+
+                <TextView
+                    android:id="@+id/title_tv"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/_13sdp"
+                    android:fontFamily="@font/nunito_sans_semibold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Business Profiles"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+            </RelativeLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewTwo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+
+            <RelativeLayout
+                android:id="@+id/toolbarp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+
+                <TextView
+                    android:id="@+id/potv"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/_13sdp"
+                    android:fontFamily="@font/nunito_sans_semibold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Political Profiles"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+            </RelativeLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:padding="5dp"
+                android:orientation="horizontal"/>
+
             <RelativeLayout
                 android:id="@+id/toolbarpp"
                 android:layout_width="match_parent"
@@ -127,7 +180,7 @@
                                 <TextView
                                     android:id="@+id/tv_edit"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="12dp"
                                     android:layout_marginStart="@dimen/_10sdp"
                                     android:layout_marginTop="@dimen/_6sdp"
                                     android:layout_marginEnd="@dimen/_10sdp"
@@ -146,55 +199,6 @@
 
             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="55dp">
-
-                <TextView
-                    android:id="@+id/title_tv"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/_13sdp"
-                    android:fontFamily="@font/nunito_sans_semibold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Business Profiles"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-
-            </RelativeLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewTwo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-            <RelativeLayout
-                android:id="@+id/toolbarp"
-                android:layout_width="match_parent"
-                android:layout_height="55dp">
-
-                <TextView
-                    android:id="@+id/potv"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/_13sdp"
-                    android:fontFamily="@font/nunito_sans_semibold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Political Profiles"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-
-            </RelativeLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:padding="5dp"
-                android:orientation="horizontal"/>
 
             <RelativeLayout
                 android:id="@+id/toolbaspec"
@@ -212,6 +216,30 @@
                     android:textColor="@color/black"
                     android:textSize="18dp" />
 
+                <LinearLayout
+                    android:id="@+id/contact_whatsapp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:background="@drawable/share_bg"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_contactWhatsApp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_6sdp"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:text="Contact WhatsApp"
+                        android:textColor="@color/al_white"
+                        android:textSize="@dimen/_8sdp" />
+
+                </LinearLayout>
             </RelativeLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_post"

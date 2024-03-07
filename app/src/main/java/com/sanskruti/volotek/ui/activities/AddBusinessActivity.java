@@ -217,7 +217,7 @@ public class AddBusinessActivity extends AppCompatActivity {
         });
 
         binding.ivBusiness.setOnClickListener(v -> {
-
+            Log.i("saqlain","In img select");
             Intent i = new Intent(
                     Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
@@ -231,16 +231,16 @@ public class AddBusinessActivity extends AppCompatActivity {
 
         if (validate()) {
 
-            String name = binding.etBusinessName.getText().toString().trim();
-            String email = binding.etBusinessEmail.getText().toString().trim();
-            String phone = binding.etBusinessNumber.getText().toString().trim();
-            String website = binding.etBusinessWebsite.getText().toString().trim();
-            String address = binding.etBusinessAddress.getText().toString().trim();
-            String insta = binding.etBusinessInsta.getText().toString().trim();
-            String youtube = binding.etBusinessYoutube.getText().toString().trim();
-            String facebook = binding.etBusinessFacebook.getText().toString().trim();
-            String twitter = binding.etBusinessTwitter.getText().toString().trim();
-            String taglinee = binding.etBusinessTaglinee.getText().toString().trim();
+            String name = binding.etBusinessName.getText().toString().trim() != null ? binding.etBusinessName.getText().toString().trim() : "";
+            String email = binding.etBusinessEmail.getText().toString().trim() != null ? binding.etBusinessEmail.getText().toString().trim() : "";
+            String phone = binding.etBusinessNumber.getText().toString().trim() != null ? binding.etBusinessNumber.getText().toString().trim() : "";
+            String website = binding.etBusinessWebsite.getText().toString().trim() != null ? binding.etBusinessWebsite.getText().toString().trim() : "";
+            String address = binding.etBusinessAddress.getText().toString().trim() != null ? binding.etBusinessAddress.getText().toString().trim() : "";
+            String insta = binding.etBusinessInsta.getText().toString().trim() != null ? binding.etBusinessInsta.getText().toString().trim() : "";
+            String youtube = binding.etBusinessYoutube.getText().toString().trim() != null ? binding.etBusinessYoutube.getText().toString().trim() : "";
+            String facebook = binding.etBusinessFacebook.getText().toString().trim() != null ? binding.etBusinessFacebook.getText().toString().trim() : "";
+            String twitter = binding.etBusinessTwitter.getText().toString().trim() != null ? binding.etBusinessTwitter.getText().toString().trim() : "";
+            String taglinee = binding.etBusinessTaglinee.getText().toString().trim() != null ? binding.etBusinessTaglinee.getText().toString().trim() : "";
 
 
             if (!networkConnectivity.isConnected()) {

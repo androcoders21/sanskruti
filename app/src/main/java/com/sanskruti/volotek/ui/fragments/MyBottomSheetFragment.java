@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ import com.sanskruti.volotek.ui.activities.EditPersonalProfileDetailsActivity;
 import com.sanskruti.volotek.ui.activities.EditPoliticalProfileDetailsActivity;
 import com.sanskruti.volotek.ui.activities.PoliticalProfileDetailsEditActivity;
 import com.sanskruti.volotek.ui.activities.ProfileEditActivity;
+import com.sanskruti.volotek.ui.dialog.UniversalDialog;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.MyUtils;
 import com.sanskruti.volotek.utils.PreferenceManager;
@@ -70,7 +72,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
     BottomAdapter featureAdapter;
     // Constructor to receive data
     List<ItemPolitical> items = new ArrayList<>();
-    LinearLayout iv_edit_politicalll, iv_edit_per, iv_edit_politicalllbus, lineDataiv;
+    LinearLayout iv_edit_politicalll, iv_edit_per, iv_edit_politicalllbus, lineDataiv, contact_whatsapp;
 
     RelativeLayout toolbarpm, toolbarbus, toolbarppm, toolbaspecSp;
     DismisListner dismisListner;
@@ -134,11 +136,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                             business_rvbus.setLayoutManager(recyclerViewLayoutManager);
 
 
-                        /*    if (businessItemArrayList.size() == 0) {
-                                iv_edit_politicalllbus.setVisibility(View.VISIBLE);
-                            } else {
-                                iv_edit_politicalllbus.setVisibility(GONE);
-                            }*/
+
                             getBusinessAdapter = new BusinessListAdapter(context, businessItemArrayList, (view, i) -> {
 
                                 if (type.equalsIgnoreCase("bus")) {
@@ -227,6 +225,8 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
         iv_edit_politicalllbus = view.findViewById(R.id.iv_edit_politicalbus);
 
+        contact_whatsapp = view.findViewById(R.id.contact_whatsapp);
+
         bustv = view.findViewById(R.id.title_tv);
         potvtv = view.findViewById(R.id.potv);
         ll = view.findViewById(R.id.profilePoliciy);
@@ -301,23 +301,44 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
         iv_edit_politicalll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                startActivity(new Intent(context, PoliticalProfileDetailsEditActivity.class));
-
-
+                if (items.size() >= 2) {
+                    Toast.makeText(context, "Already created 2 profiles!", Toast.LENGTH_SHORT).show();
+                } else {
+                    startActivity(new Intent(context, PoliticalProfileDetailsEditActivity.class));
+                }
             }
         });
         iv_edit_politicalllbus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(context, AddBusinessActivity.class);
+                if (businessItemArrayList.size() >= 2) {
+                    Log.v("saqlain","In Gone"+businessItemArrayList.size());
+                    Toast.makeText(context, "Already created 2 profiles!", Toast.LENGTH_SHORT).show();
+//                    iv_edit_politicalllbus.setVisibility(GONE);
+                } else {
+                    Log.v("saqlain","In Visible"+businessItemArrayList.size());
+//                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+                                    Intent intent = new Intent(context, AddBusinessActivity.class);
                 intent.putExtra("Action", "Insert");
                 startActivity(intent);
+                }
+
+
 
 
             }
         });
+
+        contact_whatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Replace "1234567890" with the recipient's phone number, including the country code
+                String phoneNumber = "+918553537373";
+                openWhatsAppChat(phoneNumber);
+            }
+        });
+
         /*ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -340,8 +361,8 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             bustv.setVisibility(View.GONE);
             toolbarbus.setVisibility(View.GONE);
             toolbarpm.setVisibility(View.VISIBLE);
-            toolbarppm.setVisibility(View.VISIBLE);
-            ll.setVisibility(View.VISIBLE);
+            toolbarppm.setVisibility(View.GONE);
+            ll.setVisibility(View.GONE);
             toolbaspecSp.setVisibility(View.GONE);
             rvSpec.setVisibility(View.GONE);
 
@@ -368,8 +389,8 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             bustv.setVisibility(View.VISIBLE);
             political_RV.setVisibility(View.GONE);
             business_rvbus.setVisibility(View.VISIBLE);
-            toolbarppm.setVisibility(View.VISIBLE);
-            ll.setVisibility(View.VISIBLE);
+            toolbarppm.setVisibility(View.GONE);
+            ll.setVisibility(View.GONE);
             toolbaspecSp.setVisibility(View.GONE);
             rvSpec.setVisibility(View.GONE);
 
@@ -421,7 +442,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
     //    Toast.makeText(context, "greeting 2 = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
         adapter = new SpecialFramesAdater(getActivity(), (data) -> {
-     //       Toast.makeText(context, "greeting 3 = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "greeting 3 = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, EditPoliticalProfileDetailsActivity.class);
             intent.putExtra("index", String.valueOf(0));
             intent.putExtra("img", image_url);
@@ -661,6 +682,17 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             Log.i("getJSONData", "userDataString two = " + userDataString.toString());
         }*/
 
+    }
+
+    private void openWhatsAppChat(String phoneNumber) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            String url = "https://api.whatsapp.com/send?phone=" + phoneNumber;
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,6 +28,9 @@ import com.sanskruti.volotek.utils.MyUtils;
 import com.sanskruti.volotek.utils.NetworkConnectivity;
 import com.sanskruti.volotek.utils.PreferenceManager;
 import com.sanskruti.volotek.utils.Util;
+import com.yalantis.ucrop.UCrop;
+
+import java.io.File;
 
 public class ProfileEditActivity extends AppCompatActivity {
 
@@ -40,45 +44,116 @@ public class ProfileEditActivity extends AppCompatActivity {
 
     UserItem userItem;
 
-    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        // Here, no request code
-                        if (result.getData() != null) {
-                            Uri selectedImage = result.getData().getData();
-                            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                            if (selectedImage != null) {
-                                Cursor cursor = getContentResolver().query(selectedImage,
-                                        null, null, null, null);
-
-                                if (cursor != null) {
-                                    cursor.moveToFirst();
-
-                                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                                    profileImagePath = cursor.getString(columnIndex);
-
-                                    new ImageCropperFragment(0, profileImagePath, (id, out) -> {
-
-                                        profileImagePath = out;
-                                        imageUri = Uri.parse(out);
-
-                                        GlideDataBinding.bindImage(binding.ivAddImg, out);
-
-
-                                    }).show(getSupportFragmentManager(), "");
-
-                                    cursor.close();
-
-                                }
-                            }
-                        }
-                    }
+//    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+//            new ActivityResultContracts.StartActivityForResult(),
+//            new ActivityResultCallback<ActivityResult>() {
+//                @Override
+//                public void onActivityResult(ActivityResult result) {
+//                    if (result.getResultCode() == Activity.RESULT_OK) {
+//                        // Here, no request code
+//                        if (result.getData() != null) {
+//                            Uri selectedImage = result.getData().getData();
+//                            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//
+//                            if (selectedImage != null) {
+//                                Cursor cursor = getContentResolver().query(selectedImage,
+//                                        null, null, null, null);
+//
+//                                if (cursor != null) {
+//                                    cursor.moveToFirst();
+//
+//                                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                                    profileImagePath = cursor.getString(columnIndex);
+//
+//                                    new ImageCropperFragment(0, profileImagePath, (id, out) -> {
+//
+//                                        profileImagePath = out;
+//                                        imageUri = Uri.parse(out);
+//
+//                                        GlideDataBinding.bindImage(binding.ivAddImg, out);
+//
+//
+//                                    }).show(getSupportFragmentManager(), "");
+//
+//                                    cursor.close();
+//
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            });
+ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        result -> {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                // Here, no request code
+                if (result.getData() != null) {
+                    getImageFromURI(result);
                 }
-            });
+            }
+        });
+
+    private void getImageFromURI(ActivityResult result) {
+        Uri selectedImage = result.getData().getData();
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+        if (selectedImage != null) {
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    null, null, null, null);
+
+            if (cursor != null) {
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                profileImagePath = cursor.getString(columnIndex);
+                cursor.close();
+
+                imageUri = selectedImage;
+
+                beginCrop(imageUri);
+
+
+            }
+        }
+    }
+
+
+    private void beginCrop(Uri uri) {
+        if (uri != null) {
+            try {
+
+                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), new File(uri.getPath()).getName()));
+                UCrop.Options options2 = new UCrop.Options();
+                options2.setCompressionFormat(Bitmap.CompressFormat.PNG);
+                options2.setFreeStyleCropEnabled(true);
+
+                UCrop.of(uri, destinationUri)
+                        .withOptions(options2)
+                        .start(this);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+            Uri resultUri = UCrop.getOutput(data);
+            if (resultUri != null) {
+                profileImagePath = resultUri.getPath();
+                imageUri = resultUri;
+                GlideDataBinding.bindImage(binding.ivAddImg, resultUri.toString());
+            }
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
+            cropError.printStackTrace();
+        }
+    }
 
 
     @Override
@@ -195,7 +270,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         });
 
         binding.ivAddImg.setOnClickListener(v -> {
-
+            Log.i("Saqlain","Image click");
             Intent i = new Intent(
                     Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 

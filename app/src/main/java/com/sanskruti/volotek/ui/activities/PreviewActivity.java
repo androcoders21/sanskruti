@@ -791,11 +791,11 @@ public class PreviewActivity extends AppCompatActivity {
 
                 bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
             }
-        }, 3, getResources().getDimension(com.intuit.ssp.R.dimen._2ssp));
+        }, 2, getResources().getDimension(com.intuit.ssp.R.dimen._2ssp));
         rvPost.setAdapter(adapter);
 
 
-        layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
         rvPost.setLayoutManager(layoutManager);
 

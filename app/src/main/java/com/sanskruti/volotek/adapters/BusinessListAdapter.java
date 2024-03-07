@@ -3,6 +3,7 @@ package com.sanskruti.volotek.adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +84,6 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
 
 
         holder.cvBusinessEdit.setOnClickListener(view -> {
-
             Constant.businessItem = businessItems.get(position);
 
             Intent intent = new Intent(context, AddBusinessActivity.class);

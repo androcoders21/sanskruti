@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -37,6 +38,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,10 +62,12 @@ import com.sanskruti.volotek.ui.dialog.UniversalDialog;
 import com.sanskruti.volotek.ui.fragments.FontFamilyBottomSheetDialogFragment;
 import com.sanskruti.volotek.utils.Configure;
 import com.sanskruti.volotek.utils.Constant;
+import com.sanskruti.volotek.utils.ImageCropperFragment;
 import com.sanskruti.volotek.utils.MyUtils;
 import com.sanskruti.volotek.utils.PreferenceManager;
 import com.sanskruti.volotek.viewmodel.UserViewModel;
 import com.squareup.otto.Bus;
+import com.yalantis.ucrop.UCrop;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -123,25 +129,102 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
     private Dialog dialog;
     private PhotoView photoView;
     private static final int PICK_IMAGE_REQUEST = 1;
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
-    }
-    private boolean greeting = false;
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            // Get the image URI
-            Uri imageUri = data.getData();
-            /*    photoView.setImageResource(R.drawable.demo_img);*/
-            photoView.setImageURI(imageUri);
+    Uri imageUri;
 
-            // Now you can use the imageUri to do further processing (e.g., upload the image)
-            // You might want to display the selected image in an ImageView
+    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    // Here, no request code
+                    if (result.getData() != null) {
+                        getImageFromURI(result);
+                    }
+                }
+            });
+    private void getImageFromURI(ActivityResult result) {
+        Uri selectedImage = result.getData().getData();
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+        if (selectedImage != null) {
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    null, null, null, null);
+
+            if (cursor != null) {
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                profileImagePath = cursor.getString(columnIndex);
+                cursor.close();
+
+                imageUri = selectedImage;
+
+                beginCrop(imageUri);
+
+
+            }
         }
     }
+
+
+    private void beginCrop(Uri uri) {
+        if (uri != null) {
+            try {
+
+                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), new File(uri.getPath()).getName()));
+                UCrop.Options options2 = new UCrop.Options();
+                options2.setCompressionFormat(Bitmap.CompressFormat.PNG);
+                options2.setFreeStyleCropEnabled(true);
+
+                UCrop.of(uri, destinationUri)
+                        .withOptions(options2)
+                        .start(this);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        someActivityResultLauncher.launch(intent);
+    }
+    private boolean greeting = false;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (requestCode == UCrop.REQUEST_CROP) {
+
+            if (data != null) {
+                new ImageCropperFragment(0, MyUtils.getPathFromURI(this, UCrop.getOutput(data)), (id, out) -> {
+                    imageUri = Uri.parse(out);
+                    photoView.setImageURI(imageUri);
+
+                }).show(getSupportFragmentManager(), "");
+            }
+
+        }
+
+
+    }
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+//            // Get the image URI
+//            Uri imageUri = data.getData();
+//            /*    photoView.setImageResource(R.drawable.demo_img);*/
+//            photoView.setImageURI(imageUri);
+//
+//            // Now you can use the imageUri to do further processing (e.g., upload the image)
+//            // You might want to display the selected image in an ImageView
+//        }
+//    }
     private RelativeLayout movableImageView;
 
     private ImageView ivclose,ivStickerImg;

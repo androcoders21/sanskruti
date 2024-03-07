@@ -245,14 +245,20 @@
                     android:src="@drawable/demo_img"
                     android:visibility="visible" />
             </androidx.cardview.widget.CardView>
-            <ImageView
-                android:id="@+id/iv_logo"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="@dimen/_70sdp"
-                android:layout_gravity="bottom"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher_foreground" />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom">
+                <ImageView
+                    android:id="@+id/iv_logo"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_70sdp"
+                    android:layout_gravity="bottom"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_launcher_foreground" />
+            </FrameLayout>
+
         </LinearLayout>
 
     </FrameLayout>

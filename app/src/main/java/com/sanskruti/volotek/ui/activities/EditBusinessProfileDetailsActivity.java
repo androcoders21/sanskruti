@@ -26,6 +26,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -127,6 +128,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             // Get the image URI
+
             Uri imageUri = data.getData();
             /*    photoView.setImageResource(R.drawable.demo_img);*/
             photoView.setImageURI(imageUri);
@@ -1788,7 +1790,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             int newHeight = 200 + progress * 10; // Adjust as needed
 
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(newWidth, newHeight);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(newWidth, newHeight);
 
             ivAddImg.setLayoutParams(params);
 

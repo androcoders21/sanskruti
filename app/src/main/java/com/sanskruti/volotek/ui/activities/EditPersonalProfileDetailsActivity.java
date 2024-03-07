@@ -32,6 +32,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -391,7 +392,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Bitmap result) {
-            Log.i("thisisknowdowload", "2 img = " + result.toString());
+  //          Log.i("thisisknowdowload", "2 img = " + result.toString());
             if (result != null) {
                 // Set the downloaded image as the background of the RelativeLayout
 

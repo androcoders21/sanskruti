@@ -22,6 +22,46 @@
           }
         },
         {
+          "client_id": "95528273988-fsvgd8rfvde2ikbpg5dnq7rcp9b5vfv2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sanskruti.volotek",
+            "certificate_hash": "74fcc14648e241d87e98ff16fcfec013a0fbe877"
+          }
+        },
+        {
+          "client_id": "95528273988-gv560790ktmtqteb2atg9cu453cr8uc6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sanskruti.volotek",
+            "certificate_hash": "d76a3d016acf1259da390887f1a74da29fd29fa7"
+          }
+        },
+        {
+          "client_id": "95528273988-hdqu5bpa6pruvmuso9a2b000e74evsc2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sanskruti.volotek",
+            "certificate_hash": "725391b84b5f1d9724931913158b108bbb75d63d"
+          }
+        },
+        {
+          "client_id": "95528273988-phhdo7cnm9s3vmpqpe7uluilgcip6o45.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sanskruti.volotek",
+            "certificate_hash": "9959d3b1edff9937a72ba991d8507336804f73f6"
+          }
+        },
+        {
+          "client_id": "95528273988-snpljog6clj3uirdm5pjg9pmsemqmk0j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sanskruti.volotek",
+            "certificate_hash": "c71d7429f55ce4c788abce55f6a29d2286d5066e"
+          }
+        },
+        {
           "client_id": "95528273988-819n7rvn1s2ieuldhj273df8f7cp8807.apps.googleusercontent.com",
           "client_type": 3
         }

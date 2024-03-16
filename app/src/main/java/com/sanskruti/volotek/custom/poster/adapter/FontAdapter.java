@@ -69,16 +69,16 @@ public class FontAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.layItem = view.findViewById(R.id.layItem);
             viewHolder.txtView = view.findViewById(R.id.grid_text);
-            viewHolder.txtDownloadFont = view.findViewById(R.id.txtDownloadFont);
-            viewHolder.downloadProgress = view.findViewById(R.id.downloadProgress);
+//            viewHolder.txtDownloadFont = view.findViewById(R.id.txtDownloadFont);
+//            viewHolder.downloadProgress = view.findViewById(R.id.downloadProgress);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        viewHolder.downloadProgress.setVisibility(View.INVISIBLE);
+//        viewHolder.downloadProgress.setVisibility(View.INVISIBLE);
         String[] strArr = this.Imageid;
         if (i < strArr.length) {
-            viewHolder.txtDownloadFont.setVisibility(View.GONE);
+//            viewHolder.txtDownloadFont.setVisibility(View.GONE);
             if (i == 0) {
                 viewHolder.txtView.setTypeface(Typeface.DEFAULT);
             } else {
@@ -87,6 +87,7 @@ public class FontAdapter extends BaseAdapter {
                     TextView textView = viewHolder.txtView;
                     AssetManager assets = this.mContext.getAssets();
                     textView.setTypeface(Typeface.createFromAsset(assets, "font/" + this.Imageid[i]));
+                    textView.setText(this.Imageid[i]);
                 } catch (Exception e) {
                     Log.e(TAG, "getView: font not found");
                 }
@@ -109,7 +110,7 @@ public class FontAdapter extends BaseAdapter {
             textView2.setText(MainActivity.fontArraylist.get(0).getFonts().get(length) + "");
 
             if (file.exists()) {
-                viewHolder.txtDownloadFont.setVisibility(View.GONE);
+//                viewHolder.txtDownloadFont.setVisibility(View.GONE);
                 try {
                     viewHolder.txtView.setTypeface(Typeface.createFromFile(file));
                 } catch (RuntimeException e2) {
@@ -117,7 +118,7 @@ public class FontAdapter extends BaseAdapter {
                     viewHolder.txtView.setTypeface(Typeface.DEFAULT);
                 }
             } else {
-                viewHolder.txtDownloadFont.setVisibility(View.VISIBLE);
+//                viewHolder.txtDownloadFont.setVisibility(View.VISIBLE);
             }
         }
 
@@ -130,26 +131,26 @@ public class FontAdapter extends BaseAdapter {
             viewHolder.txtView.setTextColor(this.mContext.getResources().getColor(R.color.crop_selected_color));
         }
 
-        viewHolder.txtDownloadFont.setOnClickListener(view1 -> {
-
-            if (!ConnectivityReceiver.isConnected()) {
-
-                Toast.makeText(FontAdapter.this.mContext, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
-
-            } else if (FontAdapter.this.isDownloadProgress) {
-
-                FontAdapter.this.isDownloadProgress = false;
-
-                viewHolder.downloadProgress.setVisibility(View.VISIBLE);
-
-                int length = i - FontAdapter.this.Imageid.length;
-
-
-
-            } else {
-                Toast.makeText(FontAdapter.this.mContext, "Please wait..", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        viewHolder.txtDownloadFont.setOnClickListener(view1 -> {
+//
+//            if (!ConnectivityReceiver.isConnected()) {
+//
+//                Toast.makeText(FontAdapter.this.mContext, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
+//
+//            } else if (FontAdapter.this.isDownloadProgress) {
+//
+//                FontAdapter.this.isDownloadProgress = false;
+//
+//                viewHolder.downloadProgress.setVisibility(View.VISIBLE);
+//
+//                int length = i - FontAdapter.this.Imageid.length;
+//
+//
+//
+//            } else {
+//                Toast.makeText(FontAdapter.this.mContext, "Please wait..", Toast.LENGTH_SHORT).show();
+//            }
+//        });
         viewHolder.txtView.setOnClickListener(view12 -> {
             if (i < FontAdapter.this.Imageid.length) {
                 FontAdapter.this.mSingleCallback.onClickCallBack(null, i, FontAdapter.this.Imageid[i], FontAdapter.this.mContext);

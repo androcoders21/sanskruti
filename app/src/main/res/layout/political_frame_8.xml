@@ -2,47 +2,49 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/frameNew"
+    android:background="@drawable/rounded_corners"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/rounded_corners">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
         android:layout_gravity="bottom|end">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="0dp"
             android:background="@color/white"
-            android:orientation="vertical"
+
             android:layout_gravity="bottom">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:background="#51221a"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="15dp"
-                android:background="#f27f16"
+                android:layout_height="20dp"
                 android:layout_gravity="bottom"/>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLogo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom"
+            android:layout_height="65dp"
+            android:background="@drawable/pf8background"
             android:gravity="bottom"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="bottom"
             android:padding="1dp"
             android:visibility="visible">
 
 
+            <View
+                android:layout_width="65dp"
+                android:layout_height="1dp"/>
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"
                 android:layout_weight="1"
+                android:layout_marginBottom="5dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -50,16 +52,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:textStyle="bold"
+                    android:textColor="@color/red"
                     android:text="Name"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_13sdp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/_13sdp" />
 
                 <TextView
                     android:id="@+id/tvDesignation1"
                     android:layout_width="wrap_content"
-                    android:textColor="@color/white"
                     android:layout_height="wrap_content"
+
                     android:layout_gravity="center_horizontal"
                     android:text="Designation1"
                     android:textSize="@dimen/_7sdp" />
@@ -68,40 +70,34 @@
                     android:id="@+id/tvDesignation2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:layout_gravity="center_horizontal"
                     android:text="Designation2"
                     android:textSize="@dimen/_7sdp" />
-
                 <TextView
                     android:id="@+id/tvMobileNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:visibility="gone"
+
                     android:text="Mobile Number"
                     android:textSize="@dimen/_7sdp" />
 
-                <ImageView
-                    android:id="@+id/socialMediaIv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_8sdp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginTop="6dp"
-                    android:elevation="1dp"
-                    android:src="@drawable/ic_all_social"
-                    android:visibility="visible" />
+
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
 
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_gravity="bottom"
-            android:gravity="bottom"
-            android:orientation="horizontal">
+            android:gravity="bottom">
+
             <View
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -110,11 +106,14 @@
                 android:id="@+id/iv_logo"
                 android:layout_width="@dimen/_90sdp"
                 android:layout_height="@dimen/_90sdp"
-                android:layout_gravity="bottom|end"
+                android:layout_gravity="bottom|right"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/ic_launcher_foreground" />
+                android:src="@drawable/p5profile"
+                android:visibility="visible" />
         </LinearLayout>
+
+
 
     </FrameLayout>
 
@@ -136,8 +135,8 @@
             android:visibility="visible">
             <ImageView
                 android:id="@+id/iv_party"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="@dimen/_70sdp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_gravity="start|top"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
@@ -175,7 +174,7 @@
                         android:layout_height="@dimen/_40sdp"
                         android:adjustViewBounds="true"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/demo_img"
+                        android:src="@drawable/pf5leader"
                         android:visibility="visible" />
                 </androidx.cardview.widget.CardView>
 
@@ -193,7 +192,7 @@
                         android:adjustViewBounds="true"
                         android:background="@drawable/rounded_corners"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/demo_img"
+                        android:src="@drawable/pf5leader"
                         android:visibility="visible" />
                 </androidx.cardview.widget.CardView>
 
@@ -211,7 +210,7 @@
                         android:adjustViewBounds="true"
                         android:background="@drawable/rounded_corners"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/demo_img"
+                        android:src="@drawable/pf5leader"
                         android:visibility="visible" />
                 </androidx.cardview.widget.CardView>
 
@@ -229,7 +228,7 @@
                         android:adjustViewBounds="true"
                         android:background="@drawable/rounded_corners"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/demo_img"
+                        android:src="@drawable/pf5leader"
                         android:visibility="visible" />
                 </androidx.cardview.widget.CardView>
 
@@ -247,7 +246,7 @@
                         android:adjustViewBounds="true"
                         android:background="@drawable/rounded_corners"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/demo_img"
+                        android:src="@drawable/pf5leader"
                         android:visibility="visible" />
                 </androidx.cardview.widget.CardView>
 

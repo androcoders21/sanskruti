@@ -76,16 +76,16 @@ import java.util.List;
 
 public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
     LinearLayout llFramesLl, llProfilePhotoLl, llNameLl, btnDownload, llDesignation1Ll, llDesignation2Ll, llMobileLl,llStickerLl,
-            llLeadersPhotoLl, llSocialMediaIconsLl, llPartyIconLayout, llcolorll, llcolord1ll, llcolord2ll, llcolorMobilell;
+            llLeadersPhotoLl, llSocialMediaIconsLl, llPartyIconLayout, llcolorll, llcolord1ll, llcolord2ll, llcolorMobilell, uploadedPhoto;
     FontAdapter adapter;
     LinearLayout llfontll, llfontd1ll, llfontd2ll, llfontMobilell, fm ;
 
-    LinearLayout lay_profile_photo_ll, lay_party_photo_ll, lay_name_ll, lay_Designation1_ll, lay_Designation2_ll, lay_Mobile_ll, lay_SocialMedia_ll, lay_LeadersPhoto_ll, lay_frames_ll, lay_sticker_ll;
+    LinearLayout lay_profile_photo_ll, lay_party_photo_ll, lay_name_ll, lay_Designation1_ll, lay_Designation2_ll, lay_Mobile_ll, lay_SocialMedia_ll, lay_LeadersPhoto_ll, lay_frames_ll, lay_sticker_ll, lay_uploaded_photo;
 
     LinearLayout profilePhotoShowLLll, partyPhotoShowLLll, nameShowLLll, designation1ShowLLll, designation2ShowLLll, mobileShowLLll, socialMediaShowLLll;
 
     boolean checkProfilePhoto = true, checkPartyPhoto = true, checkName = true, checkDesignation1 = true, checkDesignation2 = true, checkMobile = true, checkSocialMedia = true;
-    private ImageView ivFlipIv;
+    private ImageView ivFlipIv, uploadedFlipIv;
     private SeekBar btnseekBarProfilePhoto, btnseekBarPartyPhoto, btnseekBarName, btnseekBarDesignation1, btnseekBarDesignation2, btnseekBarMobile;
 
     private String position;
@@ -196,7 +196,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
                 new ImageCropperFragment(0, MyUtils.getPathFromURI(this, UCrop.getOutput(data)), (id, out) -> {
                     imageUri = Uri.parse(out);
                     photoView.setImageURI(imageUri);
-
+                    uploadedPhoto.setVisibility(VISIBLE);
                 }).show(getSupportFragmentManager(), "");
             }
 
@@ -230,6 +230,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         llStickerLl = (LinearLayout)findViewById(R.id.stickerLl);
         ivclose = findViewById(R.id.movableImageViewClose);
         lay_sticker_ll  = (LinearLayout) findViewById(R.id.lay_sticker);
+        uploadedPhoto = (LinearLayout) findViewById(R.id.uploadedPhoto);
         ivSticker00 = (ImageView) findViewById(R.id.iv_sticker_01);
         ivSticker01 = (ImageView) findViewById(R.id.iv_sticker_02);
         ivSticker02 = (ImageView) findViewById(R.id.iv_sticker_03);
@@ -278,6 +279,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
@@ -303,7 +305,6 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("saqlain","Personal profile");
                 // Open gallery when a button or some UI element is clicked
                 openGallery();
             }
@@ -525,6 +526,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         } else {
             //    Toast.makeText(this, "null", Toast.LENGTH_SHORT).show();
         }
+
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
@@ -789,6 +791,13 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 flipImage(ivAddImg);
+            }
+        });
+
+        uploadedFlipIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flipImage(photoView);
             }
         });
         tvProfilePhotoShowTv.setText("Hide");
@@ -1676,6 +1685,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
@@ -1691,6 +1701,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.VISIBLE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
@@ -1706,6 +1717,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.VISIBLE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
@@ -1721,6 +1733,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.VISIBLE);
@@ -1736,6 +1749,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
@@ -1751,6 +1765,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
@@ -1767,6 +1782,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
@@ -1783,6 +1799,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
@@ -1799,8 +1816,26 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.VISIBLE);
+                lay_Designation1_ll.setVisibility(View.GONE);
+                lay_Designation2_ll.setVisibility(View.GONE);
+                lay_Mobile_ll.setVisibility(View.GONE);
+                lay_SocialMedia_ll.setVisibility(View.GONE);
+                lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                lay_frames_ll.setVisibility(View.GONE);
+                lay_sticker_ll.setVisibility(View.GONE);
+            }
+        });
+
+        uploadedPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(VISIBLE);
+                lay_name_ll.setVisibility(View.GONE);
+                lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_Designation2_ll.setVisibility(View.GONE);
                 lay_Mobile_ll.setVisibility(View.GONE);
@@ -2160,6 +2195,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         btnDownload = (LinearLayout) findViewById(R.id.ll_save);
 
         ivFlipIv = (ImageView)findViewById(R.id.flipIv);
+        uploadedFlipIv = (ImageView)findViewById(R.id.uploadedFlipIv);
 
         llcolorMobilell = (LinearLayout) findViewById(R.id.llcolorMobile);
         llcolord2ll = (LinearLayout) findViewById(R.id.llcolord2);
@@ -2256,6 +2292,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         llPartyIconLayout = (LinearLayout) findViewById(R.id.partyIconLayout);
         //lay_profile_photo
         lay_profile_photo_ll = (LinearLayout) findViewById(R.id.lay_profile_photo);
+        lay_uploaded_photo = (LinearLayout) findViewById(R.id.lay_uploaded_photo);
         lay_name_ll = (LinearLayout) findViewById(R.id.lay_name);
         lay_party_photo_ll = (LinearLayout) findViewById(R.id.lay_party_photo);
 

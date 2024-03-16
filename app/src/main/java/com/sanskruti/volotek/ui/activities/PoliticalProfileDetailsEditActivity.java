@@ -766,7 +766,7 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             etName.setError(getResources().getString(R.string.hint_name));
             etName.requestFocus();
             return false;
-        } /*else if (etEmail.getText().toString().trim().isEmpty()) {
+        } else if (etEmail.getText().toString().trim().isEmpty()) {
             etEmail.setError(getResources().getString(R.string.hint_email));
             etEmail.requestFocus();
             return false;
@@ -776,17 +776,17 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             etDesignation1.requestFocus();
             return false;
 
-        } else if (etDesignation2.getText().toString().isEmpty()) {
+        }/* else if (etDesignation2.getText().toString().isEmpty()) {
             etDesignation2.setError(getResources().getString(R.string.hint_designation));
             etDesignation2.requestFocus();
             return false;
 
-        } else if (etPhone.getText().toString().isEmpty()) {
+        }*/ else if (etPhone.getText().toString().isEmpty()) {
             etPhone.setError(getResources().getString(R.string.hint_phone_number));
             etPhone.requestFocus();
             return false;
 
-        } else if (etFacebookUsername.getText().toString().isEmpty()) {
+        }/* else if (etFacebookUsername.getText().toString().isEmpty()) {
             etFacebookUsername.setError(getResources().getString(R.string.hint_facebook));
             etFacebookUsername.requestFocus();
             return false;
@@ -801,13 +801,13 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             etTwitterUsername.requestFocus();
             return false;
 
-        } else if (profileImagePath.isEmpty()) {
+        }*/ else if (profileImagePath.isEmpty()) {
             Toast.makeText(this, "Please Select Profile Image.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (profileImagePathParty.isEmpty()) {
             Toast.makeText(this, "Please Select Party Image.", Toast.LENGTH_SHORT).show();
             return false;
-        } *//* else  if(profileImagePathLeader1.isEmpty()){
+        } /* else  if(profileImagePathLeader1.isEmpty()){
             Toast.makeText(this, "Please Select Leader 1 Image.", Toast.LENGTH_SHORT).show();
             return false;
         } else  if(profileImagePathLeader2.isEmpty()){

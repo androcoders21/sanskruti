@@ -301,11 +301,11 @@ public class AddBusinessActivity extends AppCompatActivity {
             binding.etBusinessName.setError(getResources().getString(R.string.hint_business_name));
             binding.etBusinessName.requestFocus();
             return false;
-        } else /*if (binding.etBusinessNumber.getText().toString().trim().isEmpty()) {
+        } else if (binding.etBusinessNumber.getText().toString().trim().isEmpty()) {
             binding.etBusinessNumber.setError(getResources().getString(R.string.hint_business_number));
             binding.etBusinessNumber.requestFocus();
             return false;
-        } else if (binding.etBusinessEmail.getText().toString().trim().isEmpty()) {
+        }/* else if (binding.etBusinessEmail.getText().toString().trim().isEmpty()) {
             binding.etBusinessEmail.setError(getResources().getString(R.string.hint_business_email));
             binding.etBusinessEmail.requestFocus();
             return false;
@@ -313,11 +313,11 @@ public class AddBusinessActivity extends AppCompatActivity {
             binding.etBusinessEmail.setError(getString(R.string.invalid_email));
             binding.etBusinessEmail.requestFocus();
             return false;
-        } else if (binding.etBusinessWebsite.getText().toString().isEmpty()) {
+        }else if (binding.etBusinessWebsite.getText().toString().isEmpty()) {
             binding.etBusinessWebsite.setError(getResources().getString(R.string.hint_business_website));
             binding.etBusinessWebsite.requestFocus();
             return false;
-        } else if (binding.etBusinessAddress.getText().toString().trim().isEmpty()) {
+        }*/ else if (binding.etBusinessAddress.getText().toString().trim().isEmpty()) {
             binding.etBusinessAddress.setError(getResources().getString(R.string.hint_business_address));
             binding.etBusinessAddress.requestFocus();
             return false;
@@ -331,7 +331,7 @@ public class AddBusinessActivity extends AppCompatActivity {
 
             return false;
 
-        } else */{
+        } else {
             return true;
         }
     }

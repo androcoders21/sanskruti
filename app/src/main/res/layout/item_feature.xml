@@ -22,7 +22,7 @@
             android:fontFamily="@font/nunito_sans_semibold"
             android:text="@string/trending"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp"
+            android:textSize="@dimen/_15sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

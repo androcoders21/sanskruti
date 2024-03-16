@@ -283,7 +283,7 @@ public class UserRespository {
                     @Override
                     public void onResponse(Call<BusinessItem> call, Response<BusinessItem> response) {
 
-                        Log.i("RESPONSE", "RESPONSE-->" + new Gson().toJson(response.body()));
+//                        Log.i("RESPONSE", "RESPONSE-->" + new Gson().toJson(response.body()));
 
                         data.setValue(response.body());
                     }

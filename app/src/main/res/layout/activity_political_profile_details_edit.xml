@@ -91,7 +91,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Profile Photo"
+                        android:text="Profile Photo *"
                         android:layout_marginTop="10dp"
                         android:textColor="@color/black"
                         android:textStyle="bold"/>
@@ -150,7 +150,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Party Icon"
+                        android:text="Party Icon *"
                         android:layout_marginTop="10dp"
                         android:textColor="@color/black"
                         android:textStyle="bold"/>
@@ -564,7 +564,7 @@
                 android:layout_marginHorizontal="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:fontFamily="@font/nunito_sans_semibold"
-                android:text="@string/email"
+                android:text="Email *"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@+id/etBusinessName"
                 app:layout_constraintTop_toBottomOf="@+id/etBusinessName"
@@ -596,7 +596,7 @@
                 android:layout_marginHorizontal="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:fontFamily="@font/nunito_sans_semibold"
-                android:text="Designation 1"
+                android:text="Designation 1 *"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@+id/etBusinessName"
                 app:layout_constraintTop_toBottomOf="@+id/etBusinessName"

@@ -9,116 +9,127 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end">
 
+        android:layout_gravity="bottom|end">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:gravity="bottom"
-            android:layout_gravity="bottom"
-            android:orientation="vertical">
+            android:layout_height="20dp"
+            android:background="@color/white"
+
+            android:layout_gravity="bottom">
             <LinearLayout
-                android:id="@+id/linearLogo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="10dp"
-                android:paddingLeft="20dp"
-                android:gravity="bottom"
-                android:layout_gravity="bottom"
-                android:background="#0b446d"
-                android:visibility="visible">
-
-                <View
-                    android:layout_width="100dp"
-                    android:layout_height="@dimen/_70sdp"/>
-
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textColor="@color/red"
-                        android:text="Name"
-                        android:textSize="@dimen/_20sdp" />
-
-                    <TextView
-                        android:id="@+id/tvDesignation1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:text="Designation1"
-                        android:textSize="@dimen/_7sdp" />
-
-                    <TextView
-                        android:id="@+id/tvMobileNo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:text="Designation2"
-                        android:textSize="@dimen/_7sdp" />
-                    <TextView
-                        android:id="@+id/tvDesignation2"
-                        android:layout_width="wrap_content"
-                        android:visibility="gone"
-                        android:layout_height="wrap_content"
-                        android:text="Mobile Number"
-                        android:textSize="@dimen/_7sdp" />
-
-                    <ImageView
-                        android:id="@+id/socialMediaIv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_8sdp"
-                        android:layout_gravity="bottom"
-                        android:layout_marginTop="3dp"
-                        android:elevation="1dp"
-                        android:src="@drawable/ic_all_social"
-                        android:visibility="gone" />
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/iv_party"
-                    android:layout_width="@dimen/_70sdp"
-                    android:layout_height="@dimen/_70sdp"
-
-                    android:layout_gravity="bottom"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher_foreground"
-                    android:visibility="gone" />
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="#eb8322"/>
+                android:layout_height="20dp"
+                android:layout_gravity="bottom"/>
         </LinearLayout>
-        <ImageView
-            android:id="@+id/iv_logo"
-            android:layout_width="@dimen/_110sdp"
-            android:layout_height="@dimen/_110sdp"
-            android:layout_gravity="center_vertical"
-            android:adjustViewBounds="true"
-            android:scaleType="center"
-            android:src="@mipmap/ic_launcher_foreground"
-            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/linearLogo"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:background="@drawable/pf9background"
+            android:gravity="bottom"
+
+            android:layout_gravity="bottom"
+            android:padding="1dp"
+            android:visibility="visible">
+
+
+            <View
+                android:layout_width="65dp"
+                android:layout_height="1dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_weight="1"
+                android:layout_marginBottom="2dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textStyle="bold"
+                    android:textColor="@color/red"
+                    android:text="Name"
+                    android:textSize="@dimen/_13sdp" />
+
+                <TextView
+                    android:id="@+id/tvDesignation1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_gravity="center_horizontal"
+                    android:text="Designation1"
+                    android:textSize="@dimen/_7sdp" />
+
+                <TextView
+                    android:id="@+id/tvDesignation2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Designation2"
+                    android:textSize="@dimen/_7sdp" />
+                <TextView
+                    android:id="@+id/tvMobileNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+
+                    android:text="Mobile Number"
+                    android:textSize="@dimen/_7sdp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom"
+            android:gravity="bottom">
+            <ImageView
+                android:id="@+id/iv_party"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_gravity="bottom|left"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="5dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/political_symbole" />
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="1dp"/>
+            <ImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="@dimen/_90sdp"
+                android:layout_height="@dimen/_90sdp"
+                android:layout_gravity="bottom|right"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/p5profile"
+                android:visibility="visible" />
+        </LinearLayout>
+
+
 
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
+        android:layout_gravity="top|right"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp">
 
@@ -136,7 +147,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="10dp"
-                android:visibility="gone"
                 android:background="@drawable/rounded_corners"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
@@ -147,7 +157,7 @@
                     android:layout_height="@dimen/_40sdp"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/demo_img"
+                    android:src="@drawable/pf5leader"
                     android:visibility="visible" />
             </androidx.cardview.widget.CardView>
 
@@ -155,7 +165,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="10dp"
-                android:visibility="gone"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
 
@@ -166,15 +175,13 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/demo_img"
+                    android:src="@drawable/pf5leader"
                     android:visibility="visible" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-
                 app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
@@ -186,14 +193,13 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/demo_img"
+                    android:src="@drawable/pf5leader"
                     android:visibility="visible" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
@@ -205,7 +211,7 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/demo_img"
+                    android:src="@drawable/pf5leader"
                     android:visibility="visible" />
             </androidx.cardview.widget.CardView>
 
@@ -213,7 +219,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="10dp"
-                android:visibility="gone"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
 
@@ -224,14 +229,13 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/demo_img"
+                    android:src="@drawable/pf5leader"
                     android:visibility="visible" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
@@ -243,7 +247,7 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/demo_img"
+                    android:src="@drawable/pf5leader"
                     android:visibility="visible" />
             </androidx.cardview.widget.CardView>
 

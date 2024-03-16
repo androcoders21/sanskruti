@@ -142,18 +142,31 @@ ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityR
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
-            Uri resultUri = UCrop.getOutput(data);
-            if (resultUri != null) {
-                profileImagePath = resultUri.getPath();
-                imageUri = resultUri;
-                GlideDataBinding.bindImage(binding.ivAddImg, resultUri.toString());
+//        if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+//            Uri resultUri = UCrop.getOutput(data);
+//            if (resultUri != null) {
+//                profileImagePath = resultUri.getPath();
+//                imageUri = resultUri;
+//                GlideDataBinding.bindImage(binding.ivAddImg, resultUri.toString());
+//            }
+//        }
+        if (requestCode == UCrop.REQUEST_CROP) {
+
+            if (data != null) {
+                new ImageCropperFragment(0, MyUtils.getPathFromURI(this, UCrop.getOutput(data)), (id, out) -> {
+                    imageUri = Uri.parse(out);
+                    profileImagePath = imageUri.toString();
+                    GlideDataBinding.bindImage(binding.ivAddImg, imageUri.toString());
+                }).show(getSupportFragmentManager(), "");
             }
-        } else if (resultCode == UCrop.RESULT_ERROR) {
+
+        }
+        else if (resultCode == UCrop.RESULT_ERROR) {
             final Throwable cropError = UCrop.getError(data);
             cropError.printStackTrace();
         }
     }
+
 
 
     @Override
@@ -291,12 +304,12 @@ ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityR
             binding.etEmail.requestFocus();
             return false;
 
-        } else if (binding.etDesignation.getText().toString().isEmpty()) {
+        }/* else if (binding.etDesignation.getText().toString().isEmpty()) {
             binding.etDesignation.setError(getResources().getString(R.string.hint_designation));
             binding.etDesignation.requestFocus();
             return false;
 
-        } else if (binding.etPhone.getText().toString().isEmpty() && userItem.getLogin_type().equals(Constant.GOOGLE)) {
+        }*/ else if (binding.etPhone.getText().toString().isEmpty() && userItem.getLogin_type().equals(Constant.GOOGLE)) {
             binding.etPhone.setError(getResources().getString(R.string.hint_phone_number));
             binding.etPhone.requestFocus();
             return false;

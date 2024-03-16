@@ -54,6 +54,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -335,7 +336,8 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             public void onClick(View v) {
                 // Replace "1234567890" with the recipient's phone number, including the country code
                 String phoneNumber = "+918553537373";
-                openWhatsAppChat(phoneNumber);
+                String message = "नमस्कार, स्पेशल फ्रेम हवी आहे।";
+                openWhatsAppChat(phoneNumber,message);
             }
         });
 
@@ -443,6 +445,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
     //    Toast.makeText(context, "greeting 2 = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
         adapter = new SpecialFramesAdater(getActivity(), (data) -> {
 //            Toast.makeText(context, "greeting 3 = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
+
             Intent intent = new Intent(context, EditPoliticalProfileDetailsActivity.class);
             intent.putExtra("index", String.valueOf(0));
             intent.putExtra("img", image_url);
@@ -684,11 +687,11 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
     }
 
-    private void openWhatsAppChat(String phoneNumber) {
+    private void openWhatsAppChat(String phoneNumber, String message) {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            String url = "https://api.whatsapp.com/send?phone=" + phoneNumber;
-            intent.setData(Uri.parse(url));
+            Uri uri = Uri.parse("https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + URLEncoder.encode(message, "UTF-8"));
+            intent.setData(uri);
             startActivity(intent);
         } catch (Exception e) {
             Toast.makeText(getActivity(), "WhatsApp not installed", Toast.LENGTH_SHORT).show();

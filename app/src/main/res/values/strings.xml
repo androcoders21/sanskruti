@@ -86,11 +86,11 @@
     <string name="edit">Save</string>
     <string name="delete">Delete</string>
     <string name="add_business">+Add</string>
-    <string name="business_name">Business Name</string>
+    <string name="business_name">Business Name *</string>
     <string name="business_email">Business Email</string>
-    <string name="business_phone_number">Business Phone Number</string>
+    <string name="business_phone_number">Business Phone Number *</string>
     <string name="business_website">Business Website</string>
-    <string name="business_address">Business Address</string>
+    <string name="business_address">Business Address *</string>
     <string name="hint_business_name">Enter Business Name</string>
     <string name="hint_business_email">Enter Business Email</string>
     <string name="hint_business_number">Enter Business Number</string>

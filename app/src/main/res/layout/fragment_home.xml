@@ -165,7 +165,7 @@
                             android:text="Today’s Special"
                             android:textColor="@color/black"
                             android:textStyle="bold"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textSize="@dimen/_15sdp" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_story"
@@ -209,7 +209,7 @@
                                 android:text="@string/upcoming_festivals"
                                 android:textColor="@color/black"
                                 android:textStyle="bold"
-                                android:textSize="@dimen/_12sdp" />
+                                android:textSize="@dimen/_15sdp" />
 
                             <View
                                 android:layout_width="match_parent"
@@ -391,7 +391,7 @@
                                 android:fontFamily="@font/nunito_sans_semibold"
                                 android:text="@string/menu_category"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/_12sdp" />
+                                android:textSize="@dimen/_15sdp" />
 
 
                             <LinearLayout

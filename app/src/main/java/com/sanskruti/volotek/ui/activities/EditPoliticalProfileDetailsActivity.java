@@ -86,16 +86,16 @@ import java.util.Objects;
 
 public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
     LinearLayout llFramesLl, llProfilePhotoLl, llNameLl, btnDownload, llDesignation1Ll, llDesignation2Ll, llMobileLl,llStickerLl,
-            llLeadersPhotoLl, llSocialMediaIconsLl, llPartyIconLayout, llcolorll, llcolord1ll, llcolord2ll, llcolorMobilell;
+            llLeadersPhotoLl, llSocialMediaIconsLl, llPartyIconLayout, llcolorll, llcolord1ll, llcolord2ll, llcolorMobilell, uploadedPhoto;
     FontAdapter adapter;
     LinearLayout llfontll, llfontd1ll, llfontd2ll, llfontMobilell;
 
-    LinearLayout lay_profile_photo_ll, lay_party_photo_ll, lay_name_ll, lay_Designation1_ll, lay_Designation2_ll, lay_Mobile_ll, lay_SocialMedia_ll, lay_LeadersPhoto_ll, lay_frames_ll, lay_sticker_ll;
+    LinearLayout lay_profile_photo_ll, lay_party_photo_ll, lay_name_ll, lay_Designation1_ll, lay_Designation2_ll, lay_Mobile_ll, lay_SocialMedia_ll, lay_LeadersPhoto_ll, lay_frames_ll, lay_sticker_ll, lay_uploaded_photo;
 
     LinearLayout profilePhotoShowLLll, partyPhotoShowLLll, nameShowLLll, designation1ShowLLll, designation2ShowLLll, mobileShowLLll, socialMediaShowLLll;
 
     boolean checkProfilePhoto = true, checkPartyPhoto = true, checkName = true, checkDesignation1 = true, checkDesignation2 = true, checkMobile = true, checkSocialMedia = true;
-    private ImageView ivFlipIv;
+    private ImageView ivFlipIv, uploadedFlipIv;
     private SeekBar btnseekBarProfilePhoto, btnseekBarPartyPhoto, btnseekBarName, btnseekBarDesignation1, btnseekBarDesignation2, btnseekBarMobile;
 
     private String position;
@@ -120,11 +120,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
     ImageView ivAddImgLeader11, ivAddImgLeader22, ivAddImgLeader33, ivAddImgLeader44, ivAddImgLeader55, ivAddImgLeader66;
 
-    ImageView ivFrames00, ivFrames11, ivFrames22, ivFrames33;
+    ImageView ivFrames00, ivFrames11, ivFrames22, ivFrames33, ivFrames44, ivFrames55, ivFrames66, ivFrames77, ivFrames88;
     private TextView tvNameTv, tvDesignation1Tv, tvDesignation2Tv, tvMobileNoTv;
 
     private String pName, pPhone, pEmail, pFacebookUsername, pInstagramUsername, pTwitterUsername,
-            pDesignation1, pDesignation2, pProfileImg, pPartyImg, pLeaderImg1 = "", pLeaderImg2="",
+            pDesignation1, pDesignation2, pProfileImg = "", pPartyImg = "", pLeaderImg1 = "", pLeaderImg2="",
             pLeaderImg3="", pLeaderImg4="", pLeaderImg5="", pLeaderImg6="";
     private Dialog dialog;
     private PhotoView photoView;
@@ -204,6 +204,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 new ImageCropperFragment(0, MyUtils.getPathFromURI(this, UCrop.getOutput(data)), (id, out) -> {
                     imageUri = Uri.parse(out);
                     photoView.setImageURI(imageUri);
+                    uploadedPhoto.setVisibility(VISIBLE);
 
                 }).show(getSupportFragmentManager(), "");
             }
@@ -237,6 +238,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         llStickerLl = (LinearLayout)findViewById(R.id.stickerLl);
         ivclose = findViewById(R.id.movableImageViewClose);
         lay_sticker_ll  = (LinearLayout) findViewById(R.id.lay_sticker);
+        uploadedPhoto = (LinearLayout) findViewById(R.id.uploadedPhoto);
         ivSticker00 = (ImageView) findViewById(R.id.iv_sticker_01);
         ivSticker01 = (ImageView) findViewById(R.id.iv_sticker_02);
         ivSticker02 = (ImageView) findViewById(R.id.iv_sticker_03);
@@ -524,6 +526,9 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
             LinearLayout fmlogo = (LinearLayout) findViewById(R.id.linearLogo);
             fmlogo.setVisibility(View.GONE);
+            ivAddImg.setVisibility(View.GONE);
+            ivAddImgParty.setVisibility(View.GONE);
+
             String imgUrlThum = getIntent().getStringExtra("imgThum");
 
             new DownloadImageTaskThum().execute(imgUrlThum);
@@ -791,6 +796,12 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 flipImage(ivAddImg);
+            }
+        });
+        uploadedFlipIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flipImage(photoView);
             }
         });
         tvProfilePhotoShowTv.setText("Hide");
@@ -1440,6 +1451,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivSticker08.setBackground(null);
                 ivSticker09.setBackground(getDrawable(R.drawable.images_background));
 
+
             }
         });
         ivFrames00.setOnClickListener(new View.OnClickListener() {
@@ -1450,6 +1462,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames11.setBackground(null);
                 ivFrames22.setBackground(null);
                 ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
             }
         });
 
@@ -1461,6 +1478,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames11.setBackground(getDrawable(R.drawable.images_background));
                 ivFrames22.setBackground(null);
                 ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
             }
         });
 
@@ -1473,6 +1495,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames11.setBackground(null);
                 ivFrames22.setBackground(getDrawable(R.drawable.images_background));
                 ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
             }
         });
 
@@ -1485,6 +1512,100 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames22.setBackground(null);
                 ivFrames11.setBackground(null);
                 ivFrames33.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+            }
+        });
+
+        ivFrames44.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame4();
+                handleSwitchFrame("5");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+            }
+        });
+
+        ivFrames55.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("6");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+
+            }
+        });
+
+        ivFrames66.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("7");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+
+            }
+        });
+
+        ivFrames77.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("8");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames88.setBackground(null);
+
+            }
+        });
+
+        ivFrames88.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("9");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(getDrawable(R.drawable.images_background));
+
             }
         });
 
@@ -1679,6 +1800,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
@@ -1694,6 +1816,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.VISIBLE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
@@ -1709,6 +1832,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.VISIBLE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
@@ -1724,6 +1848,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.VISIBLE);
@@ -1739,6 +1864,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
@@ -1754,6 +1880,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
@@ -1770,6 +1897,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
@@ -1786,6 +1914,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
@@ -1802,8 +1931,25 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.VISIBLE);
+                lay_Designation1_ll.setVisibility(View.GONE);
+                lay_Designation2_ll.setVisibility(View.GONE);
+                lay_Mobile_ll.setVisibility(View.GONE);
+                lay_SocialMedia_ll.setVisibility(View.GONE);
+                lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                lay_frames_ll.setVisibility(View.GONE);
+                lay_sticker_ll.setVisibility(View.GONE);
+            }
+        });
+        uploadedPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.VISIBLE);
+                lay_name_ll.setVisibility(View.GONE);
+                lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_Designation2_ll.setVisibility(View.GONE);
                 lay_Mobile_ll.setVisibility(View.GONE);
@@ -2133,6 +2279,50 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         initView(newToolbar);
         getDataShare();
     }
+
+    private void switchToPoliticalFrame4() {
+        // Assuming you have a reference to the parent ViewGroup
+        ViewGroup parentLayout  = findViewById(R.id.parent_layout);
+
+        // Remove the current toolbar from the parent layout
+        View currentToolbar = findViewById(R.id.toolbar);
+        parentLayout.removeView(currentToolbar);
+
+        // Inflate the new layout (political_frame_2)
+        View newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_5, parentLayout, false);
+
+
+        // Add the new toolbar to the parent layout
+        // Set the ID for the new toolbar
+        newToolbar.setId(R.id.toolbar);
+        parentLayout.addView(newToolbar);
+
+
+        initView(newToolbar);
+        getDataShare();
+    }
+
+    private void switchToPoliticalFrame5() {
+        // Assuming you have a reference to the parent ViewGroup
+        ViewGroup parentLayout  = findViewById(R.id.parent_layout);
+
+        // Remove the current toolbar from the parent layout
+        View currentToolbar = findViewById(R.id.toolbar);
+        parentLayout.removeView(currentToolbar);
+
+        // Inflate the new layout (political_frame_2)
+        View newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_6, parentLayout, false);
+
+
+        // Add the new toolbar to the parent layout
+        // Set the ID for the new toolbar
+        newToolbar.setId(R.id.toolbar);
+        parentLayout.addView(newToolbar);
+
+
+        initView(newToolbar);
+        getDataShare();
+    }
     private void initView(View newToolbar) {
         tvNameTv = (TextView) newToolbar.findViewById(R.id.tvName);
 
@@ -2149,6 +2339,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivAddImgLeader5 = (ImageView) newToolbar.findViewById(R.id.iv_logoL5);
         ivAddImgLeader6 = (ImageView) newToolbar.findViewById(R.id.iv_logoL6);
         ivSocialMediaIv = (ImageView) newToolbar.findViewById(R.id.socialMediaIv);
+        uploadedFlipIv = (ImageView)findViewById(R.id.uploadedFlipIv);
+        lay_uploaded_photo = (LinearLayout) findViewById(R.id.lay_uploaded_photo);
     }
     RelativeLayout ivBack;
     private void init() {
@@ -2278,6 +2470,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivFrames11 = (ImageView) findViewById(R.id.iv_logoL111);
         ivFrames22 = (ImageView) findViewById(R.id.iv_logoL121);
         ivFrames33 = (ImageView) findViewById(R.id.iv_logoL131);
+        ivFrames44 = (ImageView) findViewById(R.id.iv_logoL141);
+        ivFrames55 = (ImageView) findViewById(R.id.iv_logoL151);
+        ivFrames66 = (ImageView) findViewById(R.id.iv_logoL161);
+        ivFrames77 = (ImageView) findViewById(R.id.iv_logoL171);
+        ivFrames88 = (ImageView) findViewById(R.id.iv_logoL181);
 
 
 
@@ -2399,5 +2596,45 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         } finally {
             view.destroyDrawingCache();
         }
+    }
+
+    private void handleSwitchFrame(String type){
+        ViewGroup parentLayout  = findViewById(R.id.parent_layout);
+
+        // Remove the current toolbar from the parent layout
+        View currentToolbar = findViewById(R.id.toolbar);
+        parentLayout.removeView(currentToolbar);
+
+        // Inflate the new layout (political_frame_2)
+        View newToolbar;
+        switch (type) {
+            case "5":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_5, parentLayout, false);
+                break;
+            case "6":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_6, parentLayout, false);
+                break;
+            case "7":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_7, parentLayout, false);
+                break;
+            case "8":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_8, parentLayout, false);
+                break;
+            case "9":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_9, parentLayout, false);
+                break;
+            default:
+                // Handle default case if needed
+                return;
+        }
+
+        // Add the new toolbar to the parent layout
+        // Set the ID for the new toolbar
+        newToolbar.setId(R.id.toolbar);
+        parentLayout.addView(newToolbar);
+
+
+        initView(newToolbar);
+        getDataShare();
     }
 }

@@ -76,16 +76,16 @@ import java.util.List;
 
 public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
     LinearLayout llFramesLl, llProfilePhotoLl, llNameLl, btnDownload, llDesignation1Ll, llDesignation2Ll, llMobileLl, llStickerLl,
-            llLeadersPhotoLl, llSocialMediaIconsLl, llPartyIconLayout, llcolorll, llcolord1ll, llcolord2ll, llcolorMobilell;
+            llLeadersPhotoLl, llSocialMediaIconsLl, llPartyIconLayout, llcolorll, llcolord1ll, llcolord2ll, llcolorMobilell, uploadedPhoto;
     FontAdapter adapter;
     LinearLayout llfontll, llfontd1ll, llfontd2ll, llfontMobilell;
 
-    LinearLayout lay_profile_photo_ll, lay_party_photo_ll, lay_name_ll, lay_Designation1_ll, lay_Designation2_ll, lay_Mobile_ll, lay_SocialMedia_ll, lay_LeadersPhoto_ll, lay_frames_ll, lay_sticker_ll;
+    LinearLayout lay_profile_photo_ll, lay_party_photo_ll, lay_name_ll, lay_Designation1_ll, lay_Designation2_ll, lay_Mobile_ll, lay_SocialMedia_ll, lay_LeadersPhoto_ll, lay_frames_ll, lay_sticker_ll, lay_uploaded_photo;
 
     LinearLayout profilePhotoShowLLll, partyPhotoShowLLll, nameShowLLll, designation1ShowLLll, designation2ShowLLll, mobileShowLLll, socialMediaShowLLll;
 
     boolean checkProfilePhoto = true, checkPartyPhoto = true, checkName = true, checkDesignation1 = true, checkDesignation2 = true, checkMobile = true, checkSocialMedia = true;
-    private ImageView ivFlipIv;
+    private ImageView ivFlipIv, uploadedFlipIv;
     private SeekBar btnseekBarProfilePhoto, btnseekBarPartyPhoto, btnseekBarName, btnseekBarDesignation1, btnseekBarDesignation2, btnseekBarMobile;
 
     private String position;
@@ -198,7 +198,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
                 new ImageCropperFragment(0, MyUtils.getPathFromURI(this, UCrop.getOutput(data)), (id, out) -> {
                     imageUri = Uri.parse(out);
                     photoView.setImageURI(imageUri);
-
+                    uploadedPhoto.setVisibility(VISIBLE);
                 }).show(getSupportFragmentManager(), "");
             }
 
@@ -230,7 +230,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_business_profile_details);
-
+        uploadedPhoto = (LinearLayout) findViewById(R.id.uploadedPhoto);
         movableImageView = findViewById(R.id.movableImageView);
         ivclose = findViewById(R.id.movableImageViewClose);
         ivStickerImg = (ImageView) findViewById(R.id.stickerImg);
@@ -781,6 +781,13 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 flipImage(ivAddImg);
+            }
+        });
+
+        uploadedFlipIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flipImage(photoView);
             }
         });
         tvProfilePhotoShowTv.setText("Hide");
@@ -1668,6 +1675,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
@@ -1683,6 +1691,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
@@ -1698,6 +1707,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.VISIBLE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
@@ -1713,6 +1723,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.VISIBLE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
@@ -1728,6 +1739,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.VISIBLE);
@@ -1743,6 +1755,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
@@ -1758,6 +1771,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
@@ -1774,6 +1788,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
@@ -1790,6 +1805,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
@@ -1806,8 +1822,26 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
                 lay_party_photo_ll.setVisibility(View.VISIBLE);
+                lay_Designation1_ll.setVisibility(View.GONE);
+                lay_Designation2_ll.setVisibility(View.GONE);
+                lay_Mobile_ll.setVisibility(View.GONE);
+                lay_SocialMedia_ll.setVisibility(View.GONE);
+                lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                lay_frames_ll.setVisibility(View.GONE);
+                lay_sticker_ll.setVisibility(View.GONE);
+            }
+        });
+
+        uploadedPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lay_profile_photo_ll.setVisibility(View.GONE);
+                lay_uploaded_photo.setVisibility(VISIBLE);
+                lay_name_ll.setVisibility(View.GONE);
+                lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_Designation2_ll.setVisibility(View.GONE);
                 lay_Mobile_ll.setVisibility(View.GONE);
@@ -2172,6 +2206,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         btnDownload = (LinearLayout) findViewById(R.id.ll_save);
 
         ivFlipIv = (ImageView) findViewById(R.id.flipIv);
+        uploadedFlipIv = (ImageView)findViewById(R.id.uploadedFlipIv);
 
         llcolorMobilell = (LinearLayout) findViewById(R.id.llcolorMobile);
         llcolord2ll = (LinearLayout) findViewById(R.id.llcolord2);
@@ -2260,6 +2295,7 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         llStickerLl = (LinearLayout) findViewById(R.id.stickerLl);
         llFramesLl = (LinearLayout) findViewById(R.id.framesLl);
         llProfilePhotoLl = (LinearLayout) findViewById(R.id.profilePhotoLl);
+        lay_uploaded_photo = (LinearLayout) findViewById(R.id.lay_uploaded_photo);
         llNameLl = (LinearLayout) findViewById(R.id.nameLl);
         llDesignation1Ll = (LinearLayout) findViewById(R.id.designation1Ll);
         llDesignation2Ll = (LinearLayout) findViewById(R.id.designation2Ll);

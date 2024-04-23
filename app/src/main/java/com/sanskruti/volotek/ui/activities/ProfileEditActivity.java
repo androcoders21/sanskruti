@@ -29,8 +29,11 @@ import com.sanskruti.volotek.utils.NetworkConnectivity;
 import com.sanskruti.volotek.utils.PreferenceManager;
 import com.sanskruti.volotek.utils.Util;
 import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.UCropFragment;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 public class ProfileEditActivity extends AppCompatActivity {
 
@@ -123,10 +126,11 @@ ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityR
         if (uri != null) {
             try {
 
-                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), new File(uri.getPath()).getName()));
+                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), UUID.randomUUID().toString()));
                 UCrop.Options options2 = new UCrop.Options();
                 options2.setCompressionFormat(Bitmap.CompressFormat.PNG);
-                options2.setFreeStyleCropEnabled(true);
+                options2.setFreeStyleCropEnabled(false);
+                options2.withAspectRatio(1,1);
 
                 UCrop.of(uri, destinationUri)
                         .withOptions(options2)
@@ -151,8 +155,9 @@ ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityR
 //            }
 //        }
         if (requestCode == UCrop.REQUEST_CROP) {
-
             if (data != null) {
+
+
                 new ImageCropperFragment(0, MyUtils.getPathFromURI(this, UCrop.getOutput(data)), (id, out) -> {
                     imageUri = Uri.parse(out);
                     profileImagePath = imageUri.toString();
@@ -299,22 +304,22 @@ ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityR
             binding.etName.setError(getResources().getString(R.string.hint_name));
             binding.etName.requestFocus();
             return false;
-        } else if (binding.etEmail.getText().toString().trim().isEmpty() && userItem.getLogin_type().equals(Constant.PHONE)) {
+        }/* else if (binding.etEmail.getText().toString().trim().isEmpty() && userItem.getLogin_type().equals(Constant.PHONE)) {
             binding.etEmail.setError(getResources().getString(R.string.hint_email));
             binding.etEmail.requestFocus();
             return false;
 
-        }/* else if (binding.etDesignation.getText().toString().isEmpty()) {
+        } else if (binding.etDesignation.getText().toString().isEmpty()) {
             binding.etDesignation.setError(getResources().getString(R.string.hint_designation));
             binding.etDesignation.requestFocus();
             return false;
 
-        }*/ else if (binding.etPhone.getText().toString().isEmpty() && userItem.getLogin_type().equals(Constant.GOOGLE)) {
+        } else if (binding.etPhone.getText().toString().isEmpty() && userItem.getLogin_type().equals(Constant.GOOGLE)) {
             binding.etPhone.setError(getResources().getString(R.string.hint_phone_number));
             binding.etPhone.requestFocus();
             return false;
 
-        }  else {
+        }*/  else {
             return true;
         }
     }

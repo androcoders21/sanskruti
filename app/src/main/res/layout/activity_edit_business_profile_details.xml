@@ -129,7 +129,7 @@
                         android:layout_gravity="center"
                         android:layout_marginRight="@dimen/_4sdp"
                         android:fontFamily="@font/nunito_sans_semibold"
-                        android:text="@string/save"
+                        android:text="Download"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_10sdp"
                         app:layout_constraintBottom_toBottomOf="parent"

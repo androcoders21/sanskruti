@@ -62,6 +62,7 @@ import com.sanskruti.volotek.utils.PreferenceManager;
 import com.sanskruti.volotek.viewmodel.UserViewModel;
 import com.squareup.otto.Bus;
 import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.UCropActivity;
 
 import org.json.JSONArray;
 
@@ -73,6 +74,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
     LinearLayout llFramesLl, llProfilePhotoLl, llNameLl, btnDownload, llDesignation1Ll, llDesignation2Ll, llMobileLl, llStickerLl,
@@ -164,10 +166,11 @@ public class EditBusinessProfileDetailsActivity extends AppCompatActivity {
         if (uri != null) {
             try {
 
-                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), new File(uri.getPath()).getName()));
+                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), UUID.randomUUID().toString()));
                 UCrop.Options options2 = new UCrop.Options();
                 options2.setCompressionFormat(Bitmap.CompressFormat.PNG);
                 options2.setFreeStyleCropEnabled(true);
+                options2.setAllowedGestures(UCropActivity.SCALE,UCropActivity.NONE,UCropActivity.SCALE);
 
                 UCrop.of(uri, destinationUri)
                         .withOptions(options2)

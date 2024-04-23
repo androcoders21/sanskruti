@@ -784,7 +784,7 @@ public class PreviewActivity extends AppCompatActivity {
 
 
                 setImageShow(postItemList.get(data));
-                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(postItemList.get(data).image_url,this,"NA",false);
+                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(postItemList.get(data).image_url,this,"NA",false,"");
 
                 // Or using static method
                 // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);

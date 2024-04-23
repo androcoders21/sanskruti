@@ -52,6 +52,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
     PreferenceManager preferenceManager;
@@ -766,7 +767,7 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             etName.setError(getResources().getString(R.string.hint_name));
             etName.requestFocus();
             return false;
-        } else if (etEmail.getText().toString().trim().isEmpty()) {
+        }/* else if (etEmail.getText().toString().trim().isEmpty()) {
             etEmail.setError(getResources().getString(R.string.hint_email));
             etEmail.requestFocus();
             return false;
@@ -776,17 +777,17 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             etDesignation1.requestFocus();
             return false;
 
-        }/* else if (etDesignation2.getText().toString().isEmpty()) {
+        } else if (etDesignation2.getText().toString().isEmpty()) {
             etDesignation2.setError(getResources().getString(R.string.hint_designation));
             etDesignation2.requestFocus();
             return false;
 
-        }*/ else if (etPhone.getText().toString().isEmpty()) {
+        } else if (etPhone.getText().toString().isEmpty()) {
             etPhone.setError(getResources().getString(R.string.hint_phone_number));
             etPhone.requestFocus();
             return false;
 
-        }/* else if (etFacebookUsername.getText().toString().isEmpty()) {
+        } else if (etFacebookUsername.getText().toString().isEmpty()) {
             etFacebookUsername.setError(getResources().getString(R.string.hint_facebook));
             etFacebookUsername.requestFocus();
             return false;
@@ -801,13 +802,13 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             etTwitterUsername.requestFocus();
             return false;
 
-        }*/ else if (profileImagePath.isEmpty()) {
+        }else if (profileImagePath.isEmpty()) {
             Toast.makeText(this, "Please Select Profile Image.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (profileImagePathParty.isEmpty()) {
             Toast.makeText(this, "Please Select Party Image.", Toast.LENGTH_SHORT).show();
             return false;
-        } /* else  if(profileImagePathLeader1.isEmpty()){
+        }  else  if(profileImagePathLeader1.isEmpty()){
             Toast.makeText(this, "Please Select Leader 1 Image.", Toast.LENGTH_SHORT).show();
             return false;
         } else  if(profileImagePathLeader2.isEmpty()){
@@ -935,12 +936,11 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
     private void beginCrop(Uri uri) {
         if (uri != null) {
             try {
-
-                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), new File(uri.getPath()).getName()));
+                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), UUID.randomUUID().toString()));
                 UCrop.Options options2 = new UCrop.Options();
                 options2.setCompressionFormat(Bitmap.CompressFormat.PNG);
-                options2.setFreeStyleCropEnabled(true);
-
+                options2.setFreeStyleCropEnabled(false);
+                options2.withAspectRatio(1,1);
                 UCrop.of(uri, destinationUri)
                         .withOptions(options2)
                         .start(this);

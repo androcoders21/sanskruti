@@ -45,6 +45,7 @@ import com.google.gson.Gson;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
+import java.util.UUID;
 
 public class AddBusinessActivity extends AppCompatActivity {
     public static final int REQUEST_CODE = 112;
@@ -72,7 +73,7 @@ public class AddBusinessActivity extends AppCompatActivity {
                 }
             });
     InterstitialsAdsManager interstitialsAdsManager;
-    private String stringBusinessCategory = null;
+    private String stringBusinessCategory = "104";
 
     private String Action;
     private Dialog dialog;
@@ -106,10 +107,11 @@ public class AddBusinessActivity extends AppCompatActivity {
         if (uri != null) {
             try {
 
-                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), new File(uri.getPath()).getName()));
+                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), UUID.randomUUID().toString()));
                 UCrop.Options options2 = new UCrop.Options();
                 options2.setCompressionFormat(Bitmap.CompressFormat.PNG);
-                options2.setFreeStyleCropEnabled(true);
+                options2.setFreeStyleCropEnabled(false);
+                options2.withAspectRatio(1,1);
 
                 UCrop.of(uri, destinationUri)
                         .withOptions(options2)
@@ -301,11 +303,11 @@ public class AddBusinessActivity extends AppCompatActivity {
             binding.etBusinessName.setError(getResources().getString(R.string.hint_business_name));
             binding.etBusinessName.requestFocus();
             return false;
-        } else if (binding.etBusinessNumber.getText().toString().trim().isEmpty()) {
+        }/* else if (binding.etBusinessNumber.getText().toString().trim().isEmpty()) {
             binding.etBusinessNumber.setError(getResources().getString(R.string.hint_business_number));
             binding.etBusinessNumber.requestFocus();
             return false;
-        }/* else if (binding.etBusinessEmail.getText().toString().trim().isEmpty()) {
+        } else if (binding.etBusinessEmail.getText().toString().trim().isEmpty()) {
             binding.etBusinessEmail.setError(getResources().getString(R.string.hint_business_email));
             binding.etBusinessEmail.requestFocus();
             return false;
@@ -317,14 +319,14 @@ public class AddBusinessActivity extends AppCompatActivity {
             binding.etBusinessWebsite.setError(getResources().getString(R.string.hint_business_website));
             binding.etBusinessWebsite.requestFocus();
             return false;
-        }*/ else if (binding.etBusinessAddress.getText().toString().trim().isEmpty()) {
+        } else if (binding.etBusinessAddress.getText().toString().trim().isEmpty()) {
             binding.etBusinessAddress.setError(getResources().getString(R.string.hint_business_address));
             binding.etBusinessAddress.requestFocus();
             return false;
         } else if (stringBusinessCategory == null) {
             Toast.makeText(AddBusinessActivity.this, "Please Select Business Categories", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (profileImagePath == null && !Action.equalsIgnoreCase(UPDATE)) {
+        }*/ else if (profileImagePath == null && !Action.equalsIgnoreCase(UPDATE)) {
 
                 Toast.makeText(AddBusinessActivity.this, "Please Select Business logo", Toast.LENGTH_SHORT).show();
                 binding.ivProfile.requestFocus();

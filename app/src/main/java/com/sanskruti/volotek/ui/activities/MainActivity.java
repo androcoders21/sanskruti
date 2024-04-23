@@ -3,6 +3,7 @@ package com.sanskruti.volotek.ui.activities;
 import static com.sanskruti.volotek.utils.Constant.OFFER_IMAGE;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -210,6 +211,7 @@ public class MainActivity extends BaseActivity {
 
         setContentView(R.layout.activity_main);
         activeBusinessName = (TextView) findViewById(R.id.active_business_name);
+        youtubeIcon = (ImageView) findViewById(R.id.youtube);
         circularImageView = (CircularImageView) findViewById(R.id.circularImageView);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
 
@@ -251,7 +253,7 @@ public class MainActivity extends BaseActivity {
     CircularImageView circularImageView;
     BottomNavigationView bottomNavigationView;
     LinearLayout llBusiness, addBusiness;
-    ImageView ivPremium, favorite;
+    ImageView ivPremium, favorite, youtubeIcon;
     private void setDefault(BusinessItem businessItem) {
         activeBusinessName.setText("Hi "+Constant.getUserItem(this).userName.toString());
         GlideDataBinding.bindImage(circularImageView, Constant.getUserItem(this).userImage.toString());
@@ -450,6 +452,25 @@ public class MainActivity extends BaseActivity {
 
         ivPremium.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SubsPlanActivity.class)));
         favorite.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, FavouriteActivity.class)));
+        youtubeIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Intent to open the YouTube app
+                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:@sanskrutidesign1450?si=IS0Q6Il-IMnWEQUu"));
+
+                // Intent to open the YouTube website if the app is not installed
+                Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://www.youtube.com/@sanskrutidesign1450?si=IS0Q6Il-IMnWEQUu"));
+
+                try {
+                    // Try to open the YouTube app
+                    startActivity(appIntent);
+                } catch (ActivityNotFoundException ex) {
+                    // If the YouTube app is not installed, open the YouTube website
+                    startActivity(webIntent);
+                }
+            }
+        });
 
         addBusiness.setOnClickListener(v -> {
 
@@ -495,6 +516,7 @@ public class MainActivity extends BaseActivity {
         toolName.setVisibility(visible);
         favorite.setVisibility(visible1);
         ivPremium.setVisibility(gone);
+        youtubeIcon.setVisibility(gone);
     }
 
 

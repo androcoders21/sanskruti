@@ -15,7 +15,7 @@ public class PostItem implements Serializable {
     @SerializedName("id")
     public String fest_id;
 
-    @SerializedName("type")
+    @SerializedName("category")
     public String type;
 
     @SerializedName("thumbnail")

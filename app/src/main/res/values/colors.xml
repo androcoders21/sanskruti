@@ -94,6 +94,7 @@
     <color name="green_600">#43a047</color>
     <color name="green_A700">#00C853</color>
 
+
     <!--light green-->
 
     <!-- lime-->
@@ -151,6 +152,7 @@
     <color name="color38">#4B0082</color>
     <color name="color39">#29AB87</color>
     <color name="color40">#29AB87</color>
+    <color name="color41">#255201</color>
 
     <integer-array name="colorlist">
         <item>@color/color1</item>

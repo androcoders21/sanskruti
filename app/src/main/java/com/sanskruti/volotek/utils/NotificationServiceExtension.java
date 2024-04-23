@@ -168,6 +168,7 @@ public class NotificationServiceExtension implements OneSignal.OSRemoteNotificat
 
 
     }
+    
 
     private int getNotificationIcon(NotificationCompat.Builder notificationBuilder) {
 

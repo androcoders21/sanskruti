@@ -26,20 +26,23 @@
             <RelativeLayout
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?android:actionBarSize"
+                android:layout_height="75dp"
                 android:background="#001225"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+
                 <LinearLayout
                     android:id="@+id/ll_business"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentStart="true"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:gravity="center">
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:gravity="start|center">
+
 
                     <com.mikhaellopez.circularimageview.CircularImageView
                         android:id="@+id/circularImageView"
@@ -69,7 +72,8 @@
                             android:layout_height="wrap_content"
                             android:text="@string/welcome_back"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
+                            android:textSize="@dimen/_8sdp"
+                            android:visibility="gone"/>
 
                         <TextView
                             android:id="@+id/active_business_name"
@@ -78,14 +82,13 @@
                             android:drawablePadding="@dimen/_4sdp"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="@string/add_bussiness"
+                            android:text="Sanskruti Design"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_13sdp" />
 
                     </LinearLayout>
 
                 </LinearLayout>
-
                 <TextView
                     android:id="@+id/tool_name"
                     android:layout_width="wrap_content"
@@ -98,6 +101,18 @@
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/youtube"
+                    android:layout_width="@dimen/_28sdp"
+                    android:layout_height="@dimen/_28sdp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/youtube_icon"
+                    android:padding="@dimen/_6sdp"
+                    app:tint="@color/white" />
+
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -132,6 +147,7 @@
                         app:tint="@color/white" />
 
                 </LinearLayout>
+
 
             </RelativeLayout>
 

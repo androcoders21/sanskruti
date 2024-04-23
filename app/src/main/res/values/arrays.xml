@@ -25,171 +25,102 @@
     </array>
 
     <string-array name="fonts_array">
-        <item>default</item>
+        <item>Akshar-Bold.ttf</item>
+<!--        <item>Akshar-Medium.ttf</item>-->
         <item>Akshar-Regular.ttf</item>
-        <item>AldotheApache.ttf</item>
-        <item>Alkatra-Regular.ttf</item>
-        <item>American Captain.otf</item>
-        <item>American Captain.ttf</item>
-        <item>Amiko-Regular.ttf</item>
-        <item>Amita-Regular.ttf</item>
-        <item>AnekDevanagari-Bold.ttf</item>
-        <item>AnekDevanagari-Light.ttf</item>
-        <item>AnekDevanagari-Medium.ttf</item>
-        <item>AnekDevanagari-Regular.ttf</item>
-        <item>Baloo2-Regular.ttf</item>
-        <item>Cambay-Regular.ttf</item>
-        <item>Dekko-Regular.ttf</item>
-
-        <item>GajrajOne-Regular.ttf</item>
-        <item>GROBOLD.ttf</item>
-        <item>KOMIKAX_.ttf</item>
-        <item>Hind-Regular.ttf</item>
-        <item>InknutAntiqua-Regular.ttf</item>
-        <item>Khand-Regular.ttf</item>
-
-        <item>LemonMilk.otf</item>
-        <item>libertylegion.ttf</item>
-        <item>libertylegion3d.ttf</item>
-        <item>Martel-Regular.ttf</item>
-        <item>Modak-Regular.ttf</item>
-        <item>Mukta-Regular.ttf</item>
-        <item>NotoSans-Bold.ttf</item>
-
-        <item>NotoSans-Regular.ttf</item>
-        <item>NotoSerif-Regular.ttf</item>
-
-        <item>ObelixProB-cyr.ttf</item>
-        <item>ObelixPro-cyr.ttf</item>
-        <item>PEPSI_pl.ttf</item>
-        <item>QUARTZO PERSONAL USE ONLY.ttf</item>
-        <item>SciFi Movies.ttf</item>
-        <item>Shake Your Plums.otf</item>
-        <item>Subspace Bold Italic.otf</item>
-        <item>Subspace Bold.otf</item>
-        <item>Subspace Italic.otf</item>
-        <item>Subspace.otf</item>
-        <item>The Light Brigade.otf</item>
-        <item>theboldfont.ttf</item>
-        <item>White Flame.ttf</item>
-        <item>Aleo-Light.otf</item>
-        <item>ALICE-REGULAR.TTF</item>
-        <item>Aleo-Regular.otf</item>
-        <item>ALLER.TTF</item>
-        <item>ALLER_LT.TTF</item>
-        <item>ALLERDISPLAY.TTF</item>
-        <item>aparaj.ttf</item>
-        <item>aparajb_0.ttf</item>
-        <item>GREATVIBES-REGULAR.TTF</item>
-        <item>BAUHS93.TTF</item>
-        <item>BEBAS.TTF</item>
-        <item>BEBAS___.ttf</item>
-        <item>BebasKai-Regular.otf</item>
-        <item>BebasNeue Bold.ttf</item>
-        <item>BebasNeue Book.ttf</item>
-        <item>BebasNeue Light.ttf</item>
-        <item>BebasNeue Regular.ttf</item>
-        <item>BIRA_PERSONAL_USE_ONLY.TTF</item>
-        <item>BLAIRMDITC TT MEDIUM.TTF</item>
-        <item>BrushScriptStd_0.otf</item>
-        <item>Butler_Medium.otf</item>
-        <item>Channel.ttf</item>
-        <item>Chasing Hearts - OTF.otf</item>
-        <item>Chunkfive.otf</item>
-        <item>Cookie-Regular.ttf</item>
-        <item>COOLVETICA RG.TTF</item>
-        <item>edo.ttf</item>
-        <item>elmessiri-bold.otf</item>
-        <item>ENGLEBERT-REGULAR.TTF</item>
-        <item>EXO-BOLD.TTF</item>
-        <item>EXO-MEDIUM.TTF</item>
-        <item>FredokaOne-Regular.ttf</item>
-        <item>FunnyKid.ttf</item>
-        <item>GOOD TIMES RG.TTF</item>
-        <item>Harabara Mais Black.otf</item>
-        <item>Harabara Mais Bold.otf</item>
-        <item>Harabara Mais Light.otf</item>
-        <item>Harabara Mais.otf</item>
-        <item>HARABARA.TTF</item>
-        <item>Lato-Black.ttf</item>
-        <item>Lato-Bold.ttf</item>
-        <item>Lato-BoldItalic.ttf</item>
-        <item>Lato-Light.ttf</item>
-        <item>Lato-Regular.ttf</item>
-        <item>LemonMilk.otf</item>
-        <item>LemonMilkbold.otf</item>
-        <item>Merriweather-BoldItalic.ttf</item>
-        <item>MISTRAL.TTF</item>
-        <item>Montserrat-Black.ttf</item>
-        <item>Montserrat-Bold.ttf</item>
-        <item>Montserrat-ExtraBold.ttf</item>
-        <item>Montserrat-Light.ttf</item>
-        <item>Montserrat-Medium.ttf</item>
-        <item>Montserrat-Regular.ttf</item>
-        <item>Montserrat-SemiBold.ttf</item>
-        <item>MONTSERRATSUBRAYADA-BOLD.TTF</item>
-        <item>MONTSERRATSUBRAYADA-REGULAR.TTF</item>
-        <item>NEUROPOL.ttf</item>
-        <item>Nexa Bold.otf</item>
-        <item>Nexa Light.otf</item>
-        <item>NexaRustSans-Black.otf</item>
-        <item>NexaRustScriptL-0.otf</item>
-        <item>OSWALD-BOLD.TTF</item>
-        <item>Oswald-Bold_0.ttf</item>
-        <item>Oswald-DemiBold.ttf</item>
-        <item>Oswald-Light_0.ttf</item>
-        <item>Oswald-Medium.ttf</item>
-        <item>OSWALD-REGULAR.TTF</item>
-        <item>Oswald-Regular_0.ttf</item>
-        <item>Oswald-SemiBold.ttf</item>
-        <item>PatuaOne-Regular.ttf</item>
-        <item>Raleway-Bold.ttf</item>
-        <item>Raleway-ExtraBold.ttf</item>
-        <item>Raleway-ExtraLight.ttf</item>
-        <item>Raleway-Medium.ttf</item>
-        <item>Raleway-Regular.ttf</item>
-        <item>Raleway-SemiBold.ttf</item>
-        <item>RifficFree-Bold.ttf</item>
-        <item>Roboto-Black.ttf</item>
-        <item>Roboto-Bold.ttf</item>
-        <item>Roboto-Condensed.ttf</item>
-        <item>Roboto-Light.ttf</item>
-        <item>Roboto-Medium.ttf</item>
-        <item>Roboto-Regular.ttf</item>
-        <item>ROUND BOLD.TTF</item>
-        <item>SansitaOne.ttf</item>
-        <item>segoesc_0.ttf</item>
-        <item>Sofia-Regular.otf</item>
-        <item>spyagencyv3.ttf</item>
-        <item>steelfish rg.ttf</item>
-        <item>times_0.ttf</item>
-        <item>timesbd_0.ttf</item>
-
-        <item>palanquindark_bold.ttf</item>
-        <item>palanquindark_medium.ttf</item>
-        <item>palanquindark_semiBold.ttf</item>
-
-        <item>poppins_bold.ttf</item>
-        <item>poppins_semibold.ttf</item>
-        <item>poppins_extrabolditalic.ttf</item>
-
-        <item>rajdhani_semibold.ttf</item>
-        <item>rajdhani_medium.ttf</item>
-        <item>rajdhani_bold.ttf</item>
-
-        <item>teko_semibold.ttf</item>
-        <item>teko_regular.ttf</item>
-        <item>teko_medium.ttf</item>
-
-        <item>tillana_semibold.ttf</item>
-        <item>tillana_extrabold.ttf</item>
-        <item>tillana_bold.ttf</item>
-
-        <item>vesperlibre_medium.ttf</item>
-        <item>vesperlibre_bold.ttf</item>
-        <item>vesperlibre_black.ttf</item>
-
-        <item>BakbakOne-Regular.ttf</item>
+        <item>Akshar-SemiBold.ttf</item>
+<!--        <item>Alkatra-Bold.ttf</item>-->
+<!--        <item>Alkatra-Medium.ttf</item>-->
+<!--        <item>Alkatra-Regular.ttf</item>-->
+<!--        <item>Alkatra-SemiBold.ttf</item>-->
+<!--        <item>Amiko-Bold.ttf</item>-->
+<!--        <item>Amiko-Regular.ttf</item>-->
+<!--        <item>Amiko-SemiBold.ttf</item>-->
+<!--        <item>Amita-Bold.ttf</item>-->
+<!--        <item>Amita-Regular.ttf</item>-->
+        <item>AnekDev-Bold.ttf</item>
+        <item>AnekDev-ExBold.ttf</item>
+<!--        <item>AnekDev-ExLight.ttf</item>-->
+<!--        <item>AnekDev-Light.ttf</item>-->
+<!--        <item>AnekDev-Medium.ttf</item>-->
+<!--        <item>AnekDev-Regular.ttf</item>-->
+<!--        <item>AnekDev-SemBold.ttf</item>-->
+<!--        <item>AnekDev-Thin.ttf</item>-->
+<!--        <item>Bakbak-Regular.ttf</item>-->
+        <item>Baloo-Bold.ttf</item>
+        <item>Baloo-ExtraBold.ttf</item>
+        <item>Baloo-Regular.ttf</item>
+        <item>CopperPlate-Bold.ttf</item>
+        <item>CopperPlate-Light.ttf</item>
+        <item>Elephant.ttf</item>
+        <item>Elephant-Italic.ttf</item>
+        <item>Exotc-Bold.ttf</item>
+        <item>Forte.ttf</item>
+<!--        <item>Baloo-SemiBold.ttf</item>-->
+<!--        <item>Cambay-Bold.ttf</item>-->
+<!--        <item>Cambay-BoldItalic.ttf</item>-->
+<!--        <item>Cambay-Italic.ttf</item>-->
+<!--        <item>Cambay-Regular.ttf</item>-->
+<!--        <item>Dekko-Regular.ttf</item>-->
+<!--        <item>GajrajOne-Regular.ttf</item>-->
+        <item>Hind-Medium.ttf</item>
+<!--        <item>Hind-Regular.ttf</item>-->
+        <item>Hind-SemiBold.ttf</item>
+        <item>Hind-Bold.ttf</item>
+<!--        <item>IBMPlex-Regular.ttf</item>-->
+<!--        <item>IBMPlex-SemiBold.ttf</item>-->
+<!--        <item>IBMPlex-Bold.ttf</item>-->
+<!--        <item>Inknut-SemiBold.ttf</item>-->
+<!--        <item>Inknut-ExtraBold.ttf</item>-->
+<!--        <item>Inknut-Regular.ttf</item>-->
+        <item>Khand-SemiBold.ttf</item>
+<!--        <item>Khand-Medium.ttf</item>-->
+        <item>Khand-Bold.ttf</item>
+        <item>PalanquinDark-Bold.ttf</item>
+        <item>PalanquinDark-Medium.ttf</item>
+        <item>PalanquinDark-SemiBold.ttf</item>
+        <item>PermanentMarker-Regular.ttf</item>
+        <item>Poppins-Black.ttf</item>
+<!--        <item>Martel-Regular.ttf</item>-->
+<!--        <item>Martel-SemiBold.ttf</item>-->
+<!--        <item>Martel-Bold.ttf</item>-->
+<!--        <item>Martel-ExtraBold.ttf</item>-->
+<!--        <item>Modak-Regular.ttf</item>-->
+<!--        <item>Mukta-SemiBold.ttf</item>-->
+<!--        <item>Mukta-Bold.ttf</item>-->
+<!--        <item>Mukta-ExtraBold.ttf</item>-->
+<!--        <item>Mukta-Regular.ttf</item>-->
+<!--        <item>NotoSans-Bold.ttf</item>-->
+<!--        <item>NotoSans-ExtraBold.ttf</item>-->
+<!--        <item>NotoSans-Regular.ttf</item>-->
+<!--        <item>NotoSans-SemiBold.ttf</item>-->
+<!--        <item>NotoSerif-SemiBold.ttf</item>-->
+<!--        <item>NotoSerif-Bold.ttf</item>-->
+<!--        <item>NotoSerif-ExtraBold.ttf</item>-->
+<!--        <item>NotoSerif-Regular.ttf</item>-->
+<!--        <item>Palanquin-Medium.ttf</item>-->
+        <item>Poppins-ExtraBold.ttf</item>
+<!--        <item>Poppins-Regular.ttf</item>-->
+<!--        <item>Poppins-SemiBold.ttf</item>-->
+<!--        <item>Poppins-Bold.ttf</item>-->
+        <item>Rajdhani-SemiBold.ttf</item>
+<!--        <item>Rajdhani-Medium.ttf</item>-->
+        <item>Rajdhani-Bold.ttf</item>
+<!--        <item>Rajdhani-Regular.ttf</item>-->
+        <item>Teko-SemiBold.ttf</item>
+        <item>Teko-Bold.ttf</item>
+        <item>Teko-Medium.ttf</item>
+<!--        <item>Teko-Regular.ttf</item>-->
+        <item>Tillana-SemiBold.ttf</item>
+        <item>Tillana-Bold.ttf</item>
+<!--        <item>Tillana-ExtraBold.ttf</item>-->
+<!--        <item>Tillana-Regular.ttf</item>-->
+        <item>tt0142m.ttf</item>
+        <item>tt0143m.ttf</item>
+        <item>tt0144m.ttf</item>
+        <item>tt0145m.ttf</item>
+        <item>VesperLibre-Black.ttf</item>
+        <item>VesperLibre-Bold.ttf</item>
 
     </string-array>
 </resources>

@@ -2,17 +2,18 @@ package com.sanskruti.volotek.ui.activities;
 
 import static android.view.View.VISIBLE;
 import static com.sanskruti.volotek.MyApplication.context;
+import static com.sanskruti.volotek.MyApplication.getAppContext;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -22,14 +23,17 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,14 +51,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.github.chrisbanes.photoview.PhotoView;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.easystudio.rotateimageview.RotateZoomImageView;
+//import com.github.chrisbanes.photoview.PhotoView;
 import com.google.gson.Gson;
 import com.jaredrummler.android.colorpicker.ColorPickerView;
 import com.sanskruti.volotek.R;
 import com.sanskruti.volotek.binding.GlideDataBinding;
-import com.sanskruti.volotek.custom.poster.activity.ShareImageActivity;
 import com.sanskruti.volotek.custom.poster.adapter.FontAdapter;
 import com.sanskruti.volotek.custom.poster.listener.OnClickCallback;
 import com.sanskruti.volotek.model.ItemPolitical;
@@ -68,25 +70,23 @@ import com.sanskruti.volotek.utils.PreferenceManager;
 import com.sanskruti.volotek.viewmodel.UserViewModel;
 import com.squareup.otto.Bus;
 import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.UCropActivity;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.UUID;
 
 public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
     LinearLayout llFramesLl, llProfilePhotoLl, llNameLl, btnDownload, llDesignation1Ll, llDesignation2Ll, llMobileLl,llStickerLl,
-            llLeadersPhotoLl, llSocialMediaIconsLl, llPartyIconLayout, llcolorll, llcolord1ll, llcolord2ll, llcolorMobilell, uploadedPhoto;
+            llLeadersPhotoLl, llSocialMediaIconsLl, llPartyIconLayout, llcolorll, llcolord1ll, llcolord2ll, llcolorMobilell, uploadedPhoto, add_photoLL,add_textLL,addTextColorll,addTextFontll,lay_editText,textPhotoAddll,add_StickerLL, add_bgImage;
     FontAdapter adapter;
     LinearLayout llfontll, llfontd1ll, llfontd2ll, llfontMobilell;
 
@@ -96,9 +96,9 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
     boolean checkProfilePhoto = true, checkPartyPhoto = true, checkName = true, checkDesignation1 = true, checkDesignation2 = true, checkMobile = true, checkSocialMedia = true;
     private ImageView ivFlipIv, uploadedFlipIv;
-    private SeekBar btnseekBarProfilePhoto, btnseekBarPartyPhoto, btnseekBarName, btnseekBarDesignation1, btnseekBarDesignation2, btnseekBarMobile;
+    private SeekBar btnseekBarProfilePhoto, btnseekBarPartyPhoto, btnseekBarName, btnseekBarDesignation1, btnseekBarDesignation2, btnseekBarMobile,seekBarAddText;
 
-    private String position;
+    private String position,categoryName;
     ImageView ivSticker00, ivSticker01, ivSticker02, ivSticker03, ivSticker04, ivSticker05, ivSticker06, ivSticker07, ivSticker08, ivSticker09;
     private ImageView ivbtnBoldFontName, ivbtnItalicFontName, ivbtnUnderlineFontName,
             ivbtnBoldFontDesignation1, ivbtnItalicFontDesignation1, ivbtnUnderlineFontDesignation1,
@@ -110,28 +110,45 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             visibleDesignation1KyeIconIv, hideDesignation1EyeIconIv, visibleDesignation2KyeIconIv, hideDesignation2EyeIconIv,
             visibleMobileKyeIconIv, hideMobileEyeIconIv, visibleSocialMediaKyeIconIv, hideSocialMediaEyeIconIv;
 
-    private TextView tvProfilePhotoShowTv, tvPartyPhotoShowTv, tvNameShowTv, tvDesignation1ShowTv, tvDesignation2ShowTv, tvMobileShowTv, tvSocialMediaShowTv;
+    private TextView tvProfilePhotoShowTv, tvPartyPhotoShowTv, tvNameShowTv, tvDesignation1ShowTv, tvDesignation2ShowTv, tvMobileShowTv, tvSocialMediaShowTv,category_text;
     UniversalDialog universalDialog;
-    RelativeLayout constraint, constraintTwo;
+    RelativeLayout constraint, constraintTwo,constraintThumbnail;
     PreferenceManager preferenceManager;
     JSONArray jsonArray = new JSONArray();
+    EditText etText;
     ImageView ivAddImg, ivAddImgParty, ivAddImgLeader1, ivAddImgLeader2, ivAddImgLeader3, ivAddImgLeader4, ivAddImgLeader5, ivAddImgLeader6, ivSocialMediaIv;
 
 
     ImageView ivAddImgLeader11, ivAddImgLeader22, ivAddImgLeader33, ivAddImgLeader44, ivAddImgLeader55, ivAddImgLeader66;
 
-    ImageView ivFrames00, ivFrames11, ivFrames22, ivFrames33, ivFrames44, ivFrames55, ivFrames66, ivFrames77, ivFrames88;
-    private TextView tvNameTv, tvDesignation1Tv, tvDesignation2Tv, tvMobileNoTv;
+    ImageView ivFrames00, ivFrames11, ivFrames22, ivFrames33, ivFrames44, ivFrames55, ivFrames66, ivFrames77, ivFrames88, ivFrames99, ivFrames010, ivFrames011, ivFrames012, ivFrames013, ivFrames014, ivFrames015, ivFrames016, ivFrames017, ivFrames018, ivFrames019, ivFrames020, ivFrames021 ;
+    private TextView tvNameTv, tvDesignation1Tv, tvDesignation2Tv, tvMobileNoTv,btn_save;
 
     private String pName, pPhone, pEmail, pFacebookUsername, pInstagramUsername, pTwitterUsername,
             pDesignation1, pDesignation2, pProfileImg = "", pPartyImg = "", pLeaderImg1 = "", pLeaderImg2="",
             pLeaderImg3="", pLeaderImg4="", pLeaderImg5="", pLeaderImg6="";
     private Dialog dialog;
-    private PhotoView photoView;
+    private RotateZoomImageView  photoView;
     private static final int PICK_IMAGE_REQUEST = 1;
+
+    List<ImageView> closeButtons = new ArrayList<>();
 
     Uri imageUri;
 
+    private int slectedFontColor = -16056320;
+
+    private String selectedFontFamily =  "Baloo-Bold.ttf";
+
+    private float selectedFontSize =  20;
+
+    private boolean isAddImage = false;
+
+    private void setIsAddImage(boolean value){
+        this.isAddImage = value;
+    }
+    private Boolean getIsAddImage(){
+        return isAddImage;
+    }
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -171,10 +188,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         if (uri != null) {
             try {
 
-                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), new File(uri.getPath()).getName()));
+                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), UUID.randomUUID().toString()));
                 UCrop.Options options2 = new UCrop.Options();
                 options2.setCompressionFormat(Bitmap.CompressFormat.PNG);
-                options2.setFreeStyleCropEnabled(true);
+                options2.setFreeStyleCropEnabled(false);
+                options2.setAllowedGestures(UCropActivity.SCALE,UCropActivity.NONE,UCropActivity.SCALE);
 
                 UCrop.of(uri, destinationUri)
                         .withOptions(options2)
@@ -203,9 +221,13 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             if (data != null) {
                 new ImageCropperFragment(0, MyUtils.getPathFromURI(this, UCrop.getOutput(data)), (id, out) -> {
                     imageUri = Uri.parse(out);
-                    photoView.setImageURI(imageUri);
-                    uploadedPhoto.setVisibility(VISIBLE);
-
+                    if(isAddImage){
+//                        createImage(getAppContext(),imageUri);
+                        setIsAddImage(false);
+                    }else {
+                        photoView.setImageURI(imageUri);
+                        uploadedPhoto.setVisibility(VISIBLE);
+                    }
                 }).show(getSupportFragmentManager(), "");
             }
 
@@ -236,6 +258,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_political_profile_details);
         movableImageView = findViewById(R.id.movableImageView);
         llStickerLl = (LinearLayout)findViewById(R.id.stickerLl);
+        add_StickerLL = (LinearLayout) findViewById(R.id.add_StickerLL);
+        add_bgImage = (LinearLayout) findViewById(R.id.add_bgImage);
         ivclose = findViewById(R.id.movableImageViewClose);
         lay_sticker_ll  = (LinearLayout) findViewById(R.id.lay_sticker);
         uploadedPhoto = (LinearLayout) findViewById(R.id.uploadedPhoto);
@@ -283,40 +307,124 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             }
         });
 
+
+
+
         llStickerLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lay_profile_photo_ll.setVisibility(View.GONE);
-                lay_name_ll.setVisibility(View.GONE);
-                lay_Designation1_ll.setVisibility(View.GONE);
-                lay_party_photo_ll.setVisibility(View.GONE);
-                lay_Designation2_ll.setVisibility(View.GONE);
-                lay_Mobile_ll.setVisibility(View.GONE);
-                lay_SocialMedia_ll.setVisibility(View.GONE);
-                lay_LeadersPhoto_ll.setVisibility(View.GONE);
-                lay_sticker_ll.setVisibility(VISIBLE);
-                lay_frames_ll.setVisibility(View.GONE);
+                if(greeting){
+                    lay_profile_photo_ll.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.GONE);
+                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                    lay_sticker_ll.setVisibility(VISIBLE);
+                    lay_frames_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(VISIBLE);
+                }else{
+                    lay_profile_photo_ll.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.GONE);
+                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                    lay_sticker_ll.setVisibility(VISIBLE);
+                    lay_frames_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        add_StickerLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(greeting){
+                    lay_profile_photo_ll.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.GONE);
+                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                    lay_sticker_ll.setVisibility(VISIBLE);
+                    lay_frames_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(VISIBLE);
+                }else{
+                    lay_profile_photo_ll.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.GONE);
+                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                    lay_sticker_ll.setVisibility(VISIBLE);
+                    lay_frames_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(View.GONE);
+                }
             }
         });
 
         photoView = findViewById(R.id.photoView);
+        add_photoLL = (LinearLayout) findViewById(R.id.add_photoLL);
+        add_textLL = (LinearLayout) findViewById(R.id.add_textLL);
+        lay_editText = (LinearLayout) findViewById(R.id.lay_editText);
+        textPhotoAddll = (LinearLayout) findViewById(R.id.textPhotoAddll);
+
         // Load your image into the PhotoView
         photoView.setImageResource(R.drawable.bgremove);
 
         // Enable zoom and pan gestures
-        photoView.setMaximumScale(5.0f);
-        photoView.setMediumScale(2.5f);
-        photoView.setMinimumScale(0.5f);
-        photoView.setZoomable(true);
+//        photoView.setMaximumScale(5.0f);
+//        photoView.setMediumScale(2.5f);
+//        photoView.setMinimumScale(0.5f);
+//        photoView.setZoomable(true);
 
         photoView.setVisibility(View.GONE);
-        photoView.setOnClickListener(new View.OnClickListener() {
+        add_bgImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Open gallery when a button or some UI element is clicked
                 openGallery();
+                Log.i("saqlain","Some element clicked");
             }
         });
+
+        photoView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return photoView.onTouch(v,event);
+            }
+        });
+
+        add_photoLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Open gallery when a button or some UI element is clicked
+                setIsAddImage(true);
+                openGallery();
+            }
+        });
+//        add_textLL.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                createText(getAppContext(),"Sanskruti Design");
+//                // Open gallery when a button or some UI element is clicked
+//
+//            }
+//        });
+
         init();
 
 
@@ -506,15 +614,18 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         String imgUrl = getIntent().getStringExtra("img");
         greeting = getIntent().getBooleanExtra("greeting", false);
 
+
    //     Toast.makeText(this, "greeting = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
         if (greeting) {
             photoView.setVisibility(VISIBLE);
             movableImageView.setVisibility(VISIBLE);
             llStickerLl.setVisibility(VISIBLE);
+            textPhotoAddll.setVisibility(VISIBLE);
         } else {
             photoView.setVisibility(View.GONE);
             movableImageView.setVisibility(View.GONE);
             llStickerLl.setVisibility(View.GONE);
+            textPhotoAddll.setVisibility(View.GONE);
         }
         if (getIntent().getStringExtra("imgThum") != null) {
             //    Toast.makeText(this, "not null", Toast.LENGTH_SHORT).show();
@@ -1256,9 +1367,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivSticker00.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivclose.setVisibility(VISIBLE);
-                movableImageView.setVisibility(VISIBLE);
-                ivStickerImg.setImageResource(R.drawable.sticker_01);
+//                ivclose.setVisibility(VISIBLE);
+//                movableImageView.setVisibility(VISIBLE);
+//                ivStickerImg.setImageResource(R.drawable.sticker_01);
+                createSticker(getAppContext(),"1");
                 ivSticker00.setBackground(getDrawable(R.drawable.images_background));
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1276,9 +1388,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivSticker01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivclose.setVisibility(VISIBLE);
-                movableImageView.setVisibility(VISIBLE);
-                ivStickerImg.setImageResource(R.drawable.sticker_02);
+//                ivclose.setVisibility(VISIBLE);
+//                movableImageView.setVisibility(VISIBLE);
+//                ivStickerImg.setImageResource(R.drawable.sticker_02);
+                createSticker(getAppContext(),"2");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(getDrawable(R.drawable.images_background));
 
@@ -1297,9 +1410,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivSticker02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivclose.setVisibility(VISIBLE);
-                movableImageView.setVisibility(VISIBLE);
-                ivStickerImg.setImageResource(R.drawable.sticker_03);
+//                ivclose.setVisibility(VISIBLE);
+//                movableImageView.setVisibility(VISIBLE);
+//                ivStickerImg.setImageResource(R.drawable.sticker_03);
+                createSticker(getAppContext(),"3");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(getDrawable(R.drawable.images_background));
@@ -1319,9 +1433,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivSticker03.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivclose.setVisibility(VISIBLE);
-                movableImageView.setVisibility(VISIBLE);
-                ivStickerImg.setImageResource(R.drawable.sticker_04);
+//                ivclose.setVisibility(VISIBLE);
+//                movableImageView.setVisibility(VISIBLE);
+//                ivStickerImg.setImageResource(R.drawable.sticker_04);
+                createSticker(getAppContext(),"4");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1340,9 +1455,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivSticker04.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivclose.setVisibility(VISIBLE);
-                movableImageView.setVisibility(VISIBLE);
-                ivStickerImg.setImageResource(R.drawable.sticker_05);
+//                ivclose.setVisibility(VISIBLE);
+//                movableImageView.setVisibility(VISIBLE);
+//                ivStickerImg.setImageResource(R.drawable.sticker_05);
+                createSticker(getAppContext(),"5");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1361,9 +1477,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivSticker05.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivclose.setVisibility(VISIBLE);
-                movableImageView.setVisibility(VISIBLE);
-                ivStickerImg.setImageResource(R.drawable.sticker_06);
+//                ivclose.setVisibility(VISIBLE);
+//                movableImageView.setVisibility(VISIBLE);
+//                ivStickerImg.setImageResource(R.drawable.sticker_06);
+                createSticker(getAppContext(),"6");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1380,9 +1497,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivSticker06.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivclose.setVisibility(VISIBLE);
-                movableImageView.setVisibility(VISIBLE);
-                ivStickerImg.setImageResource(R.drawable.sticker_07);
+//                ivclose.setVisibility(VISIBLE);
+//                movableImageView.setVisibility(VISIBLE);
+//                ivStickerImg.setImageResource(R.drawable.sticker_07);
+                createSticker(getAppContext(),"7");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1399,9 +1517,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivSticker07.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivclose.setVisibility(VISIBLE);
-                movableImageView.setVisibility(VISIBLE);
-                ivStickerImg.setImageResource(R.drawable.sticker_08);
+//                ivclose.setVisibility(VISIBLE);
+//                movableImageView.setVisibility(VISIBLE);
+//                ivStickerImg.setImageResource(R.drawable.sticker_08);
+                createSticker(getAppContext(),"8");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1418,9 +1537,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivSticker08.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivclose.setVisibility(VISIBLE);
-                movableImageView.setVisibility(VISIBLE);
-                ivStickerImg.setImageResource(R.drawable.sticker_09);
+//                ivclose.setVisibility(VISIBLE);
+//                movableImageView.setVisibility(VISIBLE);
+//                ivStickerImg.setImageResource(R.drawable.sticker_09);
+                createSticker(getAppContext(),"9");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1437,9 +1557,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivSticker09.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivclose.setVisibility(VISIBLE);
-                movableImageView.setVisibility(VISIBLE);
-                ivStickerImg.setImageResource(R.drawable.sticker_10);
+//                ivclose.setVisibility(VISIBLE);
+//                movableImageView.setVisibility(VISIBLE);
+//                ivStickerImg.setImageResource(R.drawable.sticker_10);
+                createSticker(getAppContext(),"10");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1458,6 +1579,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 switchToPoliticalFrame0();
+                handleResetProgress();
                 ivFrames00.setBackground(getDrawable(R.drawable.images_background));
                 ivFrames11.setBackground(null);
                 ivFrames22.setBackground(null);
@@ -1467,6 +1589,19 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames66.setBackground(null);
                 ivFrames77.setBackground(null);
                 ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
             }
         });
 
@@ -1474,6 +1609,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 switchToPoliticalFrame1();
+                handleResetProgress();
                 ivFrames00.setBackground(null);
                 ivFrames11.setBackground(getDrawable(R.drawable.images_background));
                 ivFrames22.setBackground(null);
@@ -1483,6 +1619,19 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames66.setBackground(null);
                 ivFrames77.setBackground(null);
                 ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
             }
         });
 
@@ -1492,6 +1641,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ivFrames00.setBackground(null);
                 switchToPoliticalFrame2();
+                handleResetProgress();
                 ivFrames11.setBackground(null);
                 ivFrames22.setBackground(getDrawable(R.drawable.images_background));
                 ivFrames33.setBackground(null);
@@ -1500,6 +1650,19 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames66.setBackground(null);
                 ivFrames77.setBackground(null);
                 ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
             }
         });
 
@@ -1509,6 +1672,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ivFrames00.setBackground(null);
                 switchToPoliticalFrame3();
+                handleResetProgress();
                 ivFrames22.setBackground(null);
                 ivFrames11.setBackground(null);
                 ivFrames33.setBackground(getDrawable(R.drawable.images_background));
@@ -1517,6 +1681,19 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames66.setBackground(null);
                 ivFrames77.setBackground(null);
                 ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
             }
         });
 
@@ -1534,6 +1711,19 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames66.setBackground(null);
                 ivFrames77.setBackground(null);
                 ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
             }
         });
 
@@ -1551,6 +1741,19 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames66.setBackground(null);
                 ivFrames77.setBackground(null);
                 ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
 
             }
         });
@@ -1569,6 +1772,19 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames66.setBackground(getDrawable(R.drawable.images_background));
                 ivFrames77.setBackground(null);
                 ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
 
             }
         });
@@ -1587,6 +1803,19 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames66.setBackground(null);
                 ivFrames77.setBackground(getDrawable(R.drawable.images_background));
                 ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
 
             }
         });
@@ -1605,6 +1834,422 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 ivFrames66.setBackground(null);
                 ivFrames77.setBackground(null);
                 ivFrames88.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames99.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("10");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames010.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("11");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames011.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("12");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames012.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("13");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames013.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("14");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames014.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("15");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames015.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("16");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames016.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("17");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames017.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("18");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames018.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("19");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames019.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("20");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames020.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("21");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames021.setBackground(null);
+
+            }
+        });
+
+        ivFrames021.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+//                switchToPoliticalFrame5();
+                handleSwitchFrame("22");
+                ivFrames11.setBackground(null);
+                ivFrames22.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+                ivFrames88.setBackground(null);
+                ivFrames99.setBackground(null);
+                ivFrames010.setBackground(null);
+                ivFrames011.setBackground(null);
+                ivFrames012.setBackground(null);
+                ivFrames013.setBackground(null);
+                ivFrames014.setBackground(null);
+                ivFrames015.setBackground(null);
+                ivFrames016.setBackground(null);
+                ivFrames017.setBackground(null);
+                ivFrames018.setBackground(null);
+                ivFrames019.setBackground(null);
+                ivFrames020.setBackground(null);
+                ivFrames021.setBackground(getDrawable(R.drawable.images_background));
 
             }
         });
@@ -1689,6 +2334,13 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
     }
     private void onClick() {
+
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                createText(getAppContext(),etText.getText().toString(),slectedFontColor);
+            }
+        });
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1712,6 +2364,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showColorPickerDialog(tvDesignation1Tv);
             }
+
         });
         llcolorll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1792,6 +2445,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ivclose.setVisibility(View.GONE);
+                handleCloseButtons(true);
                 saveImage(viewToBitmap(constraintTwo), true);
             }
         });
@@ -1799,33 +2453,69 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         llFramesLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lay_profile_photo_ll.setVisibility(View.GONE);
-                lay_uploaded_photo.setVisibility(View.GONE);
-                lay_name_ll.setVisibility(View.GONE);
-                lay_Designation1_ll.setVisibility(View.GONE);
-                lay_party_photo_ll.setVisibility(View.GONE);
-                lay_Designation2_ll.setVisibility(View.GONE);
-                lay_Mobile_ll.setVisibility(View.GONE);
-                lay_SocialMedia_ll.setVisibility(View.GONE);
-                lay_LeadersPhoto_ll.setVisibility(View.GONE);
-                lay_frames_ll.setVisibility(VISIBLE);
-                lay_sticker_ll.setVisibility(View.GONE);
+                if(greeting) {
+                    lay_profile_photo_ll.setVisibility(View.GONE);
+                    lay_uploaded_photo.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.GONE);
+                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                    lay_frames_ll.setVisibility(VISIBLE);
+                    lay_sticker_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(VISIBLE);
+                }else{
+                    lay_profile_photo_ll.setVisibility(View.GONE);
+                    lay_uploaded_photo.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.GONE);
+                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                    lay_frames_ll.setVisibility(VISIBLE);
+                    lay_sticker_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(View.GONE);
+                }
             }
         });
         llProfilePhotoLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lay_profile_photo_ll.setVisibility(View.VISIBLE);
-                lay_uploaded_photo.setVisibility(View.GONE);
-                lay_name_ll.setVisibility(View.GONE);
-                lay_Designation1_ll.setVisibility(View.GONE);
-                lay_party_photo_ll.setVisibility(View.GONE);
-                lay_Designation2_ll.setVisibility(View.GONE);
-                lay_Mobile_ll.setVisibility(View.GONE);
-                lay_SocialMedia_ll.setVisibility(View.GONE);
-                lay_LeadersPhoto_ll.setVisibility(View.GONE);
-                lay_frames_ll.setVisibility(View.GONE);
-                lay_sticker_ll.setVisibility(View.GONE);
+                if(greeting) {
+                    lay_profile_photo_ll.setVisibility(View.VISIBLE);
+                    lay_uploaded_photo.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.GONE);
+                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                    lay_frames_ll.setVisibility(View.GONE);
+                    lay_sticker_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(VISIBLE);
+                }else{
+                    lay_profile_photo_ll.setVisibility(View.VISIBLE);
+                    lay_uploaded_photo.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.GONE);
+                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                    lay_frames_ll.setVisibility(View.GONE);
+                    lay_sticker_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(View.GONE);
+                }
             }
         });
         llNameLl.setOnClickListener(new View.OnClickListener() {
@@ -1842,6 +2532,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(View.GONE);
                 lay_sticker_ll.setVisibility(View.GONE);
+                lay_editText.setVisibility(View.GONE);
+                textPhotoAddll.setVisibility(View.GONE);
             }
         });
         llDesignation1Ll.setOnClickListener(new View.OnClickListener() {
@@ -1858,6 +2550,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(View.GONE);
                 lay_sticker_ll.setVisibility(View.GONE);
+                lay_editText.setVisibility(View.GONE);
+                textPhotoAddll.setVisibility(View.GONE);
             }
         });
         llDesignation2Ll.setOnClickListener(new View.OnClickListener() {
@@ -1874,6 +2568,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(View.GONE);
                 lay_sticker_ll.setVisibility(View.GONE);
+                lay_editText.setVisibility(View.GONE);
+                textPhotoAddll.setVisibility(View.GONE);
             }
         });
         llMobileLl.setOnClickListener(new View.OnClickListener() {
@@ -1890,50 +2586,123 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(View.GONE);
                 lay_sticker_ll.setVisibility(View.GONE);
+                lay_editText.setVisibility(View.GONE);
+                textPhotoAddll.setVisibility(View.GONE);
             }
         });
 
         llLeadersPhotoLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lay_profile_photo_ll.setVisibility(View.GONE);
-                lay_uploaded_photo.setVisibility(View.GONE);
-                lay_name_ll.setVisibility(View.GONE);
-                lay_party_photo_ll.setVisibility(View.GONE);
-                lay_Designation1_ll.setVisibility(View.GONE);
-                lay_Designation2_ll.setVisibility(View.GONE);
-                lay_Mobile_ll.setVisibility(View.GONE);
-                lay_SocialMedia_ll.setVisibility(View.GONE);
-                lay_LeadersPhoto_ll.setVisibility(View.VISIBLE);
-                lay_frames_ll.setVisibility(View.GONE);
-                lay_sticker_ll.setVisibility(View.GONE);
+                if(greeting){
+                    lay_profile_photo_ll.setVisibility(View.GONE);
+                    lay_uploaded_photo.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.GONE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.GONE);
+                    lay_LeadersPhoto_ll.setVisibility(View.VISIBLE);
+                    lay_frames_ll.setVisibility(View.GONE);
+                    lay_sticker_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(VISIBLE);
+                }else{
+                    lay_profile_photo_ll.setVisibility(View.GONE);
+                    lay_uploaded_photo.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.GONE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.GONE);
+                    lay_LeadersPhoto_ll.setVisibility(View.VISIBLE);
+                    lay_frames_ll.setVisibility(View.GONE);
+                    lay_sticker_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(View.GONE);
+                }
             }
         });
         llSocialMediaIconsLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(greeting){
+                    lay_profile_photo_ll.setVisibility(View.GONE);
+                    lay_uploaded_photo.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.GONE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.VISIBLE);
+                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                    lay_frames_ll.setVisibility(View.GONE);
+                    lay_sticker_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(VISIBLE);
+                }else{
+                    lay_profile_photo_ll.setVisibility(View.GONE);
+                    lay_uploaded_photo.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.GONE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.VISIBLE);
+                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                    lay_frames_ll.setVisibility(View.GONE);
+                    lay_sticker_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(View.GONE);
+                }
 
-                lay_profile_photo_ll.setVisibility(View.GONE);
-                lay_uploaded_photo.setVisibility(View.GONE);
-                lay_name_ll.setVisibility(View.GONE);
-                lay_party_photo_ll.setVisibility(View.GONE);
-                lay_Designation1_ll.setVisibility(View.GONE);
-                lay_Designation2_ll.setVisibility(View.GONE);
-                lay_Mobile_ll.setVisibility(View.GONE);
-                lay_SocialMedia_ll.setVisibility(View.VISIBLE);
-                lay_LeadersPhoto_ll.setVisibility(View.GONE);
-                lay_frames_ll.setVisibility(View.GONE);
-                lay_sticker_ll.setVisibility(View.GONE);
             }
         });
 
         llPartyIconLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(greeting){
+                    lay_profile_photo_ll.setVisibility(View.GONE);
+                    lay_uploaded_photo.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.VISIBLE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.GONE);
+                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                    lay_frames_ll.setVisibility(View.GONE);
+                    lay_sticker_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(VISIBLE);
+                }else{
+                    lay_profile_photo_ll.setVisibility(View.GONE);
+                    lay_uploaded_photo.setVisibility(View.GONE);
+                    lay_name_ll.setVisibility(View.GONE);
+                    lay_party_photo_ll.setVisibility(View.VISIBLE);
+                    lay_Designation1_ll.setVisibility(View.GONE);
+                    lay_Designation2_ll.setVisibility(View.GONE);
+                    lay_Mobile_ll.setVisibility(View.GONE);
+                    lay_SocialMedia_ll.setVisibility(View.GONE);
+                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
+                    lay_frames_ll.setVisibility(View.GONE);
+                    lay_sticker_ll.setVisibility(View.GONE);
+                    lay_editText.setVisibility(View.GONE);
+                    textPhotoAddll.setVisibility(View.GONE);
+                }
+
+            }
+        });
+        add_textLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 lay_profile_photo_ll.setVisibility(View.GONE);
                 lay_uploaded_photo.setVisibility(View.GONE);
                 lay_name_ll.setVisibility(View.GONE);
-                lay_party_photo_ll.setVisibility(View.VISIBLE);
+                lay_party_photo_ll.setVisibility(View.GONE);
                 lay_Designation1_ll.setVisibility(View.GONE);
                 lay_Designation2_ll.setVisibility(View.GONE);
                 lay_Mobile_ll.setVisibility(View.GONE);
@@ -1941,6 +2710,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_LeadersPhoto_ll.setVisibility(View.GONE);
                 lay_frames_ll.setVisibility(View.GONE);
                 lay_sticker_ll.setVisibility(View.GONE);
+                lay_editText.setVisibility(View.VISIBLE);
             }
         });
         uploadedPhoto.setOnClickListener(new View.OnClickListener() {
@@ -1959,7 +2729,34 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_sticker_ll.setVisibility(View.GONE);
             }
         });
+        addTextColorll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showColorPicker();
+            }
+        });
+
+        addTextFontll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                //  showFontFamilyBottomSheet(tvMobileNoTv);
+
+                adapter = new FontAdapter(EditPoliticalProfileDetailsActivity.this, getResources().getStringArray(R.array.fonts_array));
+                adapter.setSelected(0);
+                ((GridView) findViewById(R.id.add_text_gridview_name)).setAdapter(adapter);
+
+                adapter.setItemClickCallback((OnClickCallback<ArrayList<String>, Integer, String, Activity>) (arrayList, num, str, activity) -> {
+
+                    // Apply the selected font family to the TextView
+                    selectedFontFamily = str;
+                    File file1 = new File(Configure.GetFileDir(context).getPath() + File.separator + "font");
+                    etText.setTypeface(Typeface.createFromFile(file1.getAbsolutePath() + "/" + str));
+                    adapter.setSelected(num.intValue());
+                });
+            }
+        });
     }
+
     public void setTextFont(String str, TextView autoResizeTextView) {
         try {
             if (str.equals(Bus.DEFAULT_IDENTIFIER)) {
@@ -2010,8 +2807,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
             // Update the width and height of the ImageView based on SeekBar progress
-            int newWidth = 200 + progress * 10; // Adjust as needed
-            int newHeight = 200 + progress * 10; // Adjust as needed
+            int newWidth = 200 + progress * 25; // Adjust as needed
+            int newHeight = 200 + progress * 25; // Adjust as needed
 
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(newWidth, newHeight);
@@ -2036,8 +2833,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
             // Update the width and height of the ImageView based on SeekBar progress
-            int newWidth = 200 + progress * 10; // Adjust as needed
-            int newHeight = 200 + progress * 10; // Adjust as needed
+            int newWidth = 120 + progress * 10; // Adjust as needed
+            int newHeight = 120 + progress * 10; // Adjust as needed
 
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(newWidth, newHeight);
@@ -2063,7 +2860,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
             // Update the width and height of the ImageView based on SeekBar progress
 
-            float newTextSize = 16 + progress;
+            float newTextSize = 20 + progress;
 
             tvNameTv.setTextSize(newTextSize);
 
@@ -2135,6 +2932,30 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             float newTextSize = 10 + progress;
 
             tvMobileNoTv.setTextSize(newTextSize);
+
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            // called when the user first touches the SeekBar
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            // called after the user finishes moving the SeekBar
+        }
+    };
+
+    SeekBar.OnSeekBarChangeListener seekBarChangeListenerAddText = new SeekBar.OnSeekBarChangeListener() {
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            // Update the width and height of the ImageView based on SeekBar progress
+
+            selectedFontSize = 10 + progress;
+
+            etText.setTextSize(selectedFontSize);
 
         }
 
@@ -2284,6 +3105,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         // Assuming you have a reference to the parent ViewGroup
         ViewGroup parentLayout  = findViewById(R.id.parent_layout);
 
+
         // Remove the current toolbar from the parent layout
         View currentToolbar = findViewById(R.id.toolbar);
         parentLayout.removeView(currentToolbar);
@@ -2345,6 +3167,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
     RelativeLayout ivBack;
     private void init() {
         ivBack = (RelativeLayout)findViewById(R.id.btn_bckprass);
+        category_text = (TextView)findViewById(R.id.category_text);
         preferenceManager = new PreferenceManager(this);
         universalDialog = new UniversalDialog(this, false);
         btnDownload = (LinearLayout) findViewById(R.id.ll_save);
@@ -2452,6 +3275,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
         constraint = (RelativeLayout) findViewById(R.id.constraint);
         constraintTwo = (RelativeLayout) findViewById(R.id.constraintTwo);
+        constraintThumbnail = findViewById(R.id.constraintThum);
 
         // Get the width of the screen or the parent layout
         int screenWidth = getResources().getDisplayMetrics().widthPixels-56;
@@ -2475,13 +3299,35 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivFrames66 = (ImageView) findViewById(R.id.iv_logoL161);
         ivFrames77 = (ImageView) findViewById(R.id.iv_logoL171);
         ivFrames88 = (ImageView) findViewById(R.id.iv_logoL181);
+        ivFrames99 = (ImageView) findViewById(R.id.iv_logoL191);
+        ivFrames010 = (ImageView) findViewById(R.id.iv_logoL010);
+        ivFrames011 = (ImageView) findViewById(R.id.iv_logoL011);
+        ivFrames012 = (ImageView) findViewById(R.id.iv_logoL012);
+        ivFrames013 = (ImageView) findViewById(R.id.iv_logoL013);
+        ivFrames014 = (ImageView) findViewById(R.id.iv_logoL014);
+        ivFrames015 = (ImageView) findViewById(R.id.iv_logoL015);
+        ivFrames016 = (ImageView) findViewById(R.id.iv_logoL016);
+        ivFrames017 = (ImageView) findViewById(R.id.iv_logoL017);
+        ivFrames018 = (ImageView) findViewById(R.id.iv_logoL018);
+        ivFrames019 = (ImageView) findViewById(R.id.iv_logoL019);
+        ivFrames020 = (ImageView) findViewById(R.id.iv_logoL020);
+        ivFrames021 = (ImageView) findViewById(R.id.iv_logoL021);
+
+        etText = (EditText) findViewById(R.id.etText);
+        btn_save = (TextView) findViewById(R.id.btn_save);
+        addTextColorll = (LinearLayout) findViewById(R.id.addTextColor);
+        addTextFontll = (LinearLayout) findViewById(R.id.addTextFontll);
+        seekBarAddText = (SeekBar) findViewById(R.id.seekBarAddText);
+        seekBarAddText.setOnSeekBarChangeListener(seekBarChangeListenerAddText);
+
+        categoryName = getIntent().getStringExtra("categoryName");
+        category_text.setText(categoryName);
 
 
 
 
 
-
-        switchToPoliticalFrame0();
+        switchToPoliticalFrame4();
 
 
     }
@@ -2519,14 +3365,24 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         boolean success;
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(filePath);
+            Bitmap watermarkBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.water_mark);
+
+            Bitmap watermarkedBitmap;
+            if (watermarkBitmap != null) {
+                watermarkedBitmap = addWatermark(bitmap, watermarkBitmap);
+                // Use watermarkedBitmap as needed
+                watermarkBitmap.recycle(); // Recycle the watermarkBitmap after using it
+            } else {
+                Log.e("Bitmap Loading", "Failed to load watermark image");
+                // Handle gracefully, maybe by not adding a watermark and using the original bitmap
+                watermarkedBitmap = bitmap;
+            }
 
 
-
-
-
-
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-            bitmap.recycle();
+            watermarkedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            watermarkedBitmap.recycle();
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+//            bitmap.recycle();
             fileOutputStream.flush();
 
             File file = new File(filePath);
@@ -2580,7 +3436,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         intent.putExtra("uri", filePath);
         intent.putExtra("way", "Poster");
         startActivity(intent);*/
-        ivclose.setVisibility(VISIBLE);
+//        ivclose.setVisibility(VISIBLE);
+        handleCloseButtons(false);
     }
     private Bitmap viewToBitmap(View view) {
 
@@ -2598,7 +3455,48 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         }
     }
 
+//    for water mark
+
+    private Bitmap addWatermark(Bitmap originalBitmap, Bitmap  watermarkImage) {
+        // Calculate the desired width and height for the watermark
+        int desiredWidth = 15 ;  // Adjust the divisor to change the size ratio
+        int desiredHeight = 120 ; // Adjust the divisor to change the size ratio
+
+        // Resize the watermark image
+        Bitmap resizedWatermarkImage = Bitmap.createScaledBitmap(watermarkImage, desiredWidth, desiredHeight, true);
+
+        // Create a mutable copy of the original bitmap
+        Bitmap watermarkedBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+
+        // Create a Canvas to draw the watermark
+        Canvas canvas = new Canvas(watermarkedBitmap);
+
+        // Define the Paint for drawing the watermark
+        Paint paint = new Paint();
+        paint.setColor(Color.DKGRAY); // Set color for the watermark text
+
+        // Calculate position to draw the watermark (adjust as needed)
+        int x = 17; // X-coordinate
+        int y = watermarkedBitmap.getHeight() - 600; // Y-coordinate
+
+        // Save the current state of the canvas
+        canvas.save();
+
+        // Rotate the canvas by 90 degrees around the specified pivot point (x, y)
+
+
+        // Draw the resized watermark image on the bitmap
+        canvas.drawBitmap(resizedWatermarkImage, x, y, paint);
+
+
+        // Recycle the resized watermark image to free up memory
+        resizedWatermarkImage.recycle();
+
+        return watermarkedBitmap;
+    }
+
     private void handleSwitchFrame(String type){
+        handleResetProgress();
         ViewGroup parentLayout  = findViewById(R.id.parent_layout);
 
         // Remove the current toolbar from the parent layout
@@ -2623,6 +3521,45 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             case "9":
                 newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_9, parentLayout, false);
                 break;
+            case "10":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_10, parentLayout, false);
+                break;
+            case "11":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_11, parentLayout, false);
+                break;
+            case "12":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_12, parentLayout, false);
+                break;
+            case "13":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_13, parentLayout, false);
+                break;
+            case "14":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_14, parentLayout, false);
+                break;
+            case "15":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_15, parentLayout, false);
+                break;
+            case "16":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_16, parentLayout, false);
+                break;
+            case "17":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_17, parentLayout, false);
+                break;
+            case "18":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_18, parentLayout, false);
+                break;
+            case "19":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_19, parentLayout, false);
+                break;
+            case "20":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_20, parentLayout, false);
+                break;
+            case "21":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_21, parentLayout, false);
+                break;
+            case "22":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_22, parentLayout, false);
+                break;
             default:
                 // Handle default case if needed
                 return;
@@ -2637,4 +3574,284 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         initView(newToolbar);
         getDataShare();
     }
+
+    private void handleResetProgress(){
+        btnseekBarProfilePhoto.setProgress(5);
+        btnseekBarPartyPhoto.setProgress(5);
+        btnseekBarName.setProgress(5);
+        btnseekBarDesignation1.setProgress(2);
+        btnseekBarDesignation2.setProgress(2);
+    }
+
+    public void createSticker(Context context,String sticker_type) {
+        // Create a new RelativeLayout
+        RelativeLayout relativeLayout = new RelativeLayout(context);
+
+        // Set layout parameters for the RelativeLayout
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,  // Width
+                RelativeLayout.LayoutParams.WRAP_CONTENT   // Height
+        );
+        relativeLayout.setLayoutParams(layoutParams);
+
+        // Create the sticker ImageView
+//        RotateZoomImageView stickerImageView = new RotateZoomImageView(context);
+        ImageView stickerImageView = new ImageView(context);
+        stickerImageView.setId(View.generateViewId()); // Generate a unique ID for each view
+        switch (sticker_type) {
+            case "1":
+                stickerImageView.setImageResource(R.drawable.sticker_01);
+                break;
+            case "2":
+                stickerImageView.setImageResource(R.drawable.sticker_02);
+                break;
+            case "3":
+                stickerImageView.setImageResource(R.drawable.sticker_03);
+                break;
+            case "4":
+                stickerImageView.setImageResource(R.drawable.sticker_04);
+                break;
+            case "5":
+                stickerImageView.setImageResource(R.drawable.sticker_05);
+                break;
+            case "6":
+                stickerImageView.setImageResource(R.drawable.sticker_06);
+                break;
+            case "7":
+                stickerImageView.setImageResource(R.drawable.sticker_07);
+                break;
+            case "8":
+                stickerImageView.setImageResource(R.drawable.sticker_08);
+                break;
+            case "9":
+                stickerImageView.setImageResource(R.drawable.sticker_09);
+                break;
+            case "10":
+                stickerImageView.setImageResource(R.drawable.sticker_10);
+                break;
+            default:
+                break;
+        }
+
+        // Set layout parameters for the sticker ImageView
+        RelativeLayout.LayoutParams stickerParams = new RelativeLayout.LayoutParams(
+                550, // Width
+                550  // Height
+        );
+
+        stickerImageView.setLayoutParams(stickerParams);
+        ImageView closeImageView = new ImageView(context);
+        closeImageView.setId(View.generateViewId());
+        closeImageView.setImageResource(R.drawable.icon_close);
+
+// Set layout parameters for the close ImageView
+        RelativeLayout.LayoutParams closeParams = new RelativeLayout.LayoutParams(
+                70,
+                70
+        );
+//        closeParams.setMargins(0,-100,0,0);
+        closeParams.addRule(RelativeLayout.ALIGN_TOP, stickerImageView.getId());
+        closeParams.addRule(RelativeLayout.ALIGN_START, stickerImageView.getId());
+        closeImageView.setLayoutParams(closeParams);
+
+        closeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Remove the parent RelativeLayout when the close button is clicked
+                constraint.removeView(relativeLayout);
+
+            }
+        });
+
+        ImageView zoomImageView = new ImageView(context);
+        zoomImageView.setId(View.generateViewId()); // Generate a unique ID for each view
+        zoomImageView.setImageResource(R.drawable.sticker_scale);
+
+        // Set layout parameters for the close ImageView
+        RelativeLayout.LayoutParams zoomParams = new RelativeLayout.LayoutParams(
+                70,
+                70
+        );
+        zoomParams.addRule(RelativeLayout.ALIGN_BOTTOM, stickerImageView.getId());
+        zoomParams.addRule(RelativeLayout.ALIGN_END, stickerImageView.getId());
+        zoomImageView.setLayoutParams(zoomParams);
+
+        ImageView rotateImageView = new ImageView(context);
+        rotateImageView.setId(View.generateViewId()); // Generate a unique ID for each view
+        rotateImageView.setImageResource(R.drawable.sticker_rotate);
+
+        // Set layout parameters for the close ImageView
+        RelativeLayout.LayoutParams rotateParams = new RelativeLayout.LayoutParams(
+                70,
+                70
+        );
+        rotateParams.addRule(RelativeLayout.ALIGN_BOTTOM, stickerImageView.getId());
+        rotateParams.addRule(RelativeLayout.ALIGN_START, stickerImageView.getId());
+        rotateImageView.setLayoutParams(rotateParams);
+
+        relativeLayout.addView(rotateImageView);
+        relativeLayout.addView(zoomImageView);
+        relativeLayout.addView(closeImageView);
+        relativeLayout.addView(stickerImageView);
+        constraint.addView(relativeLayout,constraint.indexOfChild(constraintThumbnail));
+        relativeLayout.setOnTouchListener(new View.OnTouchListener() {
+            private int lastAction;
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Save initial touch point and view position
+                        initialX = (int) v.getX(); // Change 'view' to 'v'
+                        initialY = (int) v.getY(); // Change 'view' to 'v'
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        lastAction = MotionEvent.ACTION_DOWN;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        // Calculate new position based on touch movement
+                        int newX = initialX + (int) (event.getRawX() - initialTouchX);
+                        int newY = initialY + (int) (event.getRawY() - initialTouchY);
+
+                        // Update view position
+                        v.setX(newX); // Change 'view' to 'v'
+                        v.setY(newY); // Change 'view' to 'v'
+                        lastAction = MotionEvent.ACTION_MOVE;
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        // Check if it was a click or drag action
+                        if (lastAction == MotionEvent.ACTION_DOWN) {
+                            // Perform click action here if needed
+                        }
+                        lastAction = MotionEvent.ACTION_UP;
+                        break;
+                }
+                return true;
+            }
+        });
+
+        zoomImageView.setOnTouchListener(new View.OnTouchListener() {
+            private float startX, startY;
+            private float initialWidth, initialHeight;
+            private boolean isResizing = false;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        startX = event.getRawX();
+                        startY = event.getRawY();
+                        initialWidth = stickerImageView.getWidth(); // Get the initial width of the sticker image
+                        initialHeight = stickerImageView.getHeight(); // Get the initial height of the sticker image
+                        isResizing = true;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (isResizing) {
+                            float currentX = event.getRawX();
+                            float currentY = event.getRawY();
+
+                            // Calculate the distance from the initial touch point
+                            float distanceX = currentX - startX;
+                            float distanceY = currentY - startY;
+
+                            // Calculate the change in size based on the distance
+                            float newSize = Math.max(initialWidth + distanceX, 0);
+
+                            // Set the new size for the sticker image
+                            stickerImageView.setLayoutParams(new RelativeLayout.LayoutParams((int) newSize, (int) newSize));
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        isResizing = false;
+                        break;
+                }
+                return true;
+            }
+        });
+
+        rotateImageView.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                    // Calculate the angle of rotation based on the movement of the touch points
+                    double startDeltaX = e1.getRawX() - (relativeLayout.getX() + relativeLayout.getWidth() / 2);
+                    double startDeltaY = e1.getRawY() - (relativeLayout.getY() + relativeLayout.getHeight() / 2);
+                    double startAngle = Math.toDegrees(Math.atan2(startDeltaY, startDeltaX));
+
+                    double currentDeltaX = e2.getRawX() - (relativeLayout.getX() + relativeLayout.getWidth() / 2);
+                    double currentDeltaY = e2.getRawY() - (relativeLayout.getY() + relativeLayout.getHeight() / 2);
+                    double currentAngle = Math.toDegrees(Math.atan2(currentDeltaY, currentDeltaX));
+
+                    // Calculate the rotation angle difference
+                    double rotationAngle = (currentAngle - startAngle) * 0.2; // Adjust the multiplier to control rotation speed
+
+                    // Apply the rotation to the sticker image
+                    relativeLayout.setRotation((float) (relativeLayout.getRotation() + rotationAngle));
+                    return true;
+                }
+            });
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+    private void handleCloseButtons(boolean makeInvisible) {
+        for (ImageView closeButton : closeButtons) {
+            if (makeInvisible) {
+                // Make the close button invisible
+                closeButton.setVisibility(View.INVISIBLE);
+            } else {
+                // Make the close button visible
+                closeButton.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private void showColorPicker() {
+        // Inflate the custom layout for the color picker
+        View view = LayoutInflater.from(this).inflate(R.layout.color_picker_layout, null);
+
+        // Find views in the custom layout
+        final ColorPickerView colorPickerView = view.findViewById(R.id.colorPickerView);
+
+        // Build the AlertDialog
+        AlertDialog colorPickerDialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Handle the selected color when the OK button is clicked
+                        slectedFontColor = colorPickerView.getColor();
+                        Log.i("saqlain", String.valueOf(slectedFontColor));
+                        etText.setTextColor(slectedFontColor);
+
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+
+        // Show the AlertDialog
+        colorPickerDialog.show();
+    }
+
 }

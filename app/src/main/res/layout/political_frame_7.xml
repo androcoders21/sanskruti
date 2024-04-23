@@ -27,14 +27,14 @@
 
 
             <View
-                android:layout_width="100dp"
+                android:layout_width="0dp"
                 android:layout_height="1dp"/>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
                 android:layout_weight="1"
+                android:layout_marginRight="70dp"
                 android:layout_marginBottom="5dp"
                 android:orientation="vertical">
 
@@ -42,36 +42,47 @@
                     android:id="@+id/tvName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="end"
                     android:textStyle="bold"
-                    android:textColor="@color/red"
+                    android:textColor="@color/color15"
+                    android:fontFamily="@font/khand"
                     android:text="Name"
-                    android:textSize="@dimen/_13sdp" />
+                    android:textSize="@dimen/_20sdp" />
 
                 <TextView
                     android:id="@+id/tvDesignation1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="-10dp"
+                    android:textColor="@color/color3"
+                    android:layout_gravity="end"
+                    android:fontFamily="@font/baloo"
                     android:text="Designation1"
-                    android:textSize="@dimen/_7sdp" />
+                    android:textSize="@dimen/_9sdp" />
 
                 <TextView
                     android:id="@+id/tvDesignation2"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_height="0dp"
+                    android:layout_gravity="start"
                     android:text="Designation2"
-                    android:textSize="@dimen/_7sdp" />
+                    android:textSize="@dimen/_9sdp" />
                 <TextView
                     android:id="@+id/tvMobileNo"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
 
                     android:text="Mobile Number"
                     android:textSize="@dimen/_7sdp" />
+                <ImageView
+                    android:id="@+id/socialMediaIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_8sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:elevation="1dp"
+                    android:src="@drawable/ic_all_social"
+                    android:visibility="gone" />
 
 
             </LinearLayout>
@@ -91,8 +102,8 @@
             android:gravity="bottom">
             <ImageView
                 android:id="@+id/iv_logo"
-                android:layout_width="@dimen/_90sdp"
-                android:layout_height="@dimen/_90sdp"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
                 android:layout_gravity="bottom|left"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
@@ -103,8 +114,9 @@
                 android:layout_height="1dp"/>
             <ImageView
                 android:id="@+id/iv_party"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:padding="@dimen/_5sdp"
                 android:layout_gravity="bottom|right"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
@@ -143,8 +155,8 @@
 
                 <ImageView
                     android:id="@+id/iv_logoL1"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_width="@dimen/_21sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/pf5leader"
@@ -160,8 +172,8 @@
 
                 <ImageView
                     android:id="@+id/iv_logoL2"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_width="@dimen/_21sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:adjustViewBounds="true"
                     android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
@@ -178,8 +190,8 @@
 
                 <ImageView
                     android:id="@+id/iv_logoL3"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_width="@dimen/_21sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:adjustViewBounds="true"
                     android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
@@ -196,8 +208,8 @@
 
                 <ImageView
                     android:id="@+id/iv_logoL4"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_width="@dimen/_21sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:adjustViewBounds="true"
                     android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
@@ -214,8 +226,8 @@
 
                 <ImageView
                     android:id="@+id/iv_logoL5"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_width="@dimen/_21sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:adjustViewBounds="true"
                     android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
@@ -232,8 +244,8 @@
 
                 <ImageView
                     android:id="@+id/iv_logoL6"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_width="@dimen/_21sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:adjustViewBounds="true"
                     android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"

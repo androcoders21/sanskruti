@@ -116,8 +116,8 @@
             android:gravity="bottom">
             <ImageView
                 android:id="@+id/iv_logo"
-                android:layout_width="@dimen/_90sdp"
-                android:layout_height="@dimen/_90sdp"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
                 android:layout_gravity="bottom|left"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
@@ -128,8 +128,8 @@
                 android:layout_height="1dp"/>
             <ImageView
                 android:id="@+id/iv_party"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_60sdp"
                 android:layout_gravity="bottom|right"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"

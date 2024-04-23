@@ -17,11 +17,11 @@
             android:layout_height="@dimen/_30sdp"
             android:layout_centerVertical="true"
 
-            android:gravity="center"
+            android:gravity="left|center"
             android:lines="1"
             android:text="Tap to Select font"
             android:textColor="@color/black"
-            android:textSize="@dimen/_10sdp" />
+            android:textSize="@dimen/_9sdp" />
 
 <!--        <ImageView-->
 <!--            android:id="@+id/txtDownloadFont"-->

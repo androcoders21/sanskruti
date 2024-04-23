@@ -106,9 +106,10 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
 
     private String type;
+    private String category_name;
 
     private boolean greeting;
-    public MyBottomSheetFragment(String image_url, Activity context, String typeOpen, boolean greetingNew) {
+    public MyBottomSheetFragment(String image_url, Activity context, String typeOpen, boolean greetingNew,String category_name) {
 //        this.data = data;
         this.userItem = Constant.getUserItem(context);
         this.context = context;
@@ -116,7 +117,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
         preferenceManager = new PreferenceManager(this.context);
         this.type = typeOpen;
         this.greeting = greetingNew;
-
+        this.category_name = category_name;
 
     }
 
@@ -271,6 +272,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                 intent.putExtra("name", userItem.getUserName());
                 intent.putExtra("email",  userItem.getEmail());
                 intent.putExtra("greeting",greeting);
+                intent.putExtra("userDesignation", userItem.getDesignation());
                 context.startActivity(intent);
                 dismiss();
             }
@@ -451,6 +453,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             intent.putExtra("img", image_url);
             intent.putExtra("imgThum", postItemList.get(data).getThumbnail());
             intent.putExtra("greeting",greeting);
+            intent.putExtra("categoryName",category_name);
             context.startActivity(intent);
         }, 3, getResources().getDimension(com.intuit.ssp.R.dimen._2ssp), postItemList);
         rvSpec.setAdapter(adapter);

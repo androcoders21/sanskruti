@@ -20,6 +20,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -62,6 +63,7 @@ import com.sanskruti.volotek.utils.PreferenceManager;
 import com.sanskruti.volotek.viewmodel.UserViewModel;
 import com.squareup.otto.Bus;
 import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.UCropActivity;
 
 import org.json.JSONArray;
 
@@ -73,6 +75,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
     LinearLayout llFramesLl, llProfilePhotoLl, llNameLl, btnDownload, llDesignation1Ll, llDesignation2Ll, llMobileLl,llStickerLl,
@@ -110,7 +113,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 
     ImageView ivAddImgLeader11, ivAddImgLeader22, ivAddImgLeader33, ivAddImgLeader44, ivAddImgLeader55, ivAddImgLeader66;
 
-    ImageView ivFrames00, ivFrames11, ivFrames22, ivFrames33;
+    ImageView ivFrames00, ivFrames11, ivFrames22, ivFrames33, ivFrames44, ivFrames55, ivFrames66, ivFrames77;
 
     ImageView ivSticker00, ivSticker01, ivSticker02, ivSticker03, ivSticker04, ivSticker05, ivSticker06, ivSticker07, ivSticker08, ivSticker09;
     private TextView tvNameTv, tvDesignation1Tv, tvDesignation2Tv, tvMobileNoTv;
@@ -163,10 +166,11 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         if (uri != null) {
             try {
 
-                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), new File(uri.getPath()).getName()));
+                Uri destinationUri = Uri.fromFile(new File(getCacheDir(), UUID.randomUUID().toString()));
                 UCrop.Options options2 = new UCrop.Options();
                 options2.setCompressionFormat(Bitmap.CompressFormat.PNG);
                 options2.setFreeStyleCropEnabled(true);
+                options2.setAllowedGestures(UCropActivity.SCALE,UCropActivity.NONE,UCropActivity.SCALE);
 
                 UCrop.of(uri, destinationUri)
                         .withOptions(options2)
@@ -305,6 +309,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Open gallery when a button or some UI element is clicked
                 openGallery();
             }
@@ -533,9 +538,17 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         String userImg = getIntent().getStringExtra("userImg");
         String name = getIntent().getStringExtra("name");
         String email = getIntent().getStringExtra("email");
+        String userDesignation = getIntent().getStringExtra("userDesignation");
+
+        Log.i("saqlain",userDesignation.toString());
+
+
 
         if(name != null){
             pName = name;
+        }
+        if(userDesignation != null){
+            pDesignation1 = userDesignation;
         }
       /*  if(businessItem.profiles.pPhone != null){
             pPhone = businessItem.profiles.pPhone;
@@ -1451,22 +1464,30 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         ivFrames00.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchToPoliticalFrame0();
+                handleSwitchFrame("1");
                 ivFrames00.setBackground(getDrawable(R.drawable.images_background));
                 ivFrames11.setBackground(null);
                 ivFrames22.setBackground(null);
                 ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
             }
         });
 
         ivFrames11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchToPoliticalFrame1();
+                handleSwitchFrame("2");
                 ivFrames00.setBackground(null);
                 ivFrames11.setBackground(getDrawable(R.drawable.images_background));
                 ivFrames22.setBackground(null);
                 ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
             }
         });
 
@@ -1475,10 +1496,14 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ivFrames00.setBackground(null);
-                switchToPoliticalFrame2();
+                handleSwitchFrame("3");
                 ivFrames11.setBackground(null);
                 ivFrames22.setBackground(getDrawable(R.drawable.images_background));
                 ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
             }
         });
 
@@ -1487,12 +1512,77 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ivFrames00.setBackground(null);
-                switchToPoliticalFrame3();
+                handleSwitchFrame("4");
                 ivFrames22.setBackground(null);
                 ivFrames11.setBackground(null);
                 ivFrames33.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
             }
         });
+
+        ivFrames44.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+                handleSwitchFrame("5");
+                ivFrames22.setBackground(null);
+                ivFrames11.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+            }
+        });
+
+        ivFrames55.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+                handleSwitchFrame("6");
+                ivFrames22.setBackground(null);
+                ivFrames11.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(null);
+            }
+        });
+
+        ivFrames66.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+                handleSwitchFrame("7");
+                ivFrames22.setBackground(null);
+                ivFrames11.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(getDrawable(R.drawable.images_background));
+                ivFrames77.setBackground(null);
+            }
+        });
+
+        ivFrames77.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivFrames00.setBackground(null);
+                handleSwitchFrame("8");
+                ivFrames22.setBackground(null);
+                ivFrames11.setBackground(null);
+                ivFrames33.setBackground(null);
+                ivFrames44.setBackground(null);
+                ivFrames55.setBackground(null);
+                ivFrames66.setBackground(null);
+                ivFrames77.setBackground(getDrawable(R.drawable.images_background));
+            }
+        });
+
 
         ivAddImgLeader11.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1896,8 +1986,8 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
             // Update the width and height of the ImageView based on SeekBar progress
-            int newWidth = 200 + progress * 10; // Adjust as needed
-            int newHeight = 200 + progress * 10; // Adjust as needed
+            int newWidth = 200 + progress * 25; // Adjust as needed
+            int newHeight = 200 + progress * 25; // Adjust as needed
 
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(newWidth, newHeight);
@@ -2111,7 +2201,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         parentLayout.removeView(currentToolbar);
 
         // Inflate the new layout (political_frame_2)
-        View newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_2, parentLayout, false);
+        View newToolbar = LayoutInflater.from(this).inflate(R.layout.personal_frame_1, parentLayout, false);
 
 
         // Add the new toolbar to the parent layout
@@ -2154,6 +2244,27 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 
         // Inflate the new layout (political_frame_2)
         View newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_4, parentLayout, false);
+
+
+        // Add the new toolbar to the parent layout
+        // Set the ID for the new toolbar
+        newToolbar.setId(R.id.toolbar);
+        parentLayout.addView(newToolbar);
+
+
+        initView(newToolbar);
+        getDataShare();
+    }
+    private void switchToPoliticalFrame4() {
+        // Assuming you have a reference to the parent ViewGroup
+        ViewGroup parentLayout  = findViewById(R.id.parent_layout);
+
+        // Remove the current toolbar from the parent layout
+        View currentToolbar = findViewById(R.id.toolbar);
+        parentLayout.removeView(currentToolbar);
+
+        // Inflate the new layout (political_frame_2)
+        View newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_5, parentLayout, false);
 
 
         // Add the new toolbar to the parent layout
@@ -2317,13 +2428,17 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         ivFrames11 = (ImageView) findViewById(R.id.iv_logoL111);
         ivFrames22 = (ImageView) findViewById(R.id.iv_logoL121);
         ivFrames33 = (ImageView) findViewById(R.id.iv_logoL131);
+        ivFrames44 = (ImageView) findViewById(R.id.iv_logoL141);
+        ivFrames55 = (ImageView) findViewById(R.id.iv_logoL151);
+        ivFrames66 = (ImageView) findViewById(R.id.iv_logoL161);
+        ivFrames77 = (ImageView) findViewById(R.id.iv_logoL171);
 
 
 
 
 
 
-        switchToPoliticalFrame0();
+        switchToPoliticalFrame1();
 
 
     }
@@ -2363,12 +2478,27 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             FileOutputStream fileOutputStream = new FileOutputStream(filePath);
 
 
+            Bitmap watermarkBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.water_mark);
+
+            Bitmap watermarkedBitmap;
+            if (watermarkBitmap != null) {
+                watermarkedBitmap = addWatermark(bitmap, watermarkBitmap);
+                // Use watermarkedBitmap as needed
+                watermarkBitmap.recycle(); // Recycle the watermarkBitmap after using it
+            } else {
+                Log.e("Bitmap Loading", "Failed to load watermark image");
+                // Handle gracefully, maybe by not adding a watermark and using the original bitmap
+                watermarkedBitmap = bitmap;
+            }
+
+
+            watermarkedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            watermarkedBitmap.recycle();
 
 
 
-
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-            bitmap.recycle();
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+//            bitmap.recycle();
             fileOutputStream.flush();
 
             File file = new File(filePath);
@@ -2406,6 +2536,44 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         }
         return success;
     }
+
+    private Bitmap addWatermark(Bitmap originalBitmap, Bitmap  watermarkImage) {
+        // Calculate the desired width and height for the watermark
+        int desiredWidth = 15 ;  // Adjust the divisor to change the size ratio
+        int desiredHeight = 120 ; // Adjust the divisor to change the size ratio
+
+        // Resize the watermark image
+        Bitmap resizedWatermarkImage = Bitmap.createScaledBitmap(watermarkImage, desiredWidth, desiredHeight, true);
+
+        // Create a mutable copy of the original bitmap
+        Bitmap watermarkedBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+
+        // Create a Canvas to draw the watermark
+        Canvas canvas = new Canvas(watermarkedBitmap);
+
+        // Define the Paint for drawing the watermark
+        Paint paint = new Paint();
+        paint.setColor(Color.DKGRAY); // Set color for the watermark text
+
+        // Calculate position to draw the watermark (adjust as needed)
+        int x = 17; // X-coordinate
+        int y = watermarkedBitmap.getHeight() - 600; // Y-coordinate
+
+        // Save the current state of the canvas
+        canvas.save();
+
+        // Rotate the canvas by 90 degrees around the specified pivot point (x, y)
+
+
+        // Draw the resized watermark image on the bitmap
+        canvas.drawBitmap(resizedWatermarkImage, x, y, paint);
+
+
+        // Recycle the resized watermark image to free up memory
+        resizedWatermarkImage.recycle();
+
+        return watermarkedBitmap;
+    }
     public void openShareActivity(String filePath) {
 
         Log.i("checkdatafilePath", "1 files path = " + filePath);
@@ -2439,4 +2607,60 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             view.destroyDrawingCache();
         }
     }
+
+    private void handleSwitchFrame(String type){
+        handleResetProgress();
+        ViewGroup parentLayout  = findViewById(R.id.parent_layout);
+
+        // Remove the current toolbar from the parent layout
+        View currentToolbar = findViewById(R.id.toolbar);
+        parentLayout.removeView(currentToolbar);
+
+        // Inflate the new layout (political_frame_2)
+        View newToolbar;
+        switch (type) {
+            case "1":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.personal_frame_1, parentLayout, false);
+                break;
+            case "2":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.personal_frame_2, parentLayout, false);
+                break;
+            case "3":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.personal_frame_3, parentLayout, false);
+                break;
+            case "4":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.personal_frame_4, parentLayout, false);
+                break;
+            case "5":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.personal_frame_5, parentLayout, false);
+                break;
+            case "6":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.personal_frame_6, parentLayout, false);
+                break;
+            case "7":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.personal_frame_7, parentLayout, false);
+                break;
+            case "8":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.personal_frame_8, parentLayout, false);
+                break;
+            default:
+                // Handle default case if needed
+                return;
+        }
+
+        // Add the new toolbar to the parent layout
+        // Set the ID for the new toolbar
+        newToolbar.setId(R.id.toolbar);
+        parentLayout.addView(newToolbar);
+
+
+        initView(newToolbar);
+        getDataShare();
+    }
+
+    private void handleResetProgress(){
+        btnseekBarProfilePhoto.setProgress(5);
+
+    }
+
 }

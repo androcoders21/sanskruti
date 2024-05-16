@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:fitsSystemWindows="true">
+
+        <!-- Text area input field -->
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter text"
+            android:maxLines="3"
+            android:scrollbars="vertical" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="125dp"
+        android:gravity="start|center">
+        <LinearLayout
+            android:id="@+id/addTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A"
+                android:textStyle="bold"
+                android:textSize="17dp"
+                android:textColor="@color/black"
+                android:layout_marginHorizontal="5dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Color"
+                android:textSize="12dp"
+                android:textColor="@color/black"
+                android:layout_marginHorizontal="5dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/addTextFontll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ff"
+                android:textStyle="bold"
+                android:textSize="17dp"
+                android:textColor="@color/black"
+                android:layout_marginHorizontal="5dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Font"
+                android:textSize="12dp"
+                android:textColor="@color/black"
+                android:layout_marginHorizontal="5dp"/>
+        </LinearLayout>
+        <GridView
+            android:id="@+id/add_text_gridview_name"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="4.0dip"
+            android:horizontalSpacing="2.0dip"
+            android:numColumns="1"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="2.0dip"
+            android:visibility="visible" />
+    </LinearLayout>
+
+
+        <!-- Submit button -->
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"
+            android:text="Submit"
+            android:backgroundTint="@color/active_color" />
+
+
+    </LinearLayout>
+</ScrollView>
+

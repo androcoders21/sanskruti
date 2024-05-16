@@ -41,6 +41,7 @@ public class NotificationServiceExtension implements OneSignal.OSRemoteNotificat
     public String externalLink = "";
     public Context context;
     PreferenceManager preferenceManager;
+    
 
     @Override
     public void remoteNotificationReceived(Context context, OSNotificationReceivedEvent osNotificationReceivedEvent) {

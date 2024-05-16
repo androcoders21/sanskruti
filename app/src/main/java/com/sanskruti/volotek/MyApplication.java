@@ -122,6 +122,7 @@ public class MyApplication extends Application {
         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().build());
         OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
 
+
         // OneSignal Initialization
         OneSignal.initWithContext(this);
         OneSignal.setAppId(preferenceManager.getString(Constant.ONESIGNAL_APP_ID));

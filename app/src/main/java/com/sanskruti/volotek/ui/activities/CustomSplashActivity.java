@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.sanskruti.volotek.AppConfig;
 import com.sanskruti.volotek.R;
+import com.sanskruti.volotek.model.Watermark;
 import com.sanskruti.volotek.ui.dialog.UniversalDialog;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.FrameUtils;
@@ -257,8 +258,6 @@ public class CustomSplashActivity extends AppCompatActivity {
 
 
         });
-
-
     }
 
 

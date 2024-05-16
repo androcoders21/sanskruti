@@ -24,7 +24,6 @@
             android:layout_margin="@dimen/_4sdp"
             app:cardCornerRadius="@dimen/_5sdp"
             app:cardElevation="@dimen/_2sdp"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -78,5 +77,6 @@
             app:fonts='@{"bold"}'
             app:layout_constraintTop_toBottomOf="@+id/txt_fest_name"
             app:textSize='@{"font_body_xxs_size"}' />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

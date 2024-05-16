@@ -37,6 +37,8 @@ import com.sanskruti.volotek.listener.DismisListner;
 import com.sanskruti.volotek.model.BusinessItem;
 import com.sanskruti.volotek.model.FrameModel;
 import com.sanskruti.volotek.model.ItemPolitical;
+import com.sanskruti.volotek.model.Sticker;
+import com.sanskruti.volotek.model.StickerResponse;
 import com.sanskruti.volotek.model.UserItem;
 import com.sanskruti.volotek.ui.activities.AddBusinessActivity;
 import com.sanskruti.volotek.ui.activities.EditBusinessProfileDetailsActivity;
@@ -94,7 +96,6 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
     @Override
     public void onDeleteClick(String pProfileId) {
         Log.i("RESPONSEGetAllData", "onDeleteClick  = ");
-        Toast.makeText(context, pProfileId, Toast.LENGTH_SHORT).show();
 
         deletePoliticalProfile(pProfileId);
     }
@@ -124,6 +125,8 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
     private BusinessListAdapter getBusinessAdapter;
     private StaggeredGridLayoutManager recyclerViewLayoutManager;
     private ArrayList<BusinessItem> businessItemArrayList;
+    private Boolean isPoliticalLoading = true;
+
 
     private void loadBusinessData() {
         ApiClient.getApiDataService().getBusinessList(preferenceManager.getString(Constant.USER_ID), "business_list").enqueue
@@ -241,8 +244,8 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
         // Political Profiles
         political_RV = view.findViewById(R.id.recyclerView);
-        loadBusinessData();
-
+//        loadBusinessData();
+        Toast.makeText(context, "Fetching Profiles data.", Toast.LENGTH_SHORT).show();
         getSpecialFrame(Constant.FRAME_TYPE_IMAGE);
         getDataShare();
         setVisibility();
@@ -306,8 +309,11 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             public void onClick(View v) {
                 if (items.size() >= 2) {
                     Toast.makeText(context, "Already created 2 profiles!", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if(isPoliticalLoading){
+                    return;
+                }else{
                     startActivity(new Intent(context, PoliticalProfileDetailsEditActivity.class));
+                    dismiss();
                 }
             }
         });
@@ -342,7 +348,6 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                 openWhatsAppChat(phoneNumber,message);
             }
         });
-
         /*ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -375,8 +380,8 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             iv_edit_politicalllbus.setVisibility(GONE);
         } else if (type.equalsIgnoreCase("NA")) {
             bustv.setVisibility(View.VISIBLE);
-            toolbarbus.setVisibility(View.VISIBLE);
-            business_rvbus.setVisibility(View.VISIBLE);
+            toolbarbus.setVisibility(GONE);
+            business_rvbus.setVisibility(View.GONE);
             political_RV.setVisibility(View.VISIBLE);
             toolbarpm.setVisibility(View.VISIBLE);
             toolbarppm.setVisibility(View.VISIBLE);
@@ -389,10 +394,10 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             iv_edit_politicalllbus.setVisibility(View.VISIBLE);
         } else {
             toolbarpm.setVisibility(View.GONE);
-            toolbarbus.setVisibility(View.VISIBLE);
+            toolbarbus.setVisibility(GONE);
             bustv.setVisibility(View.VISIBLE);
             political_RV.setVisibility(View.GONE);
-            business_rvbus.setVisibility(View.VISIBLE);
+            business_rvbus.setVisibility(GONE);
             toolbarppm.setVisibility(View.GONE);
             ll.setVisibility(View.GONE);
             toolbaspecSp.setVisibility(View.GONE);
@@ -512,6 +517,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                 if (items.size()>0){
                     items.clear();
                 }
+                isPoliticalLoading = false;
                 Log.i("RESPONSEGetAllData", "RESPONSE-->" + new Gson().toJson(businessItem));
                 Log.i("RESPONSEGetAllData", "RESPONSE-->" + new Gson().toJson(businessItem));
 
@@ -628,6 +634,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
                if(businessItem.success){
                    getDataShare();
+                   Toast.makeText(context, "Deleted successfully", Toast.LENGTH_SHORT).show();
                }
             }
 

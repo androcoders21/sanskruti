@@ -272,8 +272,8 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(
                         Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                someActivityResultLauncherLeader6.launch(i);
+                setProfileType(8);
+                someActivityResultLauncher.launch(i);
             }
         });
 
@@ -917,6 +917,9 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
                     case 5:
                         profileImagePathLeader5 = cursor.getString(columnIndex);
                         break;
+                    case 8:
+                        profileImagePathLeader6 = cursor.getString(columnIndex);
+                        break;
                     default:
                         // Handle default case (if necessary)
                         break;
@@ -960,9 +963,6 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
 
             if (data != null) {
                 new ImageCropperFragment(0, MyUtils.getPathFromURI(this, UCrop.getOutput(data)), (id, out) -> {
-
-//                    profileImagePath = out;
-                    Log.i("saqlain",out);
                     imageUri = Uri.parse(out);
                     switch (getProfileType()) {
                         case 6:
@@ -993,8 +993,11 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
                             GlideDataBinding.bindImage(ivAddImgLeader5, out);
                             profileImagePathLeader5 = out;
                             break;
+                        case 8:
+                            GlideDataBinding.bindImage(ivAddImgLeader6, out);
+                            profileImagePathLeader6 = out;
+                            break;
                         default:
-                            // Handle default case (if necessary)
                             break;
                     }
 
@@ -1202,7 +1205,6 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
                                         profileImagePathLeader4 = out;
 
                                         imageUri = Uri.parse(out);
-                                        Log.i("saqlain",out);
                                         GlideDataBinding.bindImage(ivAddImgLeader4, out);
 
 

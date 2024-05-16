@@ -237,7 +237,7 @@ public class MyGreetingBottomSheetFragment extends BottomSheetDialogFragment imp
 
         // Political Profiles
         political_RV = view.findViewById(R.id.recyclerView);
-        loadBusinessData();
+//        loadBusinessData();
 
         getSpecialFrame(Constant.FRAME_TYPE_IMAGE);
         getDataShare();
@@ -347,8 +347,8 @@ public class MyGreetingBottomSheetFragment extends BottomSheetDialogFragment imp
             iv_edit_politicalllbus.setVisibility(GONE);
         } else if (type.equalsIgnoreCase("NA")) {
             bustv.setVisibility(View.VISIBLE);
-            toolbarbus.setVisibility(View.VISIBLE);
-            business_rvbus.setVisibility(View.VISIBLE);
+            toolbarbus.setVisibility(GONE);
+            business_rvbus.setVisibility(GONE);
             political_RV.setVisibility(View.VISIBLE);
             toolbarpm.setVisibility(View.VISIBLE);
             toolbarppm.setVisibility(View.VISIBLE);
@@ -361,10 +361,10 @@ public class MyGreetingBottomSheetFragment extends BottomSheetDialogFragment imp
             iv_edit_politicalllbus.setVisibility(View.VISIBLE);
         } else {
             toolbarpm.setVisibility(View.GONE);
-            toolbarbus.setVisibility(View.VISIBLE);
+            toolbarbus.setVisibility(GONE);
             bustv.setVisibility(View.VISIBLE);
             political_RV.setVisibility(View.GONE);
-            business_rvbus.setVisibility(View.VISIBLE);
+            business_rvbus.setVisibility(GONE);
             toolbarppm.setVisibility(View.VISIBLE);
             ll.setVisibility(View.VISIBLE);
             toolbaspecSp.setVisibility(View.GONE);

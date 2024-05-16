@@ -202,6 +202,7 @@ public class Constant {
     public static String uri = "";
     public static SubsPlanItem subsPlanItem;
 
+
     public static ArrayList<String> movieImageList = new ArrayList<>();
 
     public static BusinessItem getBusinessItem(Activity context) {

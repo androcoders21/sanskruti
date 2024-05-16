@@ -276,9 +276,13 @@ ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityR
 
                                     }
                                 });
-
-                                finish();
-
+                                Boolean isFromLogin = getIntent().getBooleanExtra("isNameNull",false);
+                                if(isFromLogin){
+                                    Intent intent = new Intent(this,MainActivity.class);
+                                    startActivity(intent);
+                                }else {
+                                    finish();
+                                }
                             }
                         });
 

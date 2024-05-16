@@ -18,6 +18,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -50,17 +51,28 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.easystudio.rotateimageview.RotateZoomImageView;
 //import com.github.chrisbanes.photoview.PhotoView;
 import com.google.gson.Gson;
 import com.jaredrummler.android.colorpicker.ColorPickerView;
 import com.sanskruti.volotek.R;
+import com.sanskruti.volotek.adapters.StickerAdapterTwo;
+import com.sanskruti.volotek.adapters.StickerCatAdapter;
+import com.sanskruti.volotek.api.ApiClient;
 import com.sanskruti.volotek.binding.GlideDataBinding;
 import com.sanskruti.volotek.custom.poster.adapter.FontAdapter;
 import com.sanskruti.volotek.custom.poster.listener.OnClickCallback;
 import com.sanskruti.volotek.model.ItemPolitical;
+import com.sanskruti.volotek.model.Sticker;
+import com.sanskruti.volotek.model.StickerResponse;
+import com.sanskruti.volotek.model.StickersCategory;
+import com.sanskruti.volotek.model.Watermark;
 import com.sanskruti.volotek.ui.dialog.UniversalDialog;
+import com.sanskruti.volotek.ui.fragments.EditTextItemDialogFragment;
 import com.sanskruti.volotek.ui.fragments.FontFamilyBottomSheetDialogFragment;
 import com.sanskruti.volotek.utils.Configure;
 import com.sanskruti.volotek.utils.Constant;
@@ -69,6 +81,8 @@ import com.sanskruti.volotek.utils.MyUtils;
 import com.sanskruti.volotek.utils.PreferenceManager;
 import com.sanskruti.volotek.viewmodel.UserViewModel;
 import com.squareup.otto.Bus;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
@@ -80,23 +94,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
-public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
     LinearLayout llFramesLl, llProfilePhotoLl, llNameLl, btnDownload, llDesignation1Ll, llDesignation2Ll, llMobileLl,llStickerLl,
-            llLeadersPhotoLl, llSocialMediaIconsLl, llPartyIconLayout, llcolorll, llcolord1ll, llcolord2ll, llcolorMobilell, uploadedPhoto, add_photoLL,add_textLL,addTextColorll,addTextFontll,lay_editText,textPhotoAddll,add_StickerLL, add_bgImage;
+            llLeadersPhotoLl, llSocialMediaIconsLl, llPartyIconLayout, llcolorll, llcolord1ll, llcolord2ll, llcolorMobilell, uploadedPhoto, add_photoLL,add_textLL,lay_editText,textPhotoAddll,add_StickerLL, add_bgImage,contact_whatsapp;
     FontAdapter adapter;
     LinearLayout llfontll, llfontd1ll, llfontd2ll, llfontMobilell;
 
-    LinearLayout lay_profile_photo_ll, lay_party_photo_ll, lay_name_ll, lay_Designation1_ll, lay_Designation2_ll, lay_Mobile_ll, lay_SocialMedia_ll, lay_LeadersPhoto_ll, lay_frames_ll, lay_sticker_ll, lay_uploaded_photo;
+    LinearLayout lay_profile_photo_ll, lay_party_photo_ll, lay_name_ll, lay_Designation1_ll, lay_Designation2_ll, lay_Mobile_ll, lay_SocialMedia_ll, lay_LeadersPhoto_ll, lay_frames_ll, lay_sticker_ll, lay_uploaded_photo,photoViewll;
 
     LinearLayout profilePhotoShowLLll, partyPhotoShowLLll, nameShowLLll, designation1ShowLLll, designation2ShowLLll, mobileShowLLll, socialMediaShowLLll;
 
     boolean checkProfilePhoto = true, checkPartyPhoto = true, checkName = true, checkDesignation1 = true, checkDesignation2 = true, checkMobile = true, checkSocialMedia = true;
     private ImageView ivFlipIv, uploadedFlipIv;
-    private SeekBar btnseekBarProfilePhoto, btnseekBarPartyPhoto, btnseekBarName, btnseekBarDesignation1, btnseekBarDesignation2, btnseekBarMobile,seekBarAddText;
+    private SeekBar btnseekBarProfilePhoto, btnseekBarPartyPhoto, btnseekBarName, btnseekBarDesignation1, btnseekBarDesignation2, btnseekBarMobile;
 
     private String position,categoryName;
     ImageView ivSticker00, ivSticker01, ivSticker02, ivSticker03, ivSticker04, ivSticker05, ivSticker06, ivSticker07, ivSticker08, ivSticker09;
@@ -116,7 +136,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
     PreferenceManager preferenceManager;
     JSONArray jsonArray = new JSONArray();
     EditText etText;
-    ImageView ivAddImg, ivAddImgParty, ivAddImgLeader1, ivAddImgLeader2, ivAddImgLeader3, ivAddImgLeader4, ivAddImgLeader5, ivAddImgLeader6, ivSocialMediaIv;
+    ImageView ivAddImg, ivAddImgParty, ivAddImgLeader1, ivAddImgLeader2, ivAddImgLeader3, ivAddImgLeader4, ivAddImgLeader5, ivAddImgLeader6, ivSocialMediaIv,rightThumbnailImage,leftThumbnailImage,centerThumbnailImage;
 
 
     ImageView ivAddImgLeader11, ivAddImgLeader22, ivAddImgLeader33, ivAddImgLeader44, ivAddImgLeader55, ivAddImgLeader66;
@@ -128,7 +148,9 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             pDesignation1, pDesignation2, pProfileImg = "", pPartyImg = "", pLeaderImg1 = "", pLeaderImg2="",
             pLeaderImg3="", pLeaderImg4="", pLeaderImg5="", pLeaderImg6="";
     private Dialog dialog;
-    private RotateZoomImageView  photoView;
+//    private RotateZoomImageView  photoView;
+
+    private ImageView photoView,photoViewFlip;
     private static final int PICK_IMAGE_REQUEST = 1;
 
     List<ImageView> closeButtons = new ArrayList<>();
@@ -142,6 +164,9 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
     private float selectedFontSize =  20;
 
     private boolean isAddImage = false;
+    Watermark watermarkDetails;
+
+    RecyclerView stickerRecyclerView,recyclerViewStickerCat;
 
     private void setIsAddImage(boolean value){
         this.isAddImage = value;
@@ -187,7 +212,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
     private void beginCrop(Uri uri) {
         if (uri != null) {
             try {
-
                 Uri destinationUri = Uri.fromFile(new File(getCacheDir(), UUID.randomUUID().toString()));
                 UCrop.Options options2 = new UCrop.Options();
                 options2.setCompressionFormat(Bitmap.CompressFormat.PNG);
@@ -222,11 +246,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 new ImageCropperFragment(0, MyUtils.getPathFromURI(this, UCrop.getOutput(data)), (id, out) -> {
                     imageUri = Uri.parse(out);
                     if(isAddImage){
-//                        createImage(getAppContext(),imageUri);
+                        createImage(getAppContext(),imageUri);
                         setIsAddImage(false);
                     }else {
                         photoView.setImageURI(imageUri);
-                        uploadedPhoto.setVisibility(VISIBLE);
+                        uploadedPhoto.setVisibility(View.GONE);
                     }
                 }).show(getSupportFragmentManager(), "");
             }
@@ -252,6 +276,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
     private ImageView ivclose,ivStickerImg;
     private float xDelta, yDelta;
+
+    private List<Sticker> stickerArrayList;
+
+    private List<StickersCategory> stickersCategoryList,stickersCategoryList2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -259,10 +288,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         movableImageView = findViewById(R.id.movableImageView);
         llStickerLl = (LinearLayout)findViewById(R.id.stickerLl);
         add_StickerLL = (LinearLayout) findViewById(R.id.add_StickerLL);
-        add_bgImage = (LinearLayout) findViewById(R.id.add_bgImage);
         ivclose = findViewById(R.id.movableImageViewClose);
         lay_sticker_ll  = (LinearLayout) findViewById(R.id.lay_sticker);
         uploadedPhoto = (LinearLayout) findViewById(R.id.uploadedPhoto);
+        contact_whatsapp = (LinearLayout) findViewById(R.id.contact_whatsapp);
         ivSticker00 = (ImageView) findViewById(R.id.iv_sticker_01);
         ivSticker01 = (ImageView) findViewById(R.id.iv_sticker_02);
         ivSticker02 = (ImageView) findViewById(R.id.iv_sticker_03);
@@ -274,6 +303,14 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         ivSticker08 = (ImageView) findViewById(R.id.iv_sticker_09);
         ivSticker09 = (ImageView) findViewById(R.id.iv_sticker_10);
         ivStickerImg = (ImageView)findViewById(R.id.stickerImg);
+        constraint = (RelativeLayout) findViewById(R.id.constraint);
+        constraintTwo = (RelativeLayout) findViewById(R.id.constraintTwo);
+        constraintThumbnail = findViewById(R.id.constraintThum);
+        rightThumbnailImage = findViewById(R.id.rightThumbnailImage);
+        leftThumbnailImage = findViewById(R.id.leftThumbnailImage);
+        centerThumbnailImage = findViewById(R.id.centerThumbnailImage);
+        stickerRecyclerView = findViewById(R.id.recyclerViewSticker);
+        recyclerViewStickerCat = findViewById(R.id.recyclerViewStickerCat);
         movableImageView.setVisibility(View.GONE);
         ivclose.setVisibility(View.GONE);
         ivclose.setOnClickListener(new View.OnClickListener() {
@@ -282,6 +319,9 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 movableImageView.setVisibility(View.GONE);
             }
         });
+
+
+
         // Set touch listener to the image view
         movableImageView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -307,13 +347,19 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             }
         });
 
-
+        contact_whatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String phoneNumber = "+918553537373";
+                String message = "नमस्कार, स्पेशल फ्रेम हवी आहे।";
+                openWhatsAppChat(phoneNumber,message);
+            }
+        });
 
 
         llStickerLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(greeting){
                     lay_profile_photo_ll.setVisibility(View.GONE);
                     lay_name_ll.setVisibility(View.GONE);
                     lay_Designation1_ll.setVisibility(View.GONE);
@@ -326,27 +372,12 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                     lay_frames_ll.setVisibility(View.GONE);
                     lay_editText.setVisibility(View.GONE);
                     textPhotoAddll.setVisibility(VISIBLE);
-                }else{
-                    lay_profile_photo_ll.setVisibility(View.GONE);
-                    lay_name_ll.setVisibility(View.GONE);
-                    lay_Designation1_ll.setVisibility(View.GONE);
-                    lay_party_photo_ll.setVisibility(View.GONE);
-                    lay_Designation2_ll.setVisibility(View.GONE);
-                    lay_Mobile_ll.setVisibility(View.GONE);
-                    lay_SocialMedia_ll.setVisibility(View.GONE);
-                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
-                    lay_sticker_ll.setVisibility(VISIBLE);
-                    lay_frames_ll.setVisibility(View.GONE);
-                    lay_editText.setVisibility(View.GONE);
-                    textPhotoAddll.setVisibility(View.GONE);
-                }
             }
         });
 
         add_StickerLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(greeting){
                     lay_profile_photo_ll.setVisibility(View.GONE);
                     lay_name_ll.setVisibility(View.GONE);
                     lay_Designation1_ll.setVisibility(View.GONE);
@@ -359,31 +390,19 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                     lay_frames_ll.setVisibility(View.GONE);
                     lay_editText.setVisibility(View.GONE);
                     textPhotoAddll.setVisibility(VISIBLE);
-                }else{
-                    lay_profile_photo_ll.setVisibility(View.GONE);
-                    lay_name_ll.setVisibility(View.GONE);
-                    lay_Designation1_ll.setVisibility(View.GONE);
-                    lay_party_photo_ll.setVisibility(View.GONE);
-                    lay_Designation2_ll.setVisibility(View.GONE);
-                    lay_Mobile_ll.setVisibility(View.GONE);
-                    lay_SocialMedia_ll.setVisibility(View.GONE);
-                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
-                    lay_sticker_ll.setVisibility(VISIBLE);
-                    lay_frames_ll.setVisibility(View.GONE);
-                    lay_editText.setVisibility(View.GONE);
-                    textPhotoAddll.setVisibility(View.GONE);
-                }
             }
         });
-
+        photoViewll = findViewById(R.id.photoViewll);
+        photoViewFlip = findViewById(R.id.photoViewFlip);
         photoView = findViewById(R.id.photoView);
+
         add_photoLL = (LinearLayout) findViewById(R.id.add_photoLL);
         add_textLL = (LinearLayout) findViewById(R.id.add_textLL);
         lay_editText = (LinearLayout) findViewById(R.id.lay_editText);
         textPhotoAddll = (LinearLayout) findViewById(R.id.textPhotoAddll);
 
         // Load your image into the PhotoView
-        photoView.setImageResource(R.drawable.bgremove);
+//        photoView.setImageResource(R.drawable.photo_upload);
 
         // Enable zoom and pan gestures
 //        photoView.setMaximumScale(5.0f);
@@ -392,19 +411,127 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //        photoView.setZoomable(true);
 
         photoView.setVisibility(View.GONE);
-        add_bgImage.setOnClickListener(new View.OnClickListener() {
+        constraintTwo.setOnClickListener(new View.OnClickListener() {
+            private static final long DOUBLE_CLICK_TIME_DELTA = 300; // Time in milliseconds for double click detection
+            long lastClickTime = 0;
+
             @Override
             public void onClick(View v) {
-                // Open gallery when a button or some UI element is clicked
-                openGallery();
-                Log.i("saqlain","Some element clicked");
+                if(greeting) {
+                    long clickTime = System.currentTimeMillis();
+                    if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+                        // Double click detected
+                        openGallery();
+                        photoViewFlip.setVisibility(VISIBLE);
+                    }
+                    lastClickTime = clickTime;
+                    handleCloseButtons(true);
+                }
             }
         });
 
-        photoView.setOnTouchListener(new View.OnTouchListener() {
+
+        photoViewll.setOnTouchListener(new View.OnTouchListener() {
+            private static final int INVALID_POINTER_ID = -1;
+            private static final long DOUBLE_TAP_TIME_DELTA = 300;
+
+            private float xDelta;
+            private float yDelta;
+            private float lastRotation = 0;
+            private float lastScale = 1f;
+
+            private int activePointerId1 = INVALID_POINTER_ID;
+            private int activePointerId2 = INVALID_POINTER_ID;
+            private long lastClickTime = 0;
+
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return photoView.onTouch(v,event);
+            public boolean onTouch(View view, MotionEvent event) {
+                final int action = event.getActionMasked();
+
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Save the initial touch coordinates
+                        xDelta = event.getRawX() - view.getX();
+                        yDelta = event.getRawY() - view.getY();
+                        activePointerId1 = event.getPointerId(0);
+                        break;
+
+                    case MotionEvent.ACTION_POINTER_DOWN:
+                        if (event.getPointerCount() == 2) {
+                            // Two fingers are down
+                            lastRotation = getRotation(event);
+                            lastScale = getDistance(event);
+                            activePointerId2 = event.getPointerId(1);
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        if (event.getPointerCount() == 1 && activePointerId1 != INVALID_POINTER_ID) {
+                            // Single finger move
+                            view.setX(event.getRawX() - xDelta);
+                            view.setY(event.getRawY() - yDelta);
+                        } else if (event.getPointerCount() == 2 && activePointerId2 != INVALID_POINTER_ID) {
+                            // Two fingers move
+                            float rotation = getRotation(event) - lastRotation;
+                            view.setRotation(view.getRotation() + rotation);
+
+                            float scale = getDistance(event) / lastScale;
+                            view.setScaleX(view.getScaleX() * scale);
+                            view.setScaleY(view.getScaleY() * scale);
+
+                            lastRotation = getRotation(event);
+                            lastScale = getDistance(event);
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        long clickTime = System.currentTimeMillis();
+                        if (clickTime - lastClickTime < DOUBLE_TAP_TIME_DELTA) {
+                            // Double tap detected, open gallery
+                            openGallery();
+                        }
+                        lastClickTime = clickTime;
+                        activePointerId1 = INVALID_POINTER_ID;
+                        activePointerId2 = INVALID_POINTER_ID;
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        activePointerId1 = INVALID_POINTER_ID;
+                        activePointerId2 = INVALID_POINTER_ID;
+                        break;
+
+                    case MotionEvent.ACTION_POINTER_UP:
+                        // Check if one of the two fingers goes up
+                        int pointerIndex = event.getActionIndex();
+                        int pointerId = event.getPointerId(pointerIndex);
+                        if (pointerId == activePointerId1) {
+                            activePointerId1 = INVALID_POINTER_ID;
+                        } else if (pointerId == activePointerId2) {
+                            activePointerId2 = INVALID_POINTER_ID;
+                        }
+                        break;
+                }
+
+                return true;
+            }
+
+            private float getRotation(MotionEvent event) {
+                float deltaX = event.getX(0) - event.getX(1);
+                float deltaY = event.getY(0) - event.getY(1);
+                double radians = Math.atan2(deltaY, deltaX);
+                return (float) Math.toDegrees(radians);
+            }
+
+            private float getDistance(MotionEvent event) {
+                float deltaX = event.getX(0) - event.getX(1);
+                float deltaY = event.getY(0) - event.getY(1);
+                return (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            }
+        });
+
+        photoViewFlip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                flipImage(photoView);
             }
         });
 
@@ -426,8 +553,9 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //        });
 
         init();
-
-
+        loadStickerCategoryData();
+        loadWaterMark();
+//        loadStickerData();
         onClick();
         onShowHide();
         getDataShare();
@@ -601,6 +729,129 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
     }
     List<ItemPolitical> items = new ArrayList<>();
     UserViewModel userViewModel;
+
+//    public void loadStickerData() {
+//        ApiClient.getApiDataService().getStickerList().enqueue(
+//                new Callback<StickerResponse>() {
+//                    @Override
+//                    public void onResponse(Call<StickerResponse> call, Response<StickerResponse> response) {
+//                        if (response.isSuccessful()) {
+//                            Log.i("saqlain","successFull");
+//                            StickerResponse stickerResponse = response.body();
+//                            if (stickerResponse != null) {
+//                                stickerArrayList = stickerResponse.getData();
+//                                Log.i("saqlain",Integer.toString(stickerArrayList.size()));
+//                                stickerRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+//
+//                                StickerAdapterTwo adapter = new StickerAdapterTwo(getApplicationContext(), stickerArrayList);
+//                                LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+//                                stickerRecyclerView.setLayoutManager(verticalLayoutManager);
+//                                stickerRecyclerView.setAdapter(adapter);
+//                                adapter.setOnItemClickListener(new StickerAdapterTwo.OnItemClickListener() {
+//                                    @Override
+//                                    public void onItemClick(String imageUrl) {
+//                                        Log.i("saqlain", imageUrl);
+//                                        createSticker(context,"2",imageUrl);
+//
+//                                    }
+//                                });
+//
+//
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<StickerResponse> call, Throwable t) {
+//                        Log.i("saqlain",t.toString() + " " + Constant.api_key);
+//                    }
+//                }
+//        );
+//    }
+    private void loadStickerData(String categoryType){
+        ApiClient.getApiDataService().getStickerData(categoryType).enqueue(
+                new Callback<StickerResponse>() {
+                    @Override
+                    public void onResponse(Call<StickerResponse> call, Response<StickerResponse> response) {
+                        if(response.isSuccessful()){
+                            stickersCategoryList2 = response.body().getData();
+                            StickersCategory stickersCategory = stickersCategoryList2.get(0);
+                            stickerArrayList = stickersCategory.getStickers();
+
+                                stickerRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+//
+                                StickerAdapterTwo adapter = new StickerAdapterTwo(getApplicationContext(), stickerArrayList);
+                                LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                                stickerRecyclerView.setLayoutManager(verticalLayoutManager);
+                                stickerRecyclerView.setAdapter(adapter);
+                                adapter.setOnItemClickListener(new StickerAdapterTwo.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(String imageUrl) {
+                                        Log.i("saqlain", imageUrl);
+                                        createSticker(context,"2",imageUrl);
+
+                                    }
+                                });
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<StickerResponse> call, Throwable t) {
+
+                    }
+                }
+        );
+    }
+
+    private void loadStickerCategoryData(){
+        ApiClient.getApiDataService().getStickerList().enqueue(
+                new Callback<StickerResponse>() {
+                    @Override
+                    public void onResponse(Call<StickerResponse> call, Response<StickerResponse> response) {
+                        if(response.isSuccessful()){
+                            StickerResponse stickerResponse = response.body();
+
+                                stickersCategoryList = stickerResponse.getData();
+                                if(stickersCategoryList.size() > 0){
+                                    StickersCategory stickersCategory = stickersCategoryList.get(0);
+                                    loadStickerData(stickersCategory.getCategory_title());
+                                }
+                                recyclerViewStickerCat.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+                                StickerCatAdapter adapter = new StickerCatAdapter(getApplicationContext(), stickersCategoryList);
+                                LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                                recyclerViewStickerCat.setLayoutManager(verticalLayoutManager);
+                                recyclerViewStickerCat.setAdapter(adapter);
+                                adapter.setOnItemClickListener(new StickerCatAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(String category_name) {
+                                        Log.i("saqlain",category_name);
+                                        loadStickerData(category_name);
+                                    }
+                                });
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<StickerResponse> call, Throwable t) {
+                            Log.i("saqlain",t.toString());
+                    }
+                }
+        );
+    }
+
+    private void loadWaterMark(){
+        Constant.getHomeViewModel(this).getWatermark().observe(this,homeItem->{
+            if(homeItem != null) {
+                watermarkDetails = homeItem.getData();
+                GlideDataBinding.bindImage(rightThumbnailImage,watermarkDetails.watermarkImage);
+                GlideDataBinding.bindImage(leftThumbnailImage,watermarkDetails.watermarkImage);
+                GlideDataBinding.bindImage(centerThumbnailImage,watermarkDetails.watermarkImage);
+            }
+        });
+    }
     private void getDataShare() {
 
 
@@ -619,26 +870,35 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         if (greeting) {
             photoView.setVisibility(VISIBLE);
             movableImageView.setVisibility(VISIBLE);
-            llStickerLl.setVisibility(VISIBLE);
+            llStickerLl.setVisibility(View.GONE);
             textPhotoAddll.setVisibility(VISIBLE);
+            add_textLL.setVisibility(VISIBLE);
         } else {
             photoView.setVisibility(View.GONE);
             movableImageView.setVisibility(View.GONE);
             llStickerLl.setVisibility(View.GONE);
-            textPhotoAddll.setVisibility(View.GONE);
+            textPhotoAddll.setVisibility(VISIBLE);
+            add_textLL.setVisibility(VISIBLE);
         }
         if (getIntent().getStringExtra("imgThum") != null) {
             //    Toast.makeText(this, "not null", Toast.LENGTH_SHORT).show();
-            LinearLayout layout = (LinearLayout) findViewById(R.id.bottomLay);
-            layout.setVisibility(View.GONE);
-
+//            LinearLayout layout = (LinearLayout) findViewById(R.id.bottomLay);
+//            layout.setVisibility(View.GONE);
+            contact_whatsapp.setVisibility(VISIBLE);
             LinearLayout fm = (LinearLayout) findViewById(R.id.linearLogoL);
             fm.setVisibility(View.GONE);
 
             LinearLayout fmlogo = (LinearLayout) findViewById(R.id.linearLogo);
             fmlogo.setVisibility(View.GONE);
+
+            LinearLayout bottomButtons = (LinearLayout) findViewById(R.id.bottom_buttons);
+            bottomButtons.setVisibility(View.GONE);
+
+            lay_sticker_ll.setVisibility(VISIBLE);
+            lay_frames_ll.setVisibility(View.GONE);
             ivAddImg.setVisibility(View.GONE);
             ivAddImgParty.setVisibility(View.GONE);
+//            textPhotoAddll.setVisibility(View.GONE);
 
             String imgUrlThum = getIntent().getStringExtra("imgThum");
 
@@ -838,7 +1098,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             ivAddImgLeader11.setVisibility(View.GONE);
 
         }else {
-            ivAddImgLeader1.setVisibility(VISIBLE);
+            ivAddImgLeader1.setVisibility(View.GONE);
             ivAddImgLeader11.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader1, pLeaderImg1);
             GlideDataBinding.bindImage(ivAddImgLeader11, pLeaderImg1);
@@ -848,7 +1108,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             ivAddImgLeader2.setVisibility(View.GONE);
             ivAddImgLeader22.setVisibility(View.GONE);
         }else {
-            ivAddImgLeader2.setVisibility(VISIBLE);
+            ivAddImgLeader2.setVisibility(View.GONE);
             ivAddImgLeader22.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader2, pLeaderImg2);
             GlideDataBinding.bindImage(ivAddImgLeader22, pLeaderImg2);
@@ -858,7 +1118,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             ivAddImgLeader3.setVisibility(View.GONE);
             ivAddImgLeader33.setVisibility(View.GONE);
         }else {
-            ivAddImgLeader3.setVisibility(VISIBLE);
+            ivAddImgLeader3.setVisibility(View.GONE);
             ivAddImgLeader33.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader3, pLeaderImg3);
             GlideDataBinding.bindImage(ivAddImgLeader33, pLeaderImg3);
@@ -868,7 +1128,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             ivAddImgLeader4.setVisibility(View.GONE);
             ivAddImgLeader44.setVisibility(View.GONE);
         }else {
-            ivAddImgLeader4.setVisibility(VISIBLE);
+            ivAddImgLeader4.setVisibility(View.GONE);
             ivAddImgLeader44.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader4, pLeaderImg4);
             GlideDataBinding.bindImage(ivAddImgLeader44, pLeaderImg4);
@@ -878,7 +1138,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             ivAddImgLeader5.setVisibility(View.GONE);
             ivAddImgLeader55.setVisibility(View.GONE);
         }else {
-            ivAddImgLeader5.setVisibility(VISIBLE);
+            ivAddImgLeader5.setVisibility(View.GONE);
             ivAddImgLeader55.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader5, pLeaderImg5);
             GlideDataBinding.bindImage(ivAddImgLeader55, pLeaderImg5);
@@ -888,7 +1148,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             ivAddImgLeader6.setVisibility(View.GONE);
             ivAddImgLeader66.setVisibility(View.GONE);
         }else {
-            ivAddImgLeader6.setVisibility(VISIBLE);
+            ivAddImgLeader6.setVisibility(View.GONE);
             ivAddImgLeader66.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader6, pLeaderImg6);
             GlideDataBinding.bindImage(ivAddImgLeader66, pLeaderImg6);
@@ -1370,7 +1630,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //                ivclose.setVisibility(VISIBLE);
 //                movableImageView.setVisibility(VISIBLE);
 //                ivStickerImg.setImageResource(R.drawable.sticker_01);
-                createSticker(getAppContext(),"1");
+//                createSticker(getAppContext(),"1");
                 ivSticker00.setBackground(getDrawable(R.drawable.images_background));
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1391,7 +1651,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //                ivclose.setVisibility(VISIBLE);
 //                movableImageView.setVisibility(VISIBLE);
 //                ivStickerImg.setImageResource(R.drawable.sticker_02);
-                createSticker(getAppContext(),"2");
+//                createSticker(getAppContext(),"2");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(getDrawable(R.drawable.images_background));
 
@@ -1413,7 +1673,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //                ivclose.setVisibility(VISIBLE);
 //                movableImageView.setVisibility(VISIBLE);
 //                ivStickerImg.setImageResource(R.drawable.sticker_03);
-                createSticker(getAppContext(),"3");
+//                createSticker(getAppContext(),"3");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(getDrawable(R.drawable.images_background));
@@ -1436,7 +1696,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //                ivclose.setVisibility(VISIBLE);
 //                movableImageView.setVisibility(VISIBLE);
 //                ivStickerImg.setImageResource(R.drawable.sticker_04);
-                createSticker(getAppContext(),"4");
+//                createSticker(getAppContext(),"4");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1458,7 +1718,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //                ivclose.setVisibility(VISIBLE);
 //                movableImageView.setVisibility(VISIBLE);
 //                ivStickerImg.setImageResource(R.drawable.sticker_05);
-                createSticker(getAppContext(),"5");
+//                createSticker(getAppContext(),"5");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1480,7 +1740,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //                ivclose.setVisibility(VISIBLE);
 //                movableImageView.setVisibility(VISIBLE);
 //                ivStickerImg.setImageResource(R.drawable.sticker_06);
-                createSticker(getAppContext(),"6");
+//                createSticker(getAppContext(),"6");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1500,7 +1760,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //                ivclose.setVisibility(VISIBLE);
 //                movableImageView.setVisibility(VISIBLE);
 //                ivStickerImg.setImageResource(R.drawable.sticker_07);
-                createSticker(getAppContext(),"7");
+//                createSticker(getAppContext(),"7");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1520,7 +1780,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //                ivclose.setVisibility(VISIBLE);
 //                movableImageView.setVisibility(VISIBLE);
 //                ivStickerImg.setImageResource(R.drawable.sticker_08);
-                createSticker(getAppContext(),"8");
+//                createSticker(getAppContext(),"8");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1540,7 +1800,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //                ivclose.setVisibility(VISIBLE);
 //                movableImageView.setVisibility(VISIBLE);
 //                ivStickerImg.setImageResource(R.drawable.sticker_09);
-                createSticker(getAppContext(),"9");
+//                createSticker(getAppContext(),"9");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1560,7 +1820,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //                ivclose.setVisibility(VISIBLE);
 //                movableImageView.setVisibility(VISIBLE);
 //                ivStickerImg.setImageResource(R.drawable.sticker_10);
-                createSticker(getAppContext(),"10");
+//                createSticker(getAppContext(),"10");
                 ivSticker00.setBackground(null);
                 ivSticker01.setBackground(null);
                 ivSticker02.setBackground(null);
@@ -1671,8 +1931,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ivFrames00.setBackground(null);
-                switchToPoliticalFrame3();
-                handleResetProgress();
+                handleSwitchFrame("4");
                 ivFrames22.setBackground(null);
                 ivFrames11.setBackground(null);
                 ivFrames33.setBackground(getDrawable(R.drawable.images_background));
@@ -2338,7 +2597,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                createText(getAppContext(),etText.getText().toString(),slectedFontColor);
+                createText(getAppContext(),etText.getText().toString(),slectedFontColor);
             }
         });
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -2445,15 +2704,23 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ivclose.setVisibility(View.GONE);
-                handleCloseButtons(true);
-                saveImage(viewToBitmap(constraintTwo), true);
+                if (watermarkDetails.position != null && watermarkDetails.showWatermark != null) {
+                    if (watermarkDetails.position == 1) {
+                        leftThumbnailImage.setVisibility(View.VISIBLE);
+                    } else if (watermarkDetails.position == 2) {
+                        centerThumbnailImage.setVisibility(View.VISIBLE);
+                    } else if (watermarkDetails.position == 3) {
+                        rightThumbnailImage.setVisibility(View.VISIBLE);
+                    }
+
+                }
+                showDownloadDialog();
             }
         });
 
         llFramesLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(greeting) {
                     lay_profile_photo_ll.setVisibility(View.GONE);
                     lay_uploaded_photo.setVisibility(View.GONE);
                     lay_name_ll.setVisibility(View.GONE);
@@ -2467,27 +2734,12 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                     lay_sticker_ll.setVisibility(View.GONE);
                     lay_editText.setVisibility(View.GONE);
                     textPhotoAddll.setVisibility(VISIBLE);
-                }else{
-                    lay_profile_photo_ll.setVisibility(View.GONE);
-                    lay_uploaded_photo.setVisibility(View.GONE);
-                    lay_name_ll.setVisibility(View.GONE);
-                    lay_Designation1_ll.setVisibility(View.GONE);
-                    lay_party_photo_ll.setVisibility(View.GONE);
-                    lay_Designation2_ll.setVisibility(View.GONE);
-                    lay_Mobile_ll.setVisibility(View.GONE);
-                    lay_SocialMedia_ll.setVisibility(View.GONE);
-                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
-                    lay_frames_ll.setVisibility(VISIBLE);
-                    lay_sticker_ll.setVisibility(View.GONE);
-                    lay_editText.setVisibility(View.GONE);
-                    textPhotoAddll.setVisibility(View.GONE);
-                }
+
             }
         });
         llProfilePhotoLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(greeting) {
                     lay_profile_photo_ll.setVisibility(View.VISIBLE);
                     lay_uploaded_photo.setVisibility(View.GONE);
                     lay_name_ll.setVisibility(View.GONE);
@@ -2501,21 +2753,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                     lay_sticker_ll.setVisibility(View.GONE);
                     lay_editText.setVisibility(View.GONE);
                     textPhotoAddll.setVisibility(VISIBLE);
-                }else{
-                    lay_profile_photo_ll.setVisibility(View.VISIBLE);
-                    lay_uploaded_photo.setVisibility(View.GONE);
-                    lay_name_ll.setVisibility(View.GONE);
-                    lay_Designation1_ll.setVisibility(View.GONE);
-                    lay_party_photo_ll.setVisibility(View.GONE);
-                    lay_Designation2_ll.setVisibility(View.GONE);
-                    lay_Mobile_ll.setVisibility(View.GONE);
-                    lay_SocialMedia_ll.setVisibility(View.GONE);
-                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
-                    lay_frames_ll.setVisibility(View.GONE);
-                    lay_sticker_ll.setVisibility(View.GONE);
-                    lay_editText.setVisibility(View.GONE);
-                    textPhotoAddll.setVisibility(View.GONE);
-                }
             }
         });
         llNameLl.setOnClickListener(new View.OnClickListener() {
@@ -2594,7 +2831,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         llLeadersPhotoLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(greeting){
                     lay_profile_photo_ll.setVisibility(View.GONE);
                     lay_uploaded_photo.setVisibility(View.GONE);
                     lay_name_ll.setVisibility(View.GONE);
@@ -2608,27 +2844,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                     lay_sticker_ll.setVisibility(View.GONE);
                     lay_editText.setVisibility(View.GONE);
                     textPhotoAddll.setVisibility(VISIBLE);
-                }else{
-                    lay_profile_photo_ll.setVisibility(View.GONE);
-                    lay_uploaded_photo.setVisibility(View.GONE);
-                    lay_name_ll.setVisibility(View.GONE);
-                    lay_party_photo_ll.setVisibility(View.GONE);
-                    lay_Designation1_ll.setVisibility(View.GONE);
-                    lay_Designation2_ll.setVisibility(View.GONE);
-                    lay_Mobile_ll.setVisibility(View.GONE);
-                    lay_SocialMedia_ll.setVisibility(View.GONE);
-                    lay_LeadersPhoto_ll.setVisibility(View.VISIBLE);
-                    lay_frames_ll.setVisibility(View.GONE);
-                    lay_sticker_ll.setVisibility(View.GONE);
-                    lay_editText.setVisibility(View.GONE);
-                    textPhotoAddll.setVisibility(View.GONE);
-                }
             }
         });
         llSocialMediaIconsLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(greeting){
                     lay_profile_photo_ll.setVisibility(View.GONE);
                     lay_uploaded_photo.setVisibility(View.GONE);
                     lay_name_ll.setVisibility(View.GONE);
@@ -2642,21 +2862,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                     lay_sticker_ll.setVisibility(View.GONE);
                     lay_editText.setVisibility(View.GONE);
                     textPhotoAddll.setVisibility(VISIBLE);
-                }else{
-                    lay_profile_photo_ll.setVisibility(View.GONE);
-                    lay_uploaded_photo.setVisibility(View.GONE);
-                    lay_name_ll.setVisibility(View.GONE);
-                    lay_party_photo_ll.setVisibility(View.GONE);
-                    lay_Designation1_ll.setVisibility(View.GONE);
-                    lay_Designation2_ll.setVisibility(View.GONE);
-                    lay_Mobile_ll.setVisibility(View.GONE);
-                    lay_SocialMedia_ll.setVisibility(View.VISIBLE);
-                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
-                    lay_frames_ll.setVisibility(View.GONE);
-                    lay_sticker_ll.setVisibility(View.GONE);
-                    lay_editText.setVisibility(View.GONE);
-                    textPhotoAddll.setVisibility(View.GONE);
-                }
+
 
             }
         });
@@ -2664,7 +2870,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         llPartyIconLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(greeting){
                     lay_profile_photo_ll.setVisibility(View.GONE);
                     lay_uploaded_photo.setVisibility(View.GONE);
                     lay_name_ll.setVisibility(View.GONE);
@@ -2678,22 +2883,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                     lay_sticker_ll.setVisibility(View.GONE);
                     lay_editText.setVisibility(View.GONE);
                     textPhotoAddll.setVisibility(VISIBLE);
-                }else{
-                    lay_profile_photo_ll.setVisibility(View.GONE);
-                    lay_uploaded_photo.setVisibility(View.GONE);
-                    lay_name_ll.setVisibility(View.GONE);
-                    lay_party_photo_ll.setVisibility(View.VISIBLE);
-                    lay_Designation1_ll.setVisibility(View.GONE);
-                    lay_Designation2_ll.setVisibility(View.GONE);
-                    lay_Mobile_ll.setVisibility(View.GONE);
-                    lay_SocialMedia_ll.setVisibility(View.GONE);
-                    lay_LeadersPhoto_ll.setVisibility(View.GONE);
-                    lay_frames_ll.setVisibility(View.GONE);
-                    lay_sticker_ll.setVisibility(View.GONE);
-                    lay_editText.setVisibility(View.GONE);
-                    textPhotoAddll.setVisibility(View.GONE);
-                }
-
             }
         });
         add_textLL.setOnClickListener(new View.OnClickListener() {
@@ -2729,32 +2918,9 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                 lay_sticker_ll.setVisibility(View.GONE);
             }
         });
-        addTextColorll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showColorPicker();
-            }
-        });
 
-        addTextFontll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                //  showFontFamilyBottomSheet(tvMobileNoTv);
 
-                adapter = new FontAdapter(EditPoliticalProfileDetailsActivity.this, getResources().getStringArray(R.array.fonts_array));
-                adapter.setSelected(0);
-                ((GridView) findViewById(R.id.add_text_gridview_name)).setAdapter(adapter);
 
-                adapter.setItemClickCallback((OnClickCallback<ArrayList<String>, Integer, String, Activity>) (arrayList, num, str, activity) -> {
-
-                    // Apply the selected font family to the TextView
-                    selectedFontFamily = str;
-                    File file1 = new File(Configure.GetFileDir(context).getPath() + File.separator + "font");
-                    etText.setTypeface(Typeface.createFromFile(file1.getAbsolutePath() + "/" + str));
-                    adapter.setSelected(num.intValue());
-                });
-            }
-        });
     }
 
     public void setTextFont(String str, TextView autoResizeTextView) {
@@ -2946,29 +3112,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         }
     };
 
-    SeekBar.OnSeekBarChangeListener seekBarChangeListenerAddText = new SeekBar.OnSeekBarChangeListener() {
 
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-            // Update the width and height of the ImageView based on SeekBar progress
-
-            selectedFontSize = 10 + progress;
-
-            etText.setTextSize(selectedFontSize);
-
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-            // called when the user first touches the SeekBar
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            // called after the user finishes moving the SeekBar
-        }
-    };
     private void flipImage(ImageView imageView) {
         if (!isMirrored) {
             // Flip the image horizontally
@@ -3273,9 +3417,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         lay_party_photo_ll = (LinearLayout) findViewById(R.id.lay_party_photo);
 
 
-        constraint = (RelativeLayout) findViewById(R.id.constraint);
-        constraintTwo = (RelativeLayout) findViewById(R.id.constraintTwo);
-        constraintThumbnail = findViewById(R.id.constraintThum);
+
 
         // Get the width of the screen or the parent layout
         int screenWidth = getResources().getDisplayMetrics().widthPixels-56;
@@ -3315,10 +3457,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
         etText = (EditText) findViewById(R.id.etText);
         btn_save = (TextView) findViewById(R.id.btn_save);
-        addTextColorll = (LinearLayout) findViewById(R.id.addTextColor);
-        addTextFontll = (LinearLayout) findViewById(R.id.addTextFontll);
-        seekBarAddText = (SeekBar) findViewById(R.id.seekBarAddText);
-        seekBarAddText.setOnSeekBarChangeListener(seekBarChangeListenerAddText);
 
         categoryName = getIntent().getStringExtra("categoryName");
         category_text.setText(categoryName);
@@ -3367,16 +3505,14 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
             FileOutputStream fileOutputStream = new FileOutputStream(filePath);
             Bitmap watermarkBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.water_mark);
 
-            Bitmap watermarkedBitmap;
-            if (watermarkBitmap != null) {
-                watermarkedBitmap = addWatermark(bitmap, watermarkBitmap);
-                // Use watermarkedBitmap as needed
-                watermarkBitmap.recycle(); // Recycle the watermarkBitmap after using it
-            } else {
-                Log.e("Bitmap Loading", "Failed to load watermark image");
-                // Handle gracefully, maybe by not adding a watermark and using the original bitmap
-                watermarkedBitmap = bitmap;
-            }
+            Bitmap watermarkedBitmap = bitmap;
+//            if (watermarkBitmap != null) {
+//                watermarkedBitmap = addWatermark(bitmap, watermarkBitmap);
+//                watermarkBitmap.recycle();
+//            } else {
+//                Log.e("Bitmap Loading", "Failed to load watermark image");
+//                watermarkedBitmap = bitmap;
+//            }
 
 
             watermarkedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
@@ -3438,6 +3574,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         startActivity(intent);*/
 //        ivclose.setVisibility(VISIBLE);
         handleCloseButtons(false);
+        rightThumbnailImage.setVisibility(View.GONE);
+        leftThumbnailImage.setVisibility(View.GONE);
+        centerThumbnailImage.setVisibility(View.GONE);
+
     }
     private Bitmap viewToBitmap(View view) {
 
@@ -3506,6 +3646,9 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         // Inflate the new layout (political_frame_2)
         View newToolbar;
         switch (type) {
+            case "4":
+                newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_4, parentLayout, false);
+                break;
             case "5":
                 newToolbar = LayoutInflater.from(this).inflate(R.layout.political_frame_5, parentLayout, false);
                 break;
@@ -3583,7 +3726,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         btnseekBarDesignation2.setProgress(2);
     }
 
-    public void createSticker(Context context,String sticker_type) {
+    public void createSticker(Context context,String sticker_type,String imageUr) {
         // Create a new RelativeLayout
         RelativeLayout relativeLayout = new RelativeLayout(context);
 
@@ -3598,40 +3741,41 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 //        RotateZoomImageView stickerImageView = new RotateZoomImageView(context);
         ImageView stickerImageView = new ImageView(context);
         stickerImageView.setId(View.generateViewId()); // Generate a unique ID for each view
-        switch (sticker_type) {
-            case "1":
-                stickerImageView.setImageResource(R.drawable.sticker_01);
-                break;
-            case "2":
-                stickerImageView.setImageResource(R.drawable.sticker_02);
-                break;
-            case "3":
-                stickerImageView.setImageResource(R.drawable.sticker_03);
-                break;
-            case "4":
-                stickerImageView.setImageResource(R.drawable.sticker_04);
-                break;
-            case "5":
-                stickerImageView.setImageResource(R.drawable.sticker_05);
-                break;
-            case "6":
-                stickerImageView.setImageResource(R.drawable.sticker_06);
-                break;
-            case "7":
-                stickerImageView.setImageResource(R.drawable.sticker_07);
-                break;
-            case "8":
-                stickerImageView.setImageResource(R.drawable.sticker_08);
-                break;
-            case "9":
-                stickerImageView.setImageResource(R.drawable.sticker_09);
-                break;
-            case "10":
-                stickerImageView.setImageResource(R.drawable.sticker_10);
-                break;
-            default:
-                break;
-        }
+        Glide.with(context).load(imageUr).into(stickerImageView);
+//        switch (sticker_type) {
+//            case "1":
+//                stickerImageView.setImageResource(R.drawable.sticker_01);
+//                break;
+//            case "2":
+//                stickerImageView.setImageResource(R.drawable.sticker_02);
+//                break;
+//            case "3":
+//                stickerImageView.setImageResource(R.drawable.sticker_03);
+//                break;
+//            case "4":
+//                stickerImageView.setImageResource(R.drawable.sticker_04);
+//                break;
+//            case "5":
+//                stickerImageView.setImageResource(R.drawable.sticker_05);
+//                break;
+//            case "6":
+//                stickerImageView.setImageResource(R.drawable.sticker_06);
+//                break;
+//            case "7":
+//                stickerImageView.setImageResource(R.drawable.sticker_07);
+//                break;
+//            case "8":
+//                stickerImageView.setImageResource(R.drawable.sticker_08);
+//                break;
+//            case "9":
+//                stickerImageView.setImageResource(R.drawable.sticker_09);
+//                break;
+//            case "10":
+//                stickerImageView.setImageResource(R.drawable.sticker_10);
+//                break;
+//            default:
+//                break;
+//        }
 
         // Set layout parameters for the sticker ImageView
         RelativeLayout.LayoutParams stickerParams = new RelativeLayout.LayoutParams(
@@ -3689,6 +3833,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         rotateParams.addRule(RelativeLayout.ALIGN_START, stickerImageView.getId());
         rotateImageView.setLayoutParams(rotateParams);
 
+        closeButtons.add(rotateImageView);
+        closeButtons.add(zoomImageView);
+        closeButtons.add(closeImageView);
+
         relativeLayout.addView(rotateImageView);
         relativeLayout.addView(zoomImageView);
         relativeLayout.addView(closeImageView);
@@ -3723,7 +3871,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
                         lastAction = MotionEvent.ACTION_MOVE;
                         break;
                     case MotionEvent.ACTION_UP:
-                        // Check if it was a click or drag action
+                        handleCloseButtons(true);
+                        closeImageView.setVisibility(VISIBLE);
+                        zoomImageView.setVisibility(VISIBLE);
+                        rotateImageView.setVisibility(VISIBLE);
+
                         if (lastAction == MotionEvent.ACTION_DOWN) {
                             // Perform click action here if needed
                         }
@@ -3774,30 +3926,43 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
         });
 
         rotateImageView.setOnTouchListener(new View.OnTouchListener() {
-            private GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                    // Calculate the angle of rotation based on the movement of the touch points
-                    double startDeltaX = e1.getRawX() - (relativeLayout.getX() + relativeLayout.getWidth() / 2);
-                    double startDeltaY = e1.getRawY() - (relativeLayout.getY() + relativeLayout.getHeight() / 2);
-                    double startAngle = Math.toDegrees(Math.atan2(startDeltaY, startDeltaX));
-
-                    double currentDeltaX = e2.getRawX() - (relativeLayout.getX() + relativeLayout.getWidth() / 2);
-                    double currentDeltaY = e2.getRawY() - (relativeLayout.getY() + relativeLayout.getHeight() / 2);
-                    double currentAngle = Math.toDegrees(Math.atan2(currentDeltaY, currentDeltaX));
-
-                    // Calculate the rotation angle difference
-                    double rotationAngle = (currentAngle - startAngle) * 0.2; // Adjust the multiplier to control rotation speed
-
-                    // Apply the rotation to the sticker image
-                    relativeLayout.setRotation((float) (relativeLayout.getRotation() + rotationAngle));
-                    return true;
-                }
-            });
+            private float previousX, previousY; // Previous touch position
+            private boolean isRotating = false; // Flag to track if rotation is currently happening
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Finger is pressed, start rotation
+                        previousX = event.getX();
+                        previousY = event.getY();
+                        isRotating = true;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        // Finger is moving, continue rotation
+                        if (isRotating) {
+                            float currentX = event.getX();
+                            float currentY = event.getY();
+
+                            // Calculate angle between previous and current touch position
+                            double startAngle = Math.atan2(previousY - relativeLayout.getHeight() / 2, previousX - relativeLayout.getWidth() / 2);
+                            double currentAngle = Math.atan2(currentY - relativeLayout.getHeight() / 2, currentX - relativeLayout.getWidth() / 2);
+                            double rotationAngle = Math.toDegrees(currentAngle - startAngle);
+
+                            // Apply the rotation to the relativeLayout
+                            relativeLayout.setRotation((float) (relativeLayout.getRotation() + rotationAngle));
+
+                            // Update previous touch position
+                            previousX = currentX;
+                            previousY = currentY;
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        // Finger is released or touch is canceled, stop rotation
+                        isRotating = false;
+                        break;
+                }
                 return true;
             }
         });
@@ -3806,14 +3971,595 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
 
 
+    }
+
+
+    public void createImage(Context context, Uri selectedImage) {
+        // Create a new RelativeLayout
+        RelativeLayout relativeLayout = new RelativeLayout(context);
+
+        // Set layout parameters for the RelativeLayout
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,  // Width
+                RelativeLayout.LayoutParams.WRAP_CONTENT   // Height
+        );
+        relativeLayout.setLayoutParams(layoutParams);
+
+        // Create the sticker ImageView
+        ImageView stickerImageView = new ImageView(context);
+        stickerImageView.setId(View.generateViewId()); // Generate a unique ID for each view
+        stickerImageView.setImageURI(selectedImage);
+        // Set layout parameters for the sticker ImageView
+        RelativeLayout.LayoutParams stickerParams = new RelativeLayout.LayoutParams(
+                450, // Width
+                450  // Height
+        );
+
+        stickerParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+        stickerParams.setMargins(20,20,20,20);
+
+        stickerImageView.setLayoutParams(stickerParams);
+        stickerImageView.setZ(-Float.MAX_VALUE);
+
+        ImageView closeImageView = new ImageView(context);
+        closeImageView.setId(View.generateViewId());
+        closeImageView.setImageResource(R.drawable.icon_close);
+
+// Set layout parameters for the close ImageView
+        RelativeLayout.LayoutParams closeParams = new RelativeLayout.LayoutParams(
+                70,
+                70
+        );
+//        closeParams.setMargins(0,-100,0,0);
+        closeParams.addRule(RelativeLayout.ALIGN_TOP, stickerImageView.getId());
+        closeParams.addRule(RelativeLayout.ALIGN_START, stickerImageView.getId());
+        closeImageView.setLayoutParams(closeParams);
+
+        ImageView flipImageView = new ImageView(context);
+        flipImageView.setId(View.generateViewId()); // Generate a unique ID for each view
+        flipImageView.setImageResource(R.drawable.sticker_flip);
+
+        // Set layout parameters for the close ImageView
+        RelativeLayout.LayoutParams flipParams = new RelativeLayout.LayoutParams(
+                70,
+                70
+        );
+        flipParams.addRule(RelativeLayout.ALIGN_TOP, stickerImageView.getId());
+        flipParams.addRule(RelativeLayout.ALIGN_END, stickerImageView.getId());
+        flipImageView.setLayoutParams(flipParams);
+
+        ImageView zoomImageView = new ImageView(context);
+        zoomImageView.setId(View.generateViewId()); // Generate a unique ID for each view
+        zoomImageView.setImageResource(R.drawable.sticker_scale);
+
+        // Set layout parameters for the close ImageView
+        RelativeLayout.LayoutParams zoomParams = new RelativeLayout.LayoutParams(
+                70,
+                70
+        );
+        zoomParams.addRule(RelativeLayout.ALIGN_BOTTOM, stickerImageView.getId());
+        zoomParams.addRule(RelativeLayout.ALIGN_END, stickerImageView.getId());
+        zoomImageView.setLayoutParams(zoomParams);
+
+        ImageView rotateImageView = new ImageView(context);
+        rotateImageView.setId(View.generateViewId()); // Generate a unique ID for each view
+        rotateImageView.setImageResource(R.drawable.sticker_rotate);
+
+        // Set layout parameters for the close ImageView
+        RelativeLayout.LayoutParams rotateParams = new RelativeLayout.LayoutParams(
+                70,
+                70
+        );
+        rotateParams.addRule(RelativeLayout.ALIGN_BOTTOM, stickerImageView.getId());
+        rotateParams.addRule(RelativeLayout.ALIGN_START, stickerImageView.getId());
+        rotateImageView.setLayoutParams(rotateParams);
+
+        closeButtons.add(flipImageView);
+        closeButtons.add(rotateImageView);
+        closeButtons.add(zoomImageView);
+        closeButtons.add(closeImageView);
+
+        relativeLayout.addView(flipImageView);
+        relativeLayout.addView(rotateImageView);
+        relativeLayout.addView(zoomImageView);
+        relativeLayout.addView(closeImageView);
+        relativeLayout.addView(stickerImageView);
+        constraint.addView(relativeLayout,constraint.indexOfChild(constraintThumbnail));
+
+        relativeLayout.setOnTouchListener(new View.OnTouchListener() {
+            private float xDelta;
+            private float yDelta;
+
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                final float x = event.getRawX();
+                final float y = event.getRawY();
+
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Save the initial touch coordinates
+                        xDelta = x - view.getX();
+                        yDelta = y - view.getY();
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        // Update the image view's position based on finger movement
+                        view.setX(x - xDelta);
+                        view.setY(y - yDelta);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        handleCloseButtons(true);
+                        closeImageView.setVisibility(VISIBLE);
+                        flipImageView.setVisibility(VISIBLE);
+                        zoomImageView.setVisibility(VISIBLE);
+                        rotateImageView.setVisibility(VISIBLE);
+                        break;
+                }
+
+                return true;
+            }
+        });
+        closeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Remove the parent RelativeLayout when the close button is clicked
+                constraint.removeView(relativeLayout);
+
+            }
+        });
+
+        flipImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flipImage(stickerImageView);
+
+            }
+        });
+        zoomImageView.setOnTouchListener(new View.OnTouchListener() {
+            private float startX, startY;
+            private float initialWidth, initialHeight;
+            private boolean isResizing = false;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        startX = event.getRawX();
+                        startY = event.getRawY();
+                        initialWidth = stickerImageView.getWidth(); // Get the initial width of the sticker image
+                        initialHeight = stickerImageView.getHeight(); // Get the initial height of the sticker image
+                        isResizing = true;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (isResizing) {
+                            float currentX = event.getRawX();
+                            float currentY = event.getRawY();
+
+                            // Calculate the distance from the initial touch point
+                            float distanceX = currentX - startX;
+                            float distanceY = currentY - startY;
+
+                            // Calculate the change in size based on the distance
+                            float newSize = Math.max(initialWidth + distanceX, 0);
+
+                            // Set the new size for the sticker image
+                            stickerImageView.setLayoutParams(new RelativeLayout.LayoutParams((int) newSize, (int) newSize));
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        isResizing = false;
+                        break;
+                }
+                return true;
+            }
+        });
+
+        rotateImageView.setOnTouchListener(new View.OnTouchListener() {
+            private float previousX, previousY; // Previous touch position
+            private boolean isRotating = false; // Flag to track if rotation is currently happening
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Finger is pressed, start rotation
+                        previousX = event.getX();
+                        previousY = event.getY();
+                        isRotating = true;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        // Finger is moving, continue rotation
+                        if (isRotating) {
+                            float currentX = event.getX();
+                            float currentY = event.getY();
+
+                            // Calculate angle between previous and current touch position
+                            double startAngle = Math.atan2(previousY - relativeLayout.getHeight() / 2, previousX - relativeLayout.getWidth() / 2);
+                            double currentAngle = Math.atan2(currentY - relativeLayout.getHeight() / 2, currentX - relativeLayout.getWidth() / 2);
+                            double rotationAngle = Math.toDegrees(currentAngle - startAngle);
+
+                            // Apply the rotation to the relativeLayout
+                            relativeLayout.setRotation((float) (relativeLayout.getRotation() + rotationAngle));
+
+                            // Update previous touch position
+                            previousX = currentX;
+                            previousY = currentY;
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        // Finger is released or touch is canceled, stop rotation
+                        isRotating = false;
+                        break;
+                }
+                return true;
+            }
+        });
+
 
     }
 
 
+    public void createText(Context context, String text, int fontColor) {
+
+        RelativeLayout relativeLayout = new RelativeLayout(context);
+        relativeLayout.setId(View.generateViewId());
+        // Set layout parameters for the RelativeLayout
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,  // Width
+                RelativeLayout.LayoutParams.WRAP_CONTENT   // Height
+        );
+        relativeLayout.setLayoutParams(layoutParams);
+
+
+
+        LinearLayout linearLayoutText = new LinearLayout(context);
+        linearLayoutText.setId(View.generateViewId());
+        // Set layout parameters for the RelativeLayout
+        RelativeLayout.LayoutParams linearLayoutTextParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,  // Width
+                RelativeLayout.LayoutParams.WRAP_CONTENT   // Height
+        );
+        linearLayoutText.setLayoutParams(linearLayoutTextParams);
+        linearLayoutText.setPadding(50,50,50,50);
+        TextView textView = new TextView(context);
+        File file1 = new File(Configure.GetFileDir(context).getPath() + File.separator + "font");
+        textView.setIncludeFontPadding(false);
+        textView.setLineSpacing(1, 0.8f);
+        textView.setTypeface(Typeface.createFromFile(file1.getAbsolutePath() + "/" + selectedFontFamily));
+        textView.setId(View.generateViewId()); // Generate a unique ID for each view
+        textView.setText(text);
+        textView.setTextColor(fontColor);
+        textView.setTextSize(selectedFontSize); // Set text size as needed
+
+        // Set layout parameters for the text view
+        LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        textParams.gravity = Gravity.CENTER; // Center the TextView in the LinearLayout
+        textView.setLayoutParams(textParams);
+
+        ImageView closeImageView = new ImageView(context);
+        closeImageView.setId(View.generateViewId());
+        closeImageView.setImageResource(R.drawable.icon_close);
+        RelativeLayout.LayoutParams closeParams = new RelativeLayout.LayoutParams(
+                70,
+                70
+        );
+        closeParams.addRule(RelativeLayout.ALIGN_TOP, linearLayoutText.getId());
+        closeParams.addRule(RelativeLayout.ALIGN_START, linearLayoutText.getId());
+        closeImageView.setLayoutParams(closeParams);
+
+        ImageView dragImageView = new ImageView(context);
+        dragImageView.setId(View.generateViewId());
+        dragImageView.setImageResource(R.drawable.pen);
+        RelativeLayout.LayoutParams dragParams = new RelativeLayout.LayoutParams(
+                70,
+                70
+        );
+        dragParams.addRule(RelativeLayout.ALIGN_TOP, linearLayoutText.getId());
+        dragParams.addRule(RelativeLayout.ALIGN_END, linearLayoutText.getId());
+        dragImageView.setLayoutParams(dragParams);
+
+        ImageView zoomImageView = new ImageView(context);
+        zoomImageView.setId(View.generateViewId()); // Generate a unique ID for each view
+        zoomImageView.setImageResource(R.drawable.sticker_scale);
+
+        // Set layout parameters for the close ImageView
+        RelativeLayout.LayoutParams zoomParams = new RelativeLayout.LayoutParams(
+                70,
+                70
+        );
+        zoomParams.addRule(RelativeLayout.ALIGN_BOTTOM, linearLayoutText.getId());
+        zoomParams.addRule(RelativeLayout.ALIGN_END, linearLayoutText.getId());
+        zoomImageView.setLayoutParams(zoomParams);
+
+        ImageView rotateImageView = new ImageView(context);
+        rotateImageView.setId(View.generateViewId()); // Generate a unique ID for each view
+        rotateImageView.setImageResource(R.drawable.sticker_rotate);
+
+        // Set layout parameters for the close ImageView
+        RelativeLayout.LayoutParams rotateParams = new RelativeLayout.LayoutParams(
+                70,
+                70
+        );
+        rotateParams.addRule(RelativeLayout.ALIGN_BOTTOM, linearLayoutText.getId());
+        rotateParams.addRule(RelativeLayout.ALIGN_START, linearLayoutText.getId());
+        rotateImageView.setLayoutParams(rotateParams);
+        linearLayoutText.addView(textView);
+        relativeLayout.addView(linearLayoutText);
+        relativeLayout.addView(dragImageView);
+        relativeLayout.addView(rotateImageView);
+        relativeLayout.addView(zoomImageView);
+        relativeLayout.addView(closeImageView);
+
+        closeButtons.add(rotateImageView);
+        closeButtons.add(zoomImageView);
+        closeButtons.add(closeImageView);
+
+        closeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Remove the parent LinearLayout when the close button is clicked
+                constraint.removeView(relativeLayout);
+            }
+        });
+
+        dragImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Remove the parent LinearLayout when the close button is clicked
+
+//                showFontFamilyBottomSheet(textView);
+                EditTextItemDialogFragment editTextFragment = new EditTextItemDialogFragment();
+                editTextFragment.show(getSupportFragmentManager(), editTextFragment.getTag());
+                editTextFragment.setInitialText(textView.getText().toString());
+                editTextFragment.setOnSubmitListener(new EditTextItemDialogFragment.OnSubmitListener() {
+                    @Override
+                    public void onSubmit(String userInput) {
+                        Log.i("saqlain",userInput);
+                        textView.setText(userInput);
+                    }
+                });
+
+                editTextFragment.setColorListener(new EditTextItemDialogFragment.OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(int color) {
+                        textView.setTextColor(color);
+                    }
+                });
+
+                editTextFragment.setFontListener(new EditTextItemDialogFragment.OnFontFamilyListener() {
+                    @Override
+                    public void onFamilySelected(String fontFamily) {
+                        textView.setTypeface(Typeface.createFromFile(file1.getAbsolutePath() + "/" + fontFamily));
+                    }
+                });
+
+            }
+        });
+
+        relativeLayout.setOnTouchListener(new View.OnTouchListener() {
+            private int lastAction;
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Save initial touch point and view position
+                        initialX = (int) v.getX();
+                        initialY = (int) v.getY();
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        lastAction = MotionEvent.ACTION_DOWN;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        // Calculate new position based on touch movement
+                        int newX = initialX + (int) (event.getRawX() - initialTouchX);
+                        int newY = initialY + (int) (event.getRawY() - initialTouchY);
+
+                        // Update view position
+                        v.setX(newX);
+                        v.setY(newY);
+                        lastAction = MotionEvent.ACTION_MOVE;
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        handleCloseButtons(true);
+                        closeImageView.setVisibility(VISIBLE);
+                        dragImageView.setVisibility(VISIBLE);
+                        zoomImageView.setVisibility(VISIBLE);
+                        rotateImageView.setVisibility(VISIBLE);
+                        if (lastAction == MotionEvent.ACTION_DOWN) {
+                            // Perform click action here if needed
+                        }
+                        lastAction = MotionEvent.ACTION_UP;
+                        break;
+                }
+                return true;
+            }
+        });
+
+//        dragImageView.setOnTouchListener(new View.OnTouchListener() {
+//            private int lastAction;
+//            private int initialX;
+//            private int initialY;
+//            private float initialTouchX;
+//            private float initialTouchY;
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getActionMasked()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        // Save initial touch point and view position
+//                        initialX = (int) relativeLayout.getX();
+//                        initialY = (int) relativeLayout.getY();
+//                        initialTouchX = event.getRawX();
+//                        initialTouchY = event.getRawY();
+//                        lastAction = MotionEvent.ACTION_DOWN;
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        // Calculate new position based on touch movement
+//                        int newX = initialX + (int) (event.getRawX() - initialTouchX);
+//                        int newY = initialY + (int) (event.getRawY() - initialTouchY);
+//
+//                        // Update view position
+//                        relativeLayout.setX(newX);
+//                        relativeLayout.setY(newY);
+//                        lastAction = MotionEvent.ACTION_MOVE;
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        // Check if it was a click or drag action
+//                        if (lastAction == MotionEvent.ACTION_DOWN) {
+//                            // Perform click action here if needed
+//                        }
+//                        lastAction = MotionEvent.ACTION_UP;
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
+
+
+//        zoomImageView.setOnTouchListener(new View.OnTouchListener() {
+//            private float startX, startY;
+//            private float initialTextSize;
+//            private boolean isZooming = false;
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        startX = event.getRawX();
+//                        startY = event.getRawY();
+//                        initialTextSize = textView.getTextSize();
+//                        isZooming = true;
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        if (isZooming) {
+//                            float currentX = event.getRawX();
+//                            float currentY = event.getRawY();
+//
+//                            // Calculate the distance from the initial touch point
+//                            float distanceX = currentX - startX;
+//                            float distanceY = currentY - startY;
+//
+//                            // Calculate the total distance
+//                            float totalDistance = (float) Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+//
+//                            // Calculate the change in text size based on the distance
+//                            float newSize = initialTextSize + totalDistance * 0.02f; // Adjust this multiplier as needed for sensitivity
+//
+//                            // Set the new text size
+//                            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize);
+//                        }
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        isZooming = false;
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
+
+        zoomImageView.setOnTouchListener(new View.OnTouchListener() {
+            private float startX, startY;
+            private float initialTextSize;
+            private boolean isResizing = false;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        startX = event.getRawX();
+                        startY = event.getRawY();
+                        initialTextSize = textView.getTextSize();
+                        isResizing = true;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (isResizing) {
+                            float currentX = event.getRawX();
+                            float currentY = event.getRawY();
+
+                            // Calculate the distance from the initial touch point
+                            float distanceX = currentX - startX;
+                            float distanceY = currentY - startY;
+
+                            // Calculate the change in size based on the distance
+                            float newSize = initialTextSize + (distanceX + distanceY) / 4;
+
+                            // Limit the minimum size
+                            newSize = Math.max(newSize, 30);
+
+                            // Set the new text size
+                            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize);
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        isResizing = false;
+                        break;
+                }
+                return true;
+            }
+        });
+
+        rotateImageView.setOnTouchListener(new View.OnTouchListener() {
+            private float previousX, previousY; // Previous touch position
+            private boolean isRotating = false; // Flag to track if rotation is currently happening
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Finger is pressed, start rotation
+                        previousX = event.getX();
+                        previousY = event.getY();
+                        isRotating = true;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        // Finger is moving, continue rotation
+                        if (isRotating) {
+                            float currentX = event.getX();
+                            float currentY = event.getY();
+
+                            // Calculate angle between previous and current touch position
+                            double startAngle = Math.atan2(previousY - relativeLayout.getHeight() / 2, previousX - relativeLayout.getWidth() / 2);
+                            double currentAngle = Math.atan2(currentY - relativeLayout.getHeight() / 2, currentX - relativeLayout.getWidth() / 2);
+                            double rotationAngle = Math.toDegrees(currentAngle - startAngle);
+
+                            // Apply the rotation to the relativeLayout
+                            relativeLayout.setRotation((float) (relativeLayout.getRotation() + rotationAngle));
+
+                            // Update previous touch position
+                            previousX = currentX;
+                            previousY = currentY;
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        // Finger is released or touch is canceled, stop rotation
+                        isRotating = false;
+                        break;
+                }
+                return true;
+            }
+        });
 
 
 
 
+        closeButtons.add(dragImageView);
+        closeButtons.add(rotateImageView);
+        closeButtons.add(zoomImageView);
+        closeButtons.add(closeImageView);
+
+
+        constraint.addView(relativeLayout, constraint.indexOfChild(constraintThumbnail));
+    }
 
     private void handleCloseButtons(boolean makeInvisible) {
         for (ImageView closeButton : closeButtons) {
@@ -3852,6 +4598,52 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity {
 
         // Show the AlertDialog
         colorPickerDialog.show();
+    }
+
+    private void showDownloadDialog() {
+        // Inflate the custom layout for the color picker
+        View view2 = LayoutInflater.from(this).inflate(R.layout.download_dialog, null);
+
+        // Build the AlertDialog
+        android.app.AlertDialog colorPickerDialog = new android.app.AlertDialog.Builder(this)
+                .setView(view2)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handleCloseButtons(true);
+                        saveImage(viewToBitmap(constraintTwo), true);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        rightThumbnailImage.setVisibility(View.GONE);
+                        leftThumbnailImage.setVisibility(View.GONE);
+                        centerThumbnailImage.setVisibility(View.GONE);
+                    }
+                })
+                .create();
+        colorPickerDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                colorPickerDialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                colorPickerDialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
+            }
+        });
+
+        // Show the AlertDialog
+        colorPickerDialog.show();
+    }
+
+    private void openWhatsAppChat(String phoneNumber, String message) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse("https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + URLEncoder.encode(message, "UTF-8"));
+            intent.setData(uri);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

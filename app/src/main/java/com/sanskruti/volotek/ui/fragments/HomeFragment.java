@@ -138,13 +138,13 @@ public class HomeFragment extends Fragment {
 
         //Festival Region
         festivalAdapter = new FestivalAdapter(activity, item -> {
-            if (!item.isActive) {
-                UniversalDialog universalDialog = new UniversalDialog(getActivity(), true);
-                universalDialog.showWarningDialog(getContext().getString(R.string.no_festival_image), getContext().getString(R.string.festival_image_create),
-                        getContext().getString(R.string.ok), false);
-                universalDialog.show();
-                return;
-            }
+//            if (!item.isActive) {
+//                UniversalDialog universalDialog = new UniversalDialog(getActivity(), true);
+//                universalDialog.showWarningDialog(getContext().getString(R.string.no_festival_image), getContext().getString(R.string.festival_image_create),
+//                        getContext().getString(R.string.ok), false);
+//                universalDialog.show();
+//                return;
+//            }
             Intent intent = new Intent(getActivity(), PreviewActivity.class);
             intent.putExtra(Constant.INTENT_TYPE, FESTIVAL);
             intent.putExtra(Constant.INTENT_FEST_ID, item.id);

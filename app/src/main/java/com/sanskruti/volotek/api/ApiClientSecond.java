@@ -44,7 +44,7 @@ public class ApiClientSecond {
 
 
         return new Retrofit.Builder()
-                .baseUrl("http://54.81.76.179:3000/")
+                .baseUrl("http://51.20.89.9:3000/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
                 .create(ApiService.class);

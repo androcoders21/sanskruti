@@ -163,8 +163,6 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
-                android:background="@drawable/rounded_corners"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
 
@@ -181,7 +179,6 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
 
@@ -190,7 +187,6 @@
                     android:layout_width="@dimen/_21sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:adjustViewBounds="true"
-                    android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
                     android:src="@drawable/pf5leader"
                     android:visibility="visible" />
@@ -199,7 +195,6 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
 
@@ -208,7 +203,6 @@
                     android:layout_width="@dimen/_21sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:adjustViewBounds="true"
-                    android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
                     android:src="@drawable/pf5leader"
                     android:visibility="visible" />
@@ -217,7 +211,6 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
 
@@ -226,7 +219,6 @@
                     android:layout_width="@dimen/_21sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:adjustViewBounds="true"
-                    android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
                     android:src="@drawable/pf5leader"
                     android:visibility="visible" />
@@ -235,7 +227,6 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
 
@@ -244,7 +235,6 @@
                     android:layout_width="@dimen/_21sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:adjustViewBounds="true"
-                    android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
                     android:src="@drawable/pf5leader"
                     android:visibility="visible" />
@@ -253,7 +243,6 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 android:layout_margin="@dimen/_1sdp">
 
@@ -262,7 +251,6 @@
                     android:layout_width="@dimen/_21sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:adjustViewBounds="true"
-                    android:background="@drawable/rounded_corners"
                     android:scaleType="centerCrop"
                     android:src="@drawable/pf5leader"
                     android:visibility="visible" />

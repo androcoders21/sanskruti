@@ -19,9 +19,13 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
+import com.onesignal.OneSignal;
 import com.sanskruti.volotek.OtpEditText;
 import com.sanskruti.volotek.R;
+import com.sanskruti.volotek.api.ApiClient;
+import com.sanskruti.volotek.api.ApiService;
 import com.sanskruti.volotek.model.LoginModel;
+import com.sanskruti.volotek.model.video.TokenResponse;
 import com.sanskruti.volotek.ui.dialog.UniversalDialog;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.MyUtils;
@@ -48,6 +52,12 @@ import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -502,9 +512,14 @@ public class LoginActivity extends AppCompatActivity {
                 preferenceManager.setString(Constant.LOGIN_TYPE, loginType);
                 preferenceManager.setInt(Constant.USER_BUSINESS_LIMIT, userItem.businessLimit);
 
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent;
+                if(userItem.userName != null){
+                    intent = new Intent(LoginActivity.this, MainActivity.class);
+                }else{
+                    intent = new Intent(LoginActivity.this, ProfileEditActivity.class);
+                    intent.putExtra("isNameNull",true);
+                }
                 startActivity(intent);
-
                 finish();
 
             } else {
@@ -609,7 +624,7 @@ public class LoginActivity extends AppCompatActivity {
 
             } else {
                 Toast.makeText(context, "The verification code you have been entered incorrect !", Toast.LENGTH_SHORT).show();
-
+                prgDialog.dismiss();
             }
         });
     }

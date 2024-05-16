@@ -9,7 +9,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -30,17 +32,20 @@ import androidx.navigation.ui.NavigationUI;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.onesignal.OneSignal;
 import com.sanskruti.volotek.AdsUtils.GDPRChecker;
 import com.sanskruti.volotek.AdsUtils.InterstitialsAdsManager;
 import com.sanskruti.volotek.BuildConfig;
 import com.sanskruti.volotek.MyApplication;
 import com.sanskruti.volotek.R;
+import com.sanskruti.volotek.api.ApiClient;
 import com.sanskruti.volotek.binding.GlideDataBinding;
 import com.sanskruti.volotek.custom.animated_video.activities.FavouriteActivity;
 import com.sanskruti.volotek.custom.poster.activity.BaseActivity;
 import com.sanskruti.volotek.custom.poster.model.ServerData;
 import com.sanskruti.volotek.model.AppUpdate;
 import com.sanskruti.volotek.model.BusinessItem;
+import com.sanskruti.volotek.model.video.TokenResponse;
 import com.sanskruti.volotek.ui.dialog.UniversalDialog;
 import com.sanskruti.volotek.ui.fragments.MyBusinessFragmentBottomSheet;
 import com.sanskruti.volotek.utils.Constant;
@@ -52,6 +57,7 @@ import com.sanskruti.volotek.utils.Util;
 import com.sanskruti.volotek.viewmodel.HomeViewModel;
 import com.bumptech.glide.Glide;
 
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,6 +65,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity {
 
@@ -73,6 +85,7 @@ public class MainActivity extends BaseActivity {
     InterstitialsAdsManager manager;
     Activity activity;
     MyBusinessFragmentBottomSheet fragment;
+
 
 
     public void loadAppData() {
@@ -178,7 +191,6 @@ public class MainActivity extends BaseActivity {
 
 
     private void checkAppUpdate(AppUpdate appUpdate) {
-
         if (appUpdate.updatePopupShow.equals("1") && !appUpdate.newAppVersionCode.equals("" + BuildConfig.VERSION_CODE)) {
 
             universalDialog.showAppInfoDialog(getString(R.string.force_update__button_update), getString(R.string.app__cancel),
@@ -232,6 +244,7 @@ public class MainActivity extends BaseActivity {
 
         openOfferDialog();
 
+
         checkSubscriptionPlansExpireDialog();
 
         // Save Watermark
@@ -246,7 +259,8 @@ public class MainActivity extends BaseActivity {
         checkPermission();
 
         setUiViews();
-
+        loadAppData();
+        updatePushToken();
     }
 
     TextView activeBusinessName,toolName;
@@ -398,6 +412,39 @@ public class MainActivity extends BaseActivity {
 
 
     }
+
+    private void updatePushToken(){
+        String pushToken = OneSignal.getDeviceState().getPushToken();
+        if (pushToken != null) {
+            Log.i("saqlain",Constant.USER_ID + " " + OneSignal.getDeviceState().getPushToken() + " " + "android");
+//            ApiClient.getApiDataService().updateToken(RequestBody.create(MediaType.parse(Constant.multipart),Constant.USER_ID)
+//                            ,RequestBody.create(MediaType.parse(Constant.multipart),"android")
+//                            ,RequestBody.create(MediaType.parse(Constant.multipart), OneSignal.getDeviceState().getPushToken()))
+//                    .enqueue(
+//                            new Callback<TokenResponse>() {
+//                                @Override
+//                                public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+//                                    if(response.isSuccessful()){
+//                                        Log.i("saqlain",response.body().getMessage());
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<TokenResponse> call, Throwable t) {
+//
+//                                }
+//                            }
+//                    );
+            Constant.getHomeViewModel(this).updateToken(Constant.USER_ID,
+                    OneSignal.getDeviceState().getPushToken(),"android").observe(this,data->{
+                        if(data != null){
+                            Log.i("saqlain",data.message);
+                        }
+            });
+        } else {
+           Log.i("saqlain","Token Not Available");
+        }
+    }
     private void setUiViews() {
         NavController navController = Navigation.findNavController(this, R.id.fl_main);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
@@ -451,24 +498,30 @@ public class MainActivity extends BaseActivity {
         toolName.setVisibility(View.GONE);
 
         ivPremium.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SubsPlanActivity.class)));
-        favorite.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, FavouriteActivity.class)));
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String phoneNumber = "+918553537373";
+                String message = "नमस्कार।";
+                openWhatsAppChat(phoneNumber,message);
+            }
+        });
         youtubeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Intent to open the YouTube app
-                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:@sanskrutidesign1450?si=IS0Q6Il-IMnWEQUu"));
-
-                // Intent to open the YouTube website if the app is not installed
-                Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://www.youtube.com/@sanskrutidesign1450?si=IS0Q6Il-IMnWEQUu"));
-
-                try {
-                    // Try to open the YouTube app
-                    startActivity(appIntent);
-                } catch (ActivityNotFoundException ex) {
-                    // If the YouTube app is not installed, open the YouTube website
-                    startActivity(webIntent);
-                }
+//                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:@sanskrutidesign1450?si=IS0Q6Il-IMnWEQUu"));
+//
+//                Intent webIntent = new Intent(Intent.ACTION_VIEW,
+//                        Uri.parse("http://www.youtube.com/@sanskrutidesign1450?si=IS0Q6Il-IMnWEQUu"));
+//
+//                try {
+//                    startActivity(appIntent);
+//                } catch (ActivityNotFoundException ex) {
+//                    startActivity(webIntent);
+//                }
+                updatePushToken();
             }
         });
 
@@ -561,6 +614,17 @@ public class MainActivity extends BaseActivity {
         }
 
 
+    }
+
+    private void openWhatsAppChat(String phoneNumber, String message) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse("https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + URLEncoder.encode(message, "UTF-8"));
+            intent.setData(uri);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

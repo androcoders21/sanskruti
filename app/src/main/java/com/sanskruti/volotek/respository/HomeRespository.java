@@ -26,7 +26,9 @@ import com.sanskruti.volotek.model.PostItem;
 import com.sanskruti.volotek.model.ServiceItem;
 import com.sanskruti.volotek.model.SliderItem;
 import com.sanskruti.volotek.model.SubsPlanItem;
+import com.sanskruti.volotek.model.WatermarkResponse;
 import com.sanskruti.volotek.model.politicalProfileModel;
+import com.sanskruti.volotek.model.video.TokenResponse;
 import com.sanskruti.volotek.utils.Constant;
 
 
@@ -441,5 +443,39 @@ public class HomeRespository {
         return data;
     }
 
+    public LiveData<WatermarkResponse> getWatermark(){
+        MutableLiveData<WatermarkResponse> data = new MutableLiveData<>();
 
+        apiService.getWatermark().enqueue(new Callback<WatermarkResponse>() {
+            @Override
+            public void onResponse(Call<WatermarkResponse> call, Response<WatermarkResponse> response) {
+                data.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<WatermarkResponse> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<TokenResponse> updateToken(String userId, String deviceType, String deviceToken){
+        MutableLiveData<TokenResponse> data = new MutableLiveData<>();
+
+        RequestBody userid = RequestBody.create(MediaType.parse(Constant.multipart), userId);
+        RequestBody deviceT = RequestBody.create(MediaType.parse(Constant.multipart), deviceType);
+        RequestBody deviceTok = RequestBody.create(MediaType.parse(Constant.multipart), deviceToken);
+        apiService.updateToken(userid,deviceT,deviceTok).enqueue(new Callback<TokenResponse>() {
+            @Override
+            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<TokenResponse> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
 }

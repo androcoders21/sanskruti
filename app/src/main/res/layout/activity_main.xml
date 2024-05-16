@@ -123,17 +123,15 @@
 
                     <ImageView
                         android:id="@+id/favorite"
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
+                        android:layout_width="@dimen/_32sdp"
+                        android:layout_height="@dimen/_32sdp"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center"
                         android:layout_marginEnd="20dp"
-                        android:background="@drawable/bg_frame_02"
-                        android:backgroundTint="@color/iconBg"
                         android:padding="@dimen/_5sdp"
-                        android:src="@drawable/ic_favorite"
+                        android:src="@drawable/whatsapp_icon"
                         android:visibility="gone"
-                        app:tint="@color/white" />
+                         />
 
                     <ImageView
                         android:id="@+id/ivPremium"

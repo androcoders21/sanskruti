@@ -20,7 +20,9 @@ import com.sanskruti.volotek.model.PostItem;
 import com.sanskruti.volotek.model.ServiceItem;
 import com.sanskruti.volotek.model.SliderItem;
 import com.sanskruti.volotek.model.SubsPlanItem;
+import com.sanskruti.volotek.model.WatermarkResponse;
 import com.sanskruti.volotek.model.politicalProfileModel;
+import com.sanskruti.volotek.model.video.TokenResponse;
 import com.sanskruti.volotek.respository.HomeRespository;
 
 import java.util.List;
@@ -135,6 +137,14 @@ public class HomeViewModel extends ViewModel {
     public LiveData<ApiStatus> addBusinessCard(String userId, Integer cardId) {
         return respository.addBusinessCard(userId, cardId);
 
+    }
+
+    public LiveData<WatermarkResponse> getWatermark(){
+        return respository.getWatermark();
+    }
+
+    public LiveData<TokenResponse> updateToken(String userId, String deviceType, String deviceToken){
+        return respository.updateToken(userId,deviceType,deviceToken);
     }
 
 

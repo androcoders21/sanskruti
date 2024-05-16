@@ -24,13 +24,17 @@ import com.sanskruti.volotek.model.PoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.PostItem;
 import com.sanskruti.volotek.model.ServiceItem;
 import com.sanskruti.volotek.model.SliderItem;
+import com.sanskruti.volotek.model.Sticker;
+import com.sanskruti.volotek.model.StickerResponse;
 import com.sanskruti.volotek.model.StripeResponse;
 import com.sanskruti.volotek.model.SubsPlanItem;
 import com.sanskruti.volotek.model.UserItem;
+import com.sanskruti.volotek.model.WatermarkResponse;
 import com.sanskruti.volotek.model.WhatsappOtpResponse;
 import com.sanskruti.volotek.model.politicalProfileModel;
 import com.sanskruti.volotek.model.video.DashboardTemplateResponseMain;
 import com.sanskruti.volotek.model.video.TemplateResponse;
+import com.sanskruti.volotek.model.video.TokenResponse;
 
 import java.util.List;
 
@@ -54,6 +58,23 @@ public interface ApiService {
 
     @GET("userDetail")
     Call<UserItem> getUserById(@Query("id") String userId);
+
+    @GET("greetingStickerData")
+    Call<StickerResponse> getStickerList();
+
+    @GET("greetingStickerData")
+    Call<StickerResponse> getStickerData(@Query("search_category") String category);
+
+    @GET("getWatermarkSetting")
+    Call<WatermarkResponse> getWatermark();
+
+
+    @Multipart
+    @POST("update-device-token")
+    Call<TokenResponse>  updateToken(
+            @Part("user_id") RequestBody user_id,
+            @Part("device_type") RequestBody device_type,
+            @Part("device_token") RequestBody device_token);
 
     //*** login with google****
 

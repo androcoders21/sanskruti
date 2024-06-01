@@ -133,6 +133,8 @@ public class PreviewActivity extends AppCompatActivity {
     private Activity activity;
     private boolean video = false;
 
+    private boolean isGreeting = false;
+
     private Animation animSlideDown;
 
     private FrameLayout fl_logo, fl_name, fl_phone, fl_email, fl_website, fl_address;
@@ -778,13 +780,19 @@ public class PreviewActivity extends AppCompatActivity {
     }
     private void setupPreviewAdapter() {
 
+
+        if (type != null && type.equals("greeting")) {
+            isGreeting = true;
+        }
+
+
         adapter = new PreviewAdapter(this, (data) -> {
             if (postItemList != null) {
                 position = data;
 
 
                 setImageShow(postItemList.get(data));
-                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(postItemList.get(data).image_url,this,"NA",false,"");
+                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(postItemList.get(data).image_url,this,"NA",isGreeting,"");
 
                 // Or using static method
                 // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);

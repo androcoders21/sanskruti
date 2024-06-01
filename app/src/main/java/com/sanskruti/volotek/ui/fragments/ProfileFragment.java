@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,6 +168,13 @@ public class ProfileFragment extends Fragment {
                     getString(R.string.message__cancel_close));
 
             universalDialog.okBtn.setOnClickListener(view -> {
+
+                Constant.getHomeViewModel(this).updateLoginStatus(preferenceManager.getString(Constant.USER_PHONE),
+                        "0").observe(this,data->{
+                            if(data!=null){
+                                Log.i("saqlain",data.getIsLogIn());
+                            }
+                });
 
                 universalDialog.cancel();
 

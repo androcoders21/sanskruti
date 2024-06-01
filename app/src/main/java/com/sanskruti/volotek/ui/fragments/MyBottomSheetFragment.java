@@ -390,8 +390,8 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             rvSpec.setVisibility(View.VISIBLE);
 
             iv_edit_politicalll.setVisibility(View.VISIBLE);
-            lineDataiv.setVisibility(View.VISIBLE);
-            iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+            lineDataiv.setVisibility(GONE);
+            iv_edit_politicalllbus.setVisibility(GONE);
         } else {
             toolbarpm.setVisibility(View.GONE);
             toolbarbus.setVisibility(GONE);
@@ -405,22 +405,22 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
             iv_edit_politicalll.setVisibility(GONE);
             lineDataiv.setVisibility(GONE);
-            iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+            iv_edit_politicalllbus.setVisibility(GONE);
         }
         if (items != null) {
             if (items.size() > 0) {
                 if (type.equalsIgnoreCase("profile")) {
                     iv_edit_politicalll.setVisibility(View.VISIBLE);
                     lineDataiv.setVisibility(View.GONE);
-                    iv_edit_politicalllbus.setVisibility(View.GONE);
+                    iv_edit_politicalllbus.setVisibility(GONE);
                 } else if (type.equalsIgnoreCase("bus")) {
                     iv_edit_politicalll.setVisibility(View.GONE);
                     lineDataiv.setVisibility(View.GONE);
-                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+                    iv_edit_politicalllbus.setVisibility(GONE);
                 } else {
                     iv_edit_politicalll.setVisibility(View.VISIBLE);
-                    lineDataiv.setVisibility(View.VISIBLE);
-                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+                    lineDataiv.setVisibility(GONE);
+                    iv_edit_politicalllbus.setVisibility(GONE);
                 }
 
             } else {
@@ -430,15 +430,15 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                 if (type.equalsIgnoreCase("profile")) {
                     iv_edit_politicalll.setVisibility(View.VISIBLE);
                     lineDataiv.setVisibility(View.GONE);
-                    iv_edit_politicalllbus.setVisibility(View.GONE);
+                    iv_edit_politicalllbus.setVisibility(GONE);
                 } else if (type.equalsIgnoreCase("bus")) {
                     iv_edit_politicalll.setVisibility(View.GONE);
                     lineDataiv.setVisibility(View.GONE);
-                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+                    iv_edit_politicalllbus.setVisibility(GONE);
                 } else {
                     iv_edit_politicalll.setVisibility(View.VISIBLE);
-                    lineDataiv.setVisibility(View.VISIBLE);
-                    iv_edit_politicalllbus.setVisibility(View.VISIBLE);
+                    lineDataiv.setVisibility(GONE);
+                    iv_edit_politicalllbus.setVisibility(GONE);
                 }
             }
         }

@@ -213,7 +213,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Special Frames"
-                    android:textColor="@color/black"
+                    android:textColor="@color/red_500"
                     android:textSize="18dp" />
 
                 <LinearLayout
@@ -304,7 +304,7 @@
 
                 <LinearLayout
                     android:id="@+id/iv_edit_political"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/recyLay"

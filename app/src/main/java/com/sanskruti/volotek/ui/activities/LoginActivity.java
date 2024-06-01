@@ -352,9 +352,19 @@ public class LoginActivity extends AppCompatActivity {
             if (numberEt.getText().toString().length() > 9) {
                 prgDialog.show();
                 if (otpType.equals("phone")) {
-
-                    PhoneAuthOptions options =
-                            PhoneAuthOptions.newBuilder(mAuth)
+                    Log.i("saqlain",91+numberEt.getText().toString());
+                    Constant.getHomeViewModel(this).getLoginStatus(91+numberEt.getText().toString()).observe(this,data->{
+                        if(data != null){
+                            if(data.getIsLogIn() != null && data.getIsLogIn().equals("1")){
+                                Log.i("saqlain",data.getIsLogIn());
+                                universalDialog.showErrorDialog("You're currently logged in on another device. Please log out from that device and then log in again."
+                                        ,"Back");
+                                    universalDialog.show();
+                                    prgDialog.dismiss();
+                                universalDialog.cancelBtn.setVisibility(View.GONE);
+                                universalDialog.setCancelable(false);
+                            }else{
+                                PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
                                     .setPhoneNumber(ccp.getDefaultCountryCodeWithPlus() + numberEt.getText().toString())       // Phone number to verify
                                     .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
                                     .setActivity(this)                 // (optional) Activity for callback binding
@@ -362,6 +372,21 @@ public class LoginActivity extends AppCompatActivity {
                                     .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
                                     .build();
                     PhoneAuthProvider.verifyPhoneNumber(options);
+                            }
+                        }else{
+                            Log.i("saqlain","Error occurred");
+                        }
+                    });
+
+//                    PhoneAuthOptions options =
+//                            PhoneAuthOptions.newBuilder(mAuth)
+//                                    .setPhoneNumber(ccp.getDefaultCountryCodeWithPlus() + numberEt.getText().toString())       // Phone number to verify
+//                                    .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+//                                    .setActivity(this)                 // (optional) Activity for callback binding
+//                                    // If no activity is passed, reCAPTCHA verification can not be used.
+//                                    .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+//                                    .build();
+//                    PhoneAuthProvider.verifyPhoneNumber(options);
 
                 } else {
                     prgDialog.show();
@@ -511,6 +536,13 @@ public class LoginActivity extends AppCompatActivity {
                 preferenceManager.setString(Constant.STATUS, userItem.status);
                 preferenceManager.setString(Constant.LOGIN_TYPE, loginType);
                 preferenceManager.setInt(Constant.USER_BUSINESS_LIMIT, userItem.businessLimit);
+
+                Constant.getHomeViewModel(this).updateLoginStatus(userItem.phone,
+                        "1").observe(this,data->{
+                    if(data!=null){
+                        Log.i("saqlain",data.getIsLogIn());
+                    }
+                });
 
                 Intent intent;
                 if(userItem.userName != null){

@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,7 +53,7 @@ public class HomeFragment extends Fragment {
     StoryAdapter storyAdapter;
     FestivalAdapter festivalAdapter;
     CategoryAdapter categoryAdapter;
-    FeatureAdapterTwo featureAdapter;
+    FeatureAdapterTwo featureAdapter,greetingFeatureAdapter;
     AnimatedCategoryAdapter animatedCategoryAdapter;
     PreferenceManager preferenceManager;
 
@@ -238,6 +239,26 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        greetingFeatureAdapter = new FeatureAdapterTwo(activity,"HOME",getChildFragmentManager(),false);
+        binding.rvGreetingFeature.setAdapter(greetingFeatureAdapter);
+        binding.rvGreetingFeature.setNestedScrollingEnabled(false);
+        binding.rvGreetingFeature.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+                //
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+                //
+            }
+        });
+
         /*binding.swipeRefresh.setOnRefreshListener(() -> {
             binding.swipeRefresh.setRefreshing(true);
             getData();
@@ -283,6 +304,12 @@ public class HomeFragment extends Fragment {
                 binding.shimmerViewContainer.stopShimmer();
 
                 setHomeData(homeItem);
+            }
+        });
+
+        Constant.getHomeViewModel(this).getFeaturedGreeting().observe(getViewLifecycleOwner(),greetingData -> {
+            if(greetingData != null){
+                greetingFeatureAdapter.setFeatureItemList(greetingData);
             }
         });
 

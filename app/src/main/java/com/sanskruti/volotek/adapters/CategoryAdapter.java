@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sanskruti.volotek.AppConfig;
-import com.sanskruti.volotek.databinding.ItemCategoryBinding;
+import com.sanskruti.volotek.databinding.CategoryItemBinding;
 import com.sanskruti.volotek.listener.ClickListener;
 import com.sanskruti.volotek.model.CategoryItem;
 
@@ -35,7 +35,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemCategoryBinding binding = ItemCategoryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        CategoryItemBinding binding = CategoryItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new MyViewHolder(binding);
     }
 
@@ -62,9 +62,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        ItemCategoryBinding binding;
+        CategoryItemBinding binding;
 
-        public MyViewHolder(@NonNull ItemCategoryBinding binding) {
+        public MyViewHolder(@NonNull CategoryItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

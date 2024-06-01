@@ -34,6 +34,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -95,8 +96,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -284,6 +289,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_edit_political_profile_details);
         movableImageView = findViewById(R.id.movableImageView);
         llStickerLl = (LinearLayout)findViewById(R.id.stickerLl);
@@ -730,44 +736,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
     List<ItemPolitical> items = new ArrayList<>();
     UserViewModel userViewModel;
 
-//    public void loadStickerData() {
-//        ApiClient.getApiDataService().getStickerList().enqueue(
-//                new Callback<StickerResponse>() {
-//                    @Override
-//                    public void onResponse(Call<StickerResponse> call, Response<StickerResponse> response) {
-//                        if (response.isSuccessful()) {
-//                            Log.i("saqlain","successFull");
-//                            StickerResponse stickerResponse = response.body();
-//                            if (stickerResponse != null) {
-//                                stickerArrayList = stickerResponse.getData();
-//                                Log.i("saqlain",Integer.toString(stickerArrayList.size()));
-//                                stickerRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-//
-//                                StickerAdapterTwo adapter = new StickerAdapterTwo(getApplicationContext(), stickerArrayList);
-//                                LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-//                                stickerRecyclerView.setLayoutManager(verticalLayoutManager);
-//                                stickerRecyclerView.setAdapter(adapter);
-//                                adapter.setOnItemClickListener(new StickerAdapterTwo.OnItemClickListener() {
-//                                    @Override
-//                                    public void onItemClick(String imageUrl) {
-//                                        Log.i("saqlain", imageUrl);
-//                                        createSticker(context,"2",imageUrl);
-//
-//                                    }
-//                                });
-//
-//
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<StickerResponse> call, Throwable t) {
-//                        Log.i("saqlain",t.toString() + " " + Constant.api_key);
-//                    }
-//                }
-//        );
-//    }
     private void loadStickerData(String categoryType){
         ApiClient.getApiDataService().getStickerData(categoryType).enqueue(
                 new Callback<StickerResponse>() {
@@ -787,7 +755,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                                 adapter.setOnItemClickListener(new StickerAdapterTwo.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(String imageUrl) {
-                                        Log.i("saqlain", imageUrl);
                                         createSticker(context,"2",imageUrl);
 
                                     }
@@ -826,7 +793,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                                 adapter.setOnItemClickListener(new StickerCatAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(String category_name) {
-                                        Log.i("saqlain",category_name);
                                         loadStickerData(category_name);
                                     }
                                 });
@@ -1098,7 +1064,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             ivAddImgLeader11.setVisibility(View.GONE);
 
         }else {
-            ivAddImgLeader1.setVisibility(View.GONE);
+            ivAddImgLeader1.setVisibility(VISIBLE);
             ivAddImgLeader11.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader1, pLeaderImg1);
             GlideDataBinding.bindImage(ivAddImgLeader11, pLeaderImg1);
@@ -1108,7 +1074,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             ivAddImgLeader2.setVisibility(View.GONE);
             ivAddImgLeader22.setVisibility(View.GONE);
         }else {
-            ivAddImgLeader2.setVisibility(View.GONE);
+            ivAddImgLeader2.setVisibility(VISIBLE);
             ivAddImgLeader22.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader2, pLeaderImg2);
             GlideDataBinding.bindImage(ivAddImgLeader22, pLeaderImg2);
@@ -1118,7 +1084,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             ivAddImgLeader3.setVisibility(View.GONE);
             ivAddImgLeader33.setVisibility(View.GONE);
         }else {
-            ivAddImgLeader3.setVisibility(View.GONE);
+            ivAddImgLeader3.setVisibility(VISIBLE);
             ivAddImgLeader33.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader3, pLeaderImg3);
             GlideDataBinding.bindImage(ivAddImgLeader33, pLeaderImg3);
@@ -1128,7 +1094,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             ivAddImgLeader4.setVisibility(View.GONE);
             ivAddImgLeader44.setVisibility(View.GONE);
         }else {
-            ivAddImgLeader4.setVisibility(View.GONE);
+            ivAddImgLeader4.setVisibility(VISIBLE);
             ivAddImgLeader44.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader4, pLeaderImg4);
             GlideDataBinding.bindImage(ivAddImgLeader44, pLeaderImg4);
@@ -1138,7 +1104,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             ivAddImgLeader5.setVisibility(View.GONE);
             ivAddImgLeader55.setVisibility(View.GONE);
         }else {
-            ivAddImgLeader5.setVisibility(View.GONE);
+            ivAddImgLeader5.setVisibility(VISIBLE);
             ivAddImgLeader55.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader5, pLeaderImg5);
             GlideDataBinding.bindImage(ivAddImgLeader55, pLeaderImg5);
@@ -1148,17 +1114,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             ivAddImgLeader6.setVisibility(View.GONE);
             ivAddImgLeader66.setVisibility(View.GONE);
         }else {
-            ivAddImgLeader6.setVisibility(View.GONE);
+            ivAddImgLeader6.setVisibility(VISIBLE);
             ivAddImgLeader66.setVisibility(VISIBLE);
             GlideDataBinding.bindImage(ivAddImgLeader6, pLeaderImg6);
             GlideDataBinding.bindImage(ivAddImgLeader66, pLeaderImg6);
         }
-
-
-
-
-
-
 
     }
     private boolean isMirrored = false;
@@ -2704,17 +2664,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 ivclose.setVisibility(View.GONE);
-                if (watermarkDetails.position != null && watermarkDetails.showWatermark != null) {
-                    if (watermarkDetails.position == 1) {
-                        leftThumbnailImage.setVisibility(View.VISIBLE);
-                    } else if (watermarkDetails.position == 2) {
-                        centerThumbnailImage.setVisibility(View.VISIBLE);
-                    } else if (watermarkDetails.position == 3) {
-                        rightThumbnailImage.setVisibility(View.VISIBLE);
-                    }
-
-                }
-                showDownloadDialog();
+                checkSubscriptionPlansExpireDialog();
             }
         });
 
@@ -3585,7 +3535,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
 
         try {
 
-            Bitmap createBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+            Bitmap createBitmap = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
 
 
             view.draw(new Canvas(createBitmap));
@@ -3742,40 +3692,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         ImageView stickerImageView = new ImageView(context);
         stickerImageView.setId(View.generateViewId()); // Generate a unique ID for each view
         Glide.with(context).load(imageUr).into(stickerImageView);
-//        switch (sticker_type) {
-//            case "1":
-//                stickerImageView.setImageResource(R.drawable.sticker_01);
-//                break;
-//            case "2":
-//                stickerImageView.setImageResource(R.drawable.sticker_02);
-//                break;
-//            case "3":
-//                stickerImageView.setImageResource(R.drawable.sticker_03);
-//                break;
-//            case "4":
-//                stickerImageView.setImageResource(R.drawable.sticker_04);
-//                break;
-//            case "5":
-//                stickerImageView.setImageResource(R.drawable.sticker_05);
-//                break;
-//            case "6":
-//                stickerImageView.setImageResource(R.drawable.sticker_06);
-//                break;
-//            case "7":
-//                stickerImageView.setImageResource(R.drawable.sticker_07);
-//                break;
-//            case "8":
-//                stickerImageView.setImageResource(R.drawable.sticker_08);
-//                break;
-//            case "9":
-//                stickerImageView.setImageResource(R.drawable.sticker_09);
-//                break;
-//            case "10":
-//                stickerImageView.setImageResource(R.drawable.sticker_10);
-//                break;
-//            default:
-//                break;
-//        }
+
 
         // Set layout parameters for the sticker ImageView
         RelativeLayout.LayoutParams stickerParams = new RelativeLayout.LayoutParams(
@@ -3890,6 +3807,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             private float startX, startY;
             private float initialWidth, initialHeight;
             private boolean isResizing = false;
+            private final int MIN_SIZE = 100; // Minimum size in pixels
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -3910,11 +3828,16 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                             float distanceX = currentX - startX;
                             float distanceY = currentY - startY;
 
-                            // Calculate the change in size based on the distance
-                            float newSize = Math.max(initialWidth + distanceX, 0);
+                            // Calculate the new width and height based on the distance
+                            float newWidth = initialWidth + distanceX;
+                            float newHeight = initialHeight + distanceY;
+
+                            // Constrain the new size within the min limit
+                            newWidth = Math.max(MIN_SIZE, newWidth);
+                            newHeight = Math.max(MIN_SIZE, newHeight);
 
                             // Set the new size for the sticker image
-                            stickerImageView.setLayoutParams(new RelativeLayout.LayoutParams((int) newSize, (int) newSize));
+                            stickerImageView.setLayoutParams(new RelativeLayout.LayoutParams((int) newWidth, (int) newHeight));
                         }
                         break;
                     case MotionEvent.ACTION_UP:
@@ -3924,6 +3847,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                 return true;
             }
         });
+
 
         rotateImageView.setOnTouchListener(new View.OnTouchListener() {
             private float previousX, previousY; // Previous touch position
@@ -3966,10 +3890,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                 return true;
             }
         });
-
-
-
-
 
     }
 
@@ -4318,7 +4238,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                 editTextFragment.setOnSubmitListener(new EditTextItemDialogFragment.OnSubmitListener() {
                     @Override
                     public void onSubmit(String userInput) {
-                        Log.i("saqlain",userInput);
                         textView.setText(userInput);
                     }
                 });
@@ -4588,7 +4507,6 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                     public void onClick(DialogInterface dialog, int which) {
                         // Handle the selected color when the OK button is clicked
                         slectedFontColor = colorPickerView.getColor();
-                        Log.i("saqlain", String.valueOf(slectedFontColor));
                         etText.setTextColor(slectedFontColor);
 
                     }
@@ -4643,6 +4561,47 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             startActivity(intent);
         } catch (Exception e) {
             Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkSubscriptionPlansExpireDialog() {
+        String todayDateTime = new SimpleDateFormat(Constant.TODAY_DATE_PATTERN, Locale.getDefault()).format(System.currentTimeMillis());
+        String planEndDate = preferenceManager.getString(Constant.PLAN_END_DATE);
+
+        if (planEndDate != null && !planEndDate.isEmpty()) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(Constant.TODAY_DATE_PATTERN, Locale.getDefault());
+            try {
+                Date todayDate = dateFormat.parse(todayDateTime);
+                Date endDate = dateFormat.parse(planEndDate);
+
+                if (endDate != null && endDate.before(todayDate)) {
+                    // Your plan got expired. Show dialog
+                    universalDialog.showWarningDialog(getString(R.string.upgrade), getString(R.string.your_plan_expired),
+                            getString(R.string.upgrade), true);
+                    universalDialog.show();
+                    universalDialog.okBtn.setOnClickListener(view -> {
+                        universalDialog.cancel();
+                        startActivity(new Intent(this, SubsPlanActivity.class));
+                    });
+
+                    universalDialog.cancelBtn.setOnClickListener(view -> universalDialog.cancel());
+
+                }else{
+                    if (watermarkDetails.position != null && watermarkDetails.showWatermark != null) {
+                        if (watermarkDetails.position == 1) {
+                            leftThumbnailImage.setVisibility(View.VISIBLE);
+                        } else if (watermarkDetails.position == 2) {
+                            centerThumbnailImage.setVisibility(View.VISIBLE);
+                        } else if (watermarkDetails.position == 3) {
+                            rightThumbnailImage.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                    showDownloadDialog();
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 

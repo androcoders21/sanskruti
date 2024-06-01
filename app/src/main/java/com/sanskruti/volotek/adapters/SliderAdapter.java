@@ -56,12 +56,12 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
 
                     context.startActivity(new Intent(Intent.ACTION_VIEW).setDataAndType(Uri.parse(sliderItem.getSliderUrl()), "text/plain").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
-                } else if (sliderItem.getSliderType().equals(context.getString(R.string.subscription))) {
+                } else if (sliderItem.getSliderType().equals(Constant.SUBS_PLAN)) {
                     MyUtils.openPlanActivity(context);
-                } else if (sliderItem.getSliderType().equals(Constant.CATEGORY)) {
+                } else if (sliderItem.getSliderType().equals(Constant.CATEGORY) || sliderItem.getSliderType().equals(Constant.FESTIVAL)) {
 
                     Intent intent = new Intent(context, PreviewActivity.class);
-                    intent.putExtra(Constant.INTENT_TYPE, Constant.CATEGORY);
+                    intent.putExtra(Constant.INTENT_TYPE, sliderItem.getSliderType());
                     intent.putExtra(Constant.INTENT_FEST_ID, sliderItem.getBannerValue());
                     intent.putExtra(Constant.INTENT_FEST_NAME, sliderItem.getCategory_name());
                     intent.putExtra(Constant.INTENT_POST_IMAGE, "");

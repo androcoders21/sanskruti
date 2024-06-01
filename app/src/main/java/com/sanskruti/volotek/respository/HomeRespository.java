@@ -28,6 +28,7 @@ import com.sanskruti.volotek.model.SliderItem;
 import com.sanskruti.volotek.model.SubsPlanItem;
 import com.sanskruti.volotek.model.WatermarkResponse;
 import com.sanskruti.volotek.model.politicalProfileModel;
+import com.sanskruti.volotek.model.video.LoginStatus;
 import com.sanskruti.volotek.model.video.TokenResponse;
 import com.sanskruti.volotek.utils.Constant;
 
@@ -473,6 +474,60 @@ public class HomeRespository {
 
             @Override
             public void onFailure(Call<TokenResponse> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<LoginStatus> getLoginStatus(String userId){
+        MutableLiveData<LoginStatus> data = new MutableLiveData<>();
+
+        RequestBody userid = RequestBody.create(MediaType.parse(Constant.multipart), userId);
+        apiService.getLoginStatus(userid).enqueue(new Callback<LoginStatus>() {
+            @Override
+            public void onResponse(Call<LoginStatus> call, Response<LoginStatus> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<LoginStatus> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<LoginStatus> updateLoginStatus(String userId, String isLogin){
+        MutableLiveData<LoginStatus> data = new MutableLiveData<>();
+
+        RequestBody userid = RequestBody.create(MediaType.parse(Constant.multipart), userId);
+        RequestBody islogin = RequestBody.create(MediaType.parse(Constant.multipart), isLogin);
+        apiService.updateLoginStatus(userid,islogin).enqueue(new Callback<LoginStatus>() {
+            @Override
+            public void onResponse(Call<LoginStatus> call, Response<LoginStatus> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<LoginStatus> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<List<FeatureItem>> getFeaturedGreeting() {
+        MutableLiveData<List<FeatureItem>> data = new MutableLiveData<>();
+        apiService.getFeaturedGreeting().enqueue(new Callback<List<FeatureItem>>() {
+            @Override
+            public void onResponse(Call<List<FeatureItem>> call, Response<List<FeatureItem>> response) {
+
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<FeatureItem>> call, Throwable t) {
                 data.setValue(null);
             }
         });

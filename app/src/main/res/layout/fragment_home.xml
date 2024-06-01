@@ -364,6 +364,18 @@
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
                         tools:listitem="@layout/item_feature" />
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_greeting_feature"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="@dimen/_4sdp"
+                        android:orientation="vertical"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
+                        tools:listitem="@layout/item_feature" />
+
                     <LinearLayout
                         android:id="@+id/linearLayout7"
                         android:layout_width="match_parent"
@@ -433,7 +445,8 @@
                             android:layout_height="match_parent"
                             android:layout_marginVertical="@dimen/_5sdp"
                             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                            app:spanCount="4" />
+                            app:spanCount="3"
+                            />
                     </LinearLayout>
 
 

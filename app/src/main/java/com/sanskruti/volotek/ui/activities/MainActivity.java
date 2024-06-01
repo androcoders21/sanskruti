@@ -233,6 +233,7 @@ public class MainActivity extends BaseActivity {
         ivPremium = (ImageView)findViewById(R.id.ivPremium);
         favorite = (ImageView)findViewById(R.id.favorite);
         addBusiness = (LinearLayout)findViewById(R.id.add_business);
+        searchBar = (LinearLayout)findViewById(R.id.search_bar);
         toolbar = (RelativeLayout)findViewById(R.id.toolbar);
         activity = this;
 
@@ -266,7 +267,7 @@ public class MainActivity extends BaseActivity {
     TextView activeBusinessName,toolName;
     CircularImageView circularImageView;
     BottomNavigationView bottomNavigationView;
-    LinearLayout llBusiness, addBusiness;
+    LinearLayout llBusiness, addBusiness, searchBar;
     ImageView ivPremium, favorite, youtubeIcon;
     private void setDefault(BusinessItem businessItem) {
         activeBusinessName.setText("Hi "+Constant.getUserItem(this).userName.toString());
@@ -416,29 +417,10 @@ public class MainActivity extends BaseActivity {
     private void updatePushToken(){
         String pushToken = OneSignal.getDeviceState().getPushToken();
         if (pushToken != null) {
-            Log.i("saqlain",Constant.USER_ID + " " + OneSignal.getDeviceState().getPushToken() + " " + "android");
-//            ApiClient.getApiDataService().updateToken(RequestBody.create(MediaType.parse(Constant.multipart),Constant.USER_ID)
-//                            ,RequestBody.create(MediaType.parse(Constant.multipart),"android")
-//                            ,RequestBody.create(MediaType.parse(Constant.multipart), OneSignal.getDeviceState().getPushToken()))
-//                    .enqueue(
-//                            new Callback<TokenResponse>() {
-//                                @Override
-//                                public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
-//                                    if(response.isSuccessful()){
-//                                        Log.i("saqlain",response.body().getMessage());
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onFailure(Call<TokenResponse> call, Throwable t) {
-//
-//                                }
-//                            }
-//                    );
-            Constant.getHomeViewModel(this).updateToken(Constant.USER_ID,
-                    OneSignal.getDeviceState().getPushToken(),"android").observe(this,data->{
+            Constant.getHomeViewModel(this).updateToken(preferenceManager.getString(Constant.USER_ID),"android",
+                    OneSignal.getDeviceState().getPushToken()).observe(this,data->{
                         if(data != null){
-                            Log.i("saqlain",data.message);
+                            Log.i("saqlain",data.getMessage());
                         }
             });
         } else {
@@ -538,6 +520,11 @@ public class MainActivity extends BaseActivity {
             fragment.show(getSupportFragmentManager(), "");*/
 
 
+        });
+
+        searchBar.setOnClickListener(v -> {
+            Intent intent = new Intent(this, GlobalSearch.class);
+            startActivity(intent);
         });
 
         // Make Directory & Copy Assets Fonts to Directory.

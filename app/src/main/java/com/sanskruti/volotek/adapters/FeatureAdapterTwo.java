@@ -105,14 +105,16 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
         intent.putExtra(Constant.INTENT_VIDEO, featureItemList.get(position).video);
         intent.putExtra("From", From);
         context.startActivity(intent);*/
-        Log.i("checkAdapterStatus","check details in this type = "+featureItemList.get(position).type);
+        Log.i("saqlain","check details in this type = "+featureItemList.get(position).type);
 
 //        Intent intent = new Intent(context, ThumbnailActivity.class);
 //        intent.putExtra("backgroundImage", data.image_url);
 //        intent.putExtra("type", "images");
 //        intent.putExtra("sizeposition", "1:1");
 //        context.startActivity(intent);
-
+        if (featureItemList.get(position).type != null && featureItemList.get(position).type.equals("greeting")) {
+            greeting = true;
+        }
 
 
         // Or using static method

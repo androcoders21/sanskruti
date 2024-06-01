@@ -33,6 +33,7 @@ import com.sanskruti.volotek.model.WatermarkResponse;
 import com.sanskruti.volotek.model.WhatsappOtpResponse;
 import com.sanskruti.volotek.model.politicalProfileModel;
 import com.sanskruti.volotek.model.video.DashboardTemplateResponseMain;
+import com.sanskruti.volotek.model.video.LoginStatus;
 import com.sanskruti.volotek.model.video.TemplateResponse;
 import com.sanskruti.volotek.model.video.TokenResponse;
 
@@ -75,6 +76,21 @@ public interface ApiService {
             @Part("user_id") RequestBody user_id,
             @Part("device_type") RequestBody device_type,
             @Part("device_token") RequestBody device_token);
+
+    @Multipart
+    @POST("singleDeviceLoginStatus")
+    Call<LoginStatus> getLoginStatus(
+            @Part("user_mobile_email") RequestBody user_id
+    );
+
+    @Multipart
+    @POST("updateDeviceLoginStatus")
+    Call<LoginStatus> updateLoginStatus(
+            @Part("user_mobile_email") RequestBody user_id,
+            @Part("is_logged_in") RequestBody is_logged_in
+    );
+
+
 
     //*** login with google****
 
@@ -284,6 +300,8 @@ public interface ApiService {
     @GET("greetingData")
     Call<List<FeatureItem>> getGreetingData(@Query("catId") String categoryID,@Query("page")Integer page);
 
+    @GET("previewGreetingData")
+    Call<List<FeatureItem>> getFeaturedGreeting();
 
     //*** Create Transaction after succesfull purchase****
 

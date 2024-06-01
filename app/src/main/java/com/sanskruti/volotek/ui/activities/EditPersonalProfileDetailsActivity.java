@@ -43,6 +43,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -89,8 +90,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import retrofit2.Call;
@@ -103,7 +108,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
     FontAdapter adapter;
     LinearLayout llfontll, llfontd1ll, llfontd2ll, llfontMobilell, fm ;
 
-    LinearLayout lay_profile_photo_ll, lay_party_photo_ll, lay_name_ll, lay_Designation1_ll, lay_Designation2_ll, lay_Mobile_ll, lay_SocialMedia_ll, lay_LeadersPhoto_ll, lay_frames_ll, lay_sticker_ll, lay_uploaded_photo;
+    LinearLayout lay_profile_photo_ll, lay_party_photo_ll, lay_name_ll, lay_Designation1_ll, lay_Designation2_ll, lay_Mobile_ll, lay_SocialMedia_ll, lay_LeadersPhoto_ll, lay_frames_ll, lay_sticker_ll, lay_uploaded_photo,photoViewll;
 
     LinearLayout profilePhotoShowLLll, partyPhotoShowLLll, nameShowLLll, designation1ShowLLll, designation2ShowLLll, mobileShowLLll, socialMediaShowLLll;
 
@@ -268,6 +273,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_edit_personal_profile_details);
         movableImageView = findViewById(R.id.movableImageView);
         llStickerLl = (LinearLayout)findViewById(R.id.stickerLl);
@@ -362,6 +368,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         });
 
         photoView = findViewById(R.id.photoView);
+        photoViewll = findViewById(R.id.photoViewll);
         photoViewFlip = findViewById(R.id.photoViewFlip);
         add_photoLL = (LinearLayout) findViewById(R.id.add_photoLL);
         add_textLL = (LinearLayout) findViewById(R.id.add_textLL);
@@ -398,7 +405,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             }
         });
 
-        photoView.setOnTouchListener(new View.OnTouchListener() {
+        photoViewll.setOnTouchListener(new View.OnTouchListener() {
             private static final int INVALID_POINTER_ID = -1;
             private static final long DOUBLE_TAP_TIME_DELTA = 300;
 
@@ -2115,16 +2122,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ivclose.setVisibility(View.GONE);
-                if (watermarkDetails.position != null && watermarkDetails.showWatermark != null) {
-                    if (watermarkDetails.position == 1) {
-                        leftThumbnailImage.setVisibility(View.VISIBLE);
-                    } else if (watermarkDetails.position == 2) {
-                        centerThumbnailImage.setVisibility(View.VISIBLE);
-                    } else if (watermarkDetails.position == 3) {
-                        rightThumbnailImage.setVisibility(View.VISIBLE);
-                    }
-                }
-                showDownloadDialog();
+                checkSubscriptionPlansExpireDialog();
             }
         });
 
@@ -3797,6 +3795,47 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 
         // Show the AlertDialog
         colorPickerDialog.show();
+    }
+
+    private void checkSubscriptionPlansExpireDialog() {
+        String todayDateTime = new SimpleDateFormat(Constant.TODAY_DATE_PATTERN, Locale.getDefault()).format(System.currentTimeMillis());
+        String planEndDate = preferenceManager.getString(Constant.PLAN_END_DATE);
+
+        if (planEndDate != null && !planEndDate.isEmpty()) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(Constant.TODAY_DATE_PATTERN, Locale.getDefault());
+            try {
+                Date todayDate = dateFormat.parse(todayDateTime);
+                Date endDate = dateFormat.parse(planEndDate);
+
+                if (endDate != null && endDate.before(todayDate)) {
+                    // Your plan got expired. Show dialog
+                    universalDialog.showWarningDialog(getString(R.string.upgrade), getString(R.string.your_plan_expired),
+                            getString(R.string.upgrade), true);
+                    universalDialog.show();
+                    universalDialog.okBtn.setOnClickListener(view -> {
+                        universalDialog.cancel();
+                        startActivity(new Intent(this, SubsPlanActivity.class));
+                    });
+
+                    universalDialog.cancelBtn.setOnClickListener(view -> universalDialog.cancel());
+
+                }else{
+                    if (watermarkDetails.position != null && watermarkDetails.showWatermark != null) {
+                        if (watermarkDetails.position == 1) {
+                            leftThumbnailImage.setVisibility(View.VISIBLE);
+                        } else if (watermarkDetails.position == 2) {
+                            centerThumbnailImage.setVisibility(View.VISIBLE);
+                        } else if (watermarkDetails.position == 3) {
+                            rightThumbnailImage.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                    showDownloadDialog();
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

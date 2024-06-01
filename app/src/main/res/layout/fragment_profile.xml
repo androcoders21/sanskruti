@@ -202,12 +202,14 @@
                         android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
+                        android:visibility="gone"
                         android:background="@color/edit_bg_color" />
                     <RelativeLayout
                         android:id="@+id/iv_bussi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingVertical="@dimen/_5sdp"
+                        android:visibility="visible"
                         android:layout_marginHorizontal="@dimen/_8sdp"
                         android:layout_marginTop="@dimen/_8sdp">
 

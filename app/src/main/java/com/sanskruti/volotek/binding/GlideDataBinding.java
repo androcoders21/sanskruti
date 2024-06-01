@@ -23,6 +23,9 @@ import com.sanskruti.volotek.utils.Util;
 import com.bumptech.glide.Glide;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 public class GlideDataBinding {
 
     @BindingAdapter("imageURL")

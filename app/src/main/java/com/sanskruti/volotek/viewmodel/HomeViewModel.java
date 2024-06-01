@@ -22,6 +22,7 @@ import com.sanskruti.volotek.model.SliderItem;
 import com.sanskruti.volotek.model.SubsPlanItem;
 import com.sanskruti.volotek.model.WatermarkResponse;
 import com.sanskruti.volotek.model.politicalProfileModel;
+import com.sanskruti.volotek.model.video.LoginStatus;
 import com.sanskruti.volotek.model.video.TokenResponse;
 import com.sanskruti.volotek.respository.HomeRespository;
 
@@ -147,5 +148,14 @@ public class HomeViewModel extends ViewModel {
         return respository.updateToken(userId,deviceType,deviceToken);
     }
 
+    public LiveData<LoginStatus> getLoginStatus(String userId){
+        return respository.getLoginStatus(userId);
+    }
 
+    public LiveData<LoginStatus> updateLoginStatus(String userId,String isLogin){
+        return respository.updateLoginStatus(userId,isLogin);
+    }
+    public LiveData<List<FeatureItem>> getFeaturedGreeting() {
+        return respository.getFeaturedGreeting();
+    }
 }

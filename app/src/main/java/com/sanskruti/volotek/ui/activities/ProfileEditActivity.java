@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -229,9 +230,13 @@ ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityR
 
 
     private void setUpUi() {
+        Boolean isFromLogin = getIntent().getBooleanExtra("isNameNull",false);
 
         binding.toolbar.toolName.setText(getResources().getString(R.string.edit_profile));
-
+        if(isFromLogin){
+            binding.toolbar.toolName.setPadding(40,0,0,0);
+         binding.toolbar.back.setVisibility(View.GONE);
+        }
         binding.toolbar.back.setOnClickListener(v -> onBackPressed());
 
         binding.btnSave.setOnClickListener(v -> {
@@ -276,7 +281,7 @@ ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityR
 
                                     }
                                 });
-                                Boolean isFromLogin = getIntent().getBooleanExtra("isNameNull",false);
+
                                 if(isFromLogin){
                                     Intent intent = new Intent(this,MainActivity.class);
                                     startActivity(intent);

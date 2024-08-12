@@ -29,6 +29,8 @@ public class ApiClientSecond {
 
 
 
+
+
     public static ApiService getApiDataService() {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -44,7 +46,7 @@ public class ApiClientSecond {
 
 
         return new Retrofit.Builder()
-                .baseUrl("http://51.20.89.9:3000/")
+                .baseUrl("https://admin.sanskrutidesign.com/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
                 .create(ApiService.class);

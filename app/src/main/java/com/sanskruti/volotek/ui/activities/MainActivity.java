@@ -1,5 +1,6 @@
 package com.sanskruti.volotek.ui.activities;
 
+import static com.sanskruti.volotek.utils.Constant.INTENT_TYPE;
 import static com.sanskruti.volotek.utils.Constant.OFFER_IMAGE;
 
 import android.app.Activity;
@@ -45,6 +46,7 @@ import com.sanskruti.volotek.custom.poster.activity.BaseActivity;
 import com.sanskruti.volotek.custom.poster.model.ServerData;
 import com.sanskruti.volotek.model.AppUpdate;
 import com.sanskruti.volotek.model.BusinessItem;
+import com.sanskruti.volotek.model.UserItem;
 import com.sanskruti.volotek.model.video.TokenResponse;
 import com.sanskruti.volotek.ui.dialog.UniversalDialog;
 import com.sanskruti.volotek.ui.fragments.MyBusinessFragmentBottomSheet;
@@ -85,6 +87,7 @@ public class MainActivity extends BaseActivity {
     InterstitialsAdsManager manager;
     Activity activity;
     MyBusinessFragmentBottomSheet fragment;
+    UserItem userItem;
 
 
 
@@ -256,12 +259,18 @@ public class MainActivity extends BaseActivity {
             preferenceManager.setBoolean(Constant.NOTIFICATION_ENABLED, true);
             preferenceManager.setBoolean(Constant.NOTIFICATION_FIRST, true);
         }
+        userItem = Constant.getUserItem(this);
+
+        if (userItem != null) {
+            activeBusinessName.setText(userItem.getUserName());
+        }
 
         checkPermission();
 
         setUiViews();
         loadAppData();
         updatePushToken();
+        getReferralCode();
     }
 
     TextView activeBusinessName,toolName;
@@ -427,6 +436,21 @@ public class MainActivity extends BaseActivity {
            Log.i("saqlain","Token Not Available");
         }
     }
+
+    private void getReferralCode(){
+            Constant.getHomeViewModel(this).checkReferralCode(preferenceManager.getString(Constant.USER_ID))
+                    .observe(this,data->{
+                if(data != null){
+                    Log.i("saqlain",data.getReferralCode() + " || " + data.getUserType() + " || " + data );
+                    if(data.getReferralCode() != null){
+                        preferenceManager.setString(Constant.USER_REFERRAL,data.getReferralCode());
+                    }
+                    if(data.getUserType() != null){
+                        preferenceManager.setString(Constant.USER_TYPE,data.getUserType());
+                    }
+                }
+            });
+    }
     private void setUiViews() {
         NavController navController = Navigation.findNavController(this, R.id.fl_main);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
@@ -462,7 +486,9 @@ public class MainActivity extends BaseActivity {
 
                    /* navController.navigate(R.id.allSavedDataFragment);
                     topBar(R.string.my_creation, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE);*/
-                    startActivity(new Intent(activity, CategoryActivity.class));
+                    Intent intent = new Intent(activity, CategoryActivity.class);
+                    intent.putExtra(INTENT_TYPE,"category");
+                    startActivity(intent);
 
 
                     return true;
@@ -493,17 +519,17 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
 
                 // Intent to open the YouTube app
-//                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:@sanskrutidesign1450?si=IS0Q6Il-IMnWEQUu"));
-//
-//                Intent webIntent = new Intent(Intent.ACTION_VIEW,
-//                        Uri.parse("http://www.youtube.com/@sanskrutidesign1450?si=IS0Q6Il-IMnWEQUu"));
-//
-//                try {
-//                    startActivity(appIntent);
-//                } catch (ActivityNotFoundException ex) {
-//                    startActivity(webIntent);
-//                }
-                updatePushToken();
+                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:@sanskrutidesign1450?si=IS0Q6Il-IMnWEQUu"));
+
+                Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://www.youtube.com/@sanskrutidesign1450?si=IS0Q6Il-IMnWEQUu"));
+
+                try {
+                    startActivity(appIntent);
+                } catch (ActivityNotFoundException ex) {
+                    startActivity(webIntent);
+                }
+
             }
         });
 

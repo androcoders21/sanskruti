@@ -355,7 +355,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.i("saqlain",91+numberEt.getText().toString());
                     Constant.getHomeViewModel(this).getLoginStatus(91+numberEt.getText().toString()).observe(this,data->{
                         if(data != null){
-                            if(data.getIsLogIn() != null && data.getIsLogIn().equals("1")){
+                            if(data.getIsLogIn() != null && data.getIsLogIn().equals("0")){
                                 Log.i("saqlain",data.getIsLogIn());
                                 universalDialog.showErrorDialog("You're currently logged in on another device. Please log out from that device and then log in again."
                                         ,"Back");
@@ -538,7 +538,7 @@ public class LoginActivity extends AppCompatActivity {
                 preferenceManager.setInt(Constant.USER_BUSINESS_LIMIT, userItem.businessLimit);
 
                 Constant.getHomeViewModel(this).updateLoginStatus(userItem.phone,
-                        "1").observe(this,data->{
+                        "0").observe(this,data->{
                     if(data!=null){
                         Log.i("saqlain",data.getIsLogIn());
                     }

@@ -56,7 +56,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:text="Name"
-                    android:fontFamily="@font/khand"
+                    android:fontFamily="@font/khand_bold"
                     android:textSize="@dimen/_20sdp" />
 
                 <TextView

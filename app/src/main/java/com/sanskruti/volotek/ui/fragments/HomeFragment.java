@@ -4,6 +4,7 @@ import static android.os.Looper.getMainLooper;
 import static com.sanskruti.volotek.MyApplication.context;
 import static com.sanskruti.volotek.utils.Constant.CATEGORY;
 import static com.sanskruti.volotek.utils.Constant.FESTIVAL;
+import static com.sanskruti.volotek.utils.Constant.INTENT_TYPE;
 import static com.sanskruti.volotek.utils.Constant.SUBS_PLAN;
 
 import android.app.Activity;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -52,7 +54,7 @@ public class HomeFragment extends Fragment {
     Activity activity;
     StoryAdapter storyAdapter;
     FestivalAdapter festivalAdapter;
-    CategoryAdapter categoryAdapter;
+    CategoryAdapter categoryAdapter, greetingAdapter,trendingAdapter;
     FeatureAdapterTwo featureAdapter,greetingFeatureAdapter;
     AnimatedCategoryAdapter animatedCategoryAdapter;
     PreferenceManager preferenceManager;
@@ -169,6 +171,9 @@ public class HomeFragment extends Fragment {
             intent.putExtra(Constant.INTENT_VIDEO, item.video);
             startActivity(intent);
         }, true);
+        binding.rvCategory.setLayoutManager(new LinearLayoutManager(activity.getApplicationContext()));
+        LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        binding.rvCategory.setLayoutManager(verticalLayoutManager);
         binding.rvCategory.setAdapter(categoryAdapter);
         binding.rvCategory.setNestedScrollingEnabled(false);
         binding.rvCategory.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
@@ -218,11 +223,43 @@ public class HomeFragment extends Fragment {
             }
         });
 
+// For Category feature posts
+//        featureAdapter = new FeatureAdapterTwo(activity, "HOME",getChildFragmentManager(),false);
+//        binding.rvHomeFeature.setAdapter(featureAdapter);
+//        binding.rvHomeFeature.setNestedScrollingEnabled(false);
+//        binding.rvHomeFeature.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+//            @Override
+//            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+//                //
+//            }
+//
+//            @Override
+//            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+//                //
+//            }
+//        });
 
-        featureAdapter = new FeatureAdapterTwo(activity, "HOME",getChildFragmentManager(),false);
-        binding.rvHomeFeature.setAdapter(featureAdapter);
-        binding.rvHomeFeature.setNestedScrollingEnabled(false);
-        binding.rvHomeFeature.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+        greetingAdapter = new CategoryAdapter(getContext(), item -> {
+            Intent intent = new Intent(getActivity(), PreviewActivity.class);
+            intent.putExtra(Constant.INTENT_TYPE, "greeting");
+            intent.putExtra(Constant.INTENT_FEST_ID, item.id);
+            intent.putExtra(Constant.INTENT_FEST_NAME, item.name);
+
+            intent.putExtra(Constant.INTENT_POST_IMAGE, "");
+            intent.putExtra(Constant.INTENT_VIDEO, item.video);
+            startActivity(intent);
+        }, true);
+        binding.rvGreeting.setLayoutManager(new LinearLayoutManager(activity.getApplicationContext()));
+        LinearLayoutManager verticalLayoutManager2 = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        binding.rvGreeting.setLayoutManager(verticalLayoutManager2);
+        binding.rvGreeting.setAdapter(greetingAdapter);
+        binding.rvGreeting.setNestedScrollingEnabled(false);
+        binding.rvGreeting.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
                 return false;
@@ -230,19 +267,34 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-                //
+                // ontouch
             }
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-                //
+
+
+                //onRequest...
             }
         });
 
-        greetingFeatureAdapter = new FeatureAdapterTwo(activity,"HOME",getChildFragmentManager(),false);
-        binding.rvGreetingFeature.setAdapter(greetingFeatureAdapter);
-        binding.rvGreetingFeature.setNestedScrollingEnabled(false);
-        binding.rvGreetingFeature.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+//        Trending
+        trendingAdapter = new CategoryAdapter(getContext(), item -> {
+            Intent intent = new Intent(getActivity(), PreviewActivity.class);
+            intent.putExtra(Constant.INTENT_TYPE, "trending");
+            intent.putExtra(Constant.INTENT_FEST_ID, item.id);
+            intent.putExtra(Constant.INTENT_FEST_NAME, item.name);
+
+            intent.putExtra(Constant.INTENT_POST_IMAGE, "");
+            intent.putExtra(Constant.INTENT_VIDEO, item.video);
+            startActivity(intent);
+        }, true);
+        binding.rvTrending.setLayoutManager(new LinearLayoutManager(activity.getApplicationContext()));
+        LinearLayoutManager verticalLayoutManager3 = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        binding.rvTrending.setLayoutManager(verticalLayoutManager3);
+        binding.rvTrending.setAdapter(trendingAdapter);
+        binding.rvTrending.setNestedScrollingEnabled(false);
+        binding.rvTrending.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
                 return false;
@@ -250,19 +302,16 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-                //
+                // ontouch
             }
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-                //
+
+
+                //onRequest...
             }
         });
-
-        /*binding.swipeRefresh.setOnRefreshListener(() -> {
-            binding.swipeRefresh.setRefreshing(true);
-            getData();
-        });*/
 
 
         binding.fabWhatsApp.setOnClickListener(new View.OnClickListener() {
@@ -276,9 +325,23 @@ public class HomeFragment extends Fragment {
 
         binding.txtViewFestival.setOnClickListener(v -> interstitialsAdsManager.showInterstitialAd(() -> getContext().startActivity(new Intent(getActivity(), FestivalActivity.class))));
 
-        binding.txtViewCategory.setOnClickListener(v -> interstitialsAdsManager.showInterstitialAd(() -> getContext().startActivity(new Intent(getActivity(), CategoryActivity.class))));
+        binding.txtViewCategory.setOnClickListener(v -> interstitialsAdsManager.showInterstitialAd(() -> {
+            Intent intent = new Intent(getActivity(), CategoryActivity.class);
+            intent.putExtra(INTENT_TYPE,"category");
+            getContext().startActivity(intent);
+        }));
 
         binding.txtViewAnimated.setOnClickListener(v -> interstitialsAdsManager.showInterstitialAd(() -> getContext().startActivity(new Intent(getActivity(), AnimatedVideoActivity.class))));
+        binding.txtViewGreeting.setOnClickListener(v -> interstitialsAdsManager.showInterstitialAd(() -> {
+            Intent intent = new Intent(getActivity(), CategoryActivity.class);
+            intent.putExtra(INTENT_TYPE,"greeting");
+            getContext().startActivity(intent);
+        }));
+        binding.txtViewTrending.setOnClickListener(v -> interstitialsAdsManager.showInterstitialAd(() -> {
+            Intent intent = new Intent(getActivity(), CategoryActivity.class);
+            intent.putExtra(INTENT_TYPE,"trending");
+            getContext().startActivity(intent);
+        }));
 
     }
 
@@ -309,10 +372,17 @@ public class HomeFragment extends Fragment {
 
         Constant.getHomeViewModel(this).getFeaturedGreeting().observe(getViewLifecycleOwner(),greetingData -> {
             if(greetingData != null){
-                greetingFeatureAdapter.setFeatureItemList(greetingData);
+//                greetingFeatureAdapter.setFeatureItemList(greetingData);
+                greetingAdapter.setCategories(greetingData);
             }
         });
 
+        Constant.getHomeViewModel(this).getTrending().observe(getViewLifecycleOwner(),trendingData -> {
+            if(trendingData != null){
+//                greetingFeatureAdapter.setFeatureItemList(greetingData);
+                trendingAdapter.setCategories(trendingData);
+            }
+        });
 
     }
 
@@ -332,7 +402,7 @@ public class HomeFragment extends Fragment {
         }
 
         if (data.featureItemList != null) {
-            featureAdapter.setFeatureItemList(data.featureItemList);
+//            featureAdapter.setFeatureItemList(data.featureItemList);
         }
 
         if (data.animatedCategoryList != null) {

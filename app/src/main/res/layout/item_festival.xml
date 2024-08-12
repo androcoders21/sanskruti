@@ -51,7 +51,7 @@
                     android:maxLines="1"
                     android:paddingHorizontal="@dimen/_4sdp"
                     android:paddingVertical="@dimen/_2sdp"
-                    android:text="@{festivalData.date}"
+                    app:formattedDate="@{festivalData.date}"
                     android:textColor="@color/al_white"
                     app:fonts='@{"bold"}'
                     app:layout_constraintEnd_toEndOf="parent"

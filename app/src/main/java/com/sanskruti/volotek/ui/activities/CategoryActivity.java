@@ -1,9 +1,11 @@
 package com.sanskruti.volotek.ui.activities;
 
 import static com.sanskruti.volotek.utils.Constant.CATEGORY;
+import static com.sanskruti.volotek.utils.Constant.GREETING;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,8 @@ public class CategoryActivity extends AppCompatActivity implements ClickListener
     CategoryAdapter categoryAdapter;
     PreferenceManager preferenceManager;
 
+    String imageType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,12 @@ public class CategoryActivity extends AppCompatActivity implements ClickListener
         preferenceManager = new PreferenceManager(this);
         new AdsUtils(this).showBannerAds(this);
         setUiViews();
-        getData();
+        if (getIntent().getExtras() != null) {
+            imageType = getIntent().getStringExtra(Constant.INTENT_TYPE);
+            Log.i("saqlain",imageType);
+            getData();
+        }
+
     }
 
     private void setUiViews() {
@@ -47,18 +56,34 @@ public class CategoryActivity extends AppCompatActivity implements ClickListener
     }
 
     private void getData() {
+if(imageType.equals(CATEGORY)) {
+    binding.toolbar.toolName.setText(getResources().getString(R.string.menu_category));
+    Constant.getHomeViewModel(this).getCategories("categories").observe(this, categoryItems -> {
+        if (categoryItems != null) {
+            categoryAdapter.setCategories(categoryItems);
+            binding.animationView.setVisibility(View.GONE);
+        } else {
+            binding.animationView.setVisibility(View.VISIBLE);
+        }
 
-        Constant.getHomeViewModel(this).getCategories("categories").observe(this, categoryItems -> {
-            binding.swipeRefresh.setRefreshing(false);
-            if (categoryItems != null) {
-                categoryAdapter.setCategories(categoryItems);
-                binding.animationView.setVisibility(View.GONE);
-            } else {
-                binding.animationView.setVisibility(View.VISIBLE);
-            }
-
-        });
-
+    });
+    }else if(imageType.equals(GREETING)){
+    binding.toolbar.toolName.setText("Greeting");
+    Constant.getHomeViewModel(this).getFeaturedGreeting().observe(this,greetingData -> {
+        if(greetingData != null){
+//                greetingFeatureAdapter.setFeatureItemList(greetingData);
+            categoryAdapter.setCategories(greetingData);
+        }
+    });
+}else if(imageType.equals("trending")){
+    binding.toolbar.toolName.setText("Trending");
+    Constant.getHomeViewModel(this).getTrending().observe(this,trendingData -> {
+        if(trendingData != null){
+//                greetingFeatureAdapter.setFeatureItemList(greetingData);
+            categoryAdapter.setCategories(trendingData);
+        }
+    });
+}
 
     }
 
@@ -66,7 +91,7 @@ public class CategoryActivity extends AppCompatActivity implements ClickListener
     public void onClick(CategoryItem data) {
 
         Intent intent = new Intent(this, PreviewActivity.class);
-        intent.putExtra(Constant.INTENT_TYPE, CATEGORY);
+        intent.putExtra(Constant.INTENT_TYPE, imageType);
         intent.putExtra(Constant.INTENT_FEST_ID, data.id);
         intent.putExtra(Constant.INTENT_FEST_NAME, data.name);
         intent.putExtra(Constant.INTENT_POST_IMAGE, "");

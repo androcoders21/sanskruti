@@ -25,6 +25,7 @@ import com.sanskruti.volotek.ui.activities.CustomSplashActivity;
 import com.sanskruti.volotek.ui.activities.PoliticalProfileDetailsEditActivity;
 import com.sanskruti.volotek.ui.activities.PrivacyActivity;
 import com.sanskruti.volotek.ui.activities.ProfileEditActivity;
+import com.sanskruti.volotek.ui.activities.ReferralActivity;
 import com.sanskruti.volotek.ui.activities.ServicesActivity;
 import com.sanskruti.volotek.ui.activities.SettingActivity;
 import com.sanskruti.volotek.ui.activities.SubsPlanActivity;
@@ -81,7 +82,7 @@ public class ProfileFragment extends Fragment {
              /*   Intent intent = new Intent(context, AddBusinessActivity.class);
                 intent.putExtra("Action", "Insert");
                 startActivity(intent);*/
-                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"bus",false,"");
+                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"bus",false,"","");
 
                 // Or using static method
                 // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
@@ -106,7 +107,10 @@ public class ProfileFragment extends Fragment {
 
     private void setUpUi() {
 
-
+        if(preferenceManager.getString(Constant.USER_TYPE).equals("party_worker")){
+            binding.ivEditPolitical.setVisibility(View.GONE);
+            binding.politicalLine.setVisibility(View.GONE);
+        }
         if (!preferenceManager.getBoolean(Constant.IS_SUBSCRIBE)) {
             binding.btnSubsUpgrade.setVisibility(View.VISIBLE);
         } else {
@@ -127,7 +131,7 @@ public class ProfileFragment extends Fragment {
         binding.ivEditPolitical.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"profile",false,"");
+                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"profile",false,"","");
 
                 // Or using static method
                 // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
@@ -138,7 +142,7 @@ public class ProfileFragment extends Fragment {
         binding.ivEditPolitical.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"profile",false,"");
+                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"profile",false,"","");
 
                 // Or using static method
                 // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
@@ -170,7 +174,7 @@ public class ProfileFragment extends Fragment {
             universalDialog.okBtn.setOnClickListener(view -> {
 
                 Constant.getHomeViewModel(this).updateLoginStatus(preferenceManager.getString(Constant.USER_PHONE),
-                        "0").observe(this,data->{
+                        "1").observe(this,data->{
                             if(data!=null){
                                 Log.i("saqlain",data.getIsLogIn());
                             }
@@ -218,6 +222,10 @@ public class ProfileFragment extends Fragment {
             intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_txt) + context.getPackageName());
             startActivity(Intent.createChooser(intent, "Share App..."));
 
+        });
+
+        binding.ivReferral.setOnClickListener(view -> {
+            getContext().startActivity(new Intent(getActivity(), ReferralActivity.class));
         });
 
     }

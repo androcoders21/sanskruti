@@ -13,6 +13,7 @@ import com.sanskruti.volotek.api.ApiStatus;
 import com.sanskruti.volotek.custom.animated_video.model.ModelAudio;
 import com.sanskruti.volotek.model.AppInfos;
 import com.sanskruti.volotek.model.CategoryItem;
+import com.sanskruti.volotek.model.CheckReferralResponse;
 import com.sanskruti.volotek.model.CouponItem;
 import com.sanskruti.volotek.model.DeletePoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.DigitalCardModel;
@@ -23,6 +24,8 @@ import com.sanskruti.volotek.model.HomeItem;
 import com.sanskruti.volotek.model.LanguageItem;
 import com.sanskruti.volotek.model.PoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.PostItem;
+import com.sanskruti.volotek.model.ReferralResponse;
+import com.sanskruti.volotek.model.SearchData;
 import com.sanskruti.volotek.model.ServiceItem;
 import com.sanskruti.volotek.model.SliderItem;
 import com.sanskruti.volotek.model.SubsPlanItem;
@@ -329,7 +332,7 @@ public class HomeRespository {
 
     public LiveData<PoliticalProfileBaseModel> getAllPoliticalProfile(String user_id) {
         MutableLiveData<PoliticalProfileBaseModel> data = new MutableLiveData<>();
-        ApiClientSecond.getApiDataService().getAllPoliticalData(user_id).enqueue(new Callback<PoliticalProfileBaseModel>() {
+        apiService.getAllPoliticalData(user_id).enqueue(new Callback<PoliticalProfileBaseModel>() {
             @Override
             public void onResponse(Call<PoliticalProfileBaseModel> call, Response<PoliticalProfileBaseModel> response) {
                 Log.i("checkframdata","data = "+new Gson().toJson(response.body()));
@@ -348,7 +351,7 @@ public class HomeRespository {
 
     public LiveData<DeletePoliticalProfileBaseModel> deletePoliticalProfile(String profile_id) {
         MutableLiveData<DeletePoliticalProfileBaseModel> data = new MutableLiveData<>();
-        ApiClientSecond.getApiDataService().deletePoliticalProfile(profile_id).enqueue(new Callback<DeletePoliticalProfileBaseModel>() {
+        apiService.deletePoliticalProfile(profile_id).enqueue(new Callback<DeletePoliticalProfileBaseModel>() {
             @Override
             public void onResponse(Call<DeletePoliticalProfileBaseModel> call, Response<DeletePoliticalProfileBaseModel> response) {
                 Log.i("checkframdata","data = "+new Gson().toJson(response.body()));
@@ -517,17 +520,87 @@ public class HomeRespository {
         return data;
     }
 
-    public LiveData<List<FeatureItem>> getFeaturedGreeting() {
-        MutableLiveData<List<FeatureItem>> data = new MutableLiveData<>();
-        apiService.getFeaturedGreeting().enqueue(new Callback<List<FeatureItem>>() {
+    public LiveData<SearchData> getSearchData(){
+        MutableLiveData<SearchData> data = new MutableLiveData<>();
+        apiService.getSearchData().enqueue(new Callback<SearchData>() {
             @Override
-            public void onResponse(Call<List<FeatureItem>> call, Response<List<FeatureItem>> response) {
+            public void onResponse(Call<SearchData> call, Response<SearchData> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<SearchData> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<List<CategoryItem>> getFeaturedGreeting() {
+        MutableLiveData<List<CategoryItem>> data = new MutableLiveData<>();
+        apiService.getFeaturedGreeting().enqueue(new Callback<List<CategoryItem>>() {
+            @Override
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
 
                 data.setValue(response.body());
             }
 
             @Override
-            public void onFailure(Call<List<FeatureItem>> call, Throwable t) {
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<List<CategoryItem>> getTrending() {
+        MutableLiveData<List<CategoryItem>> data = new MutableLiveData<>();
+        apiService.getTrending().enqueue(new Callback<List<CategoryItem>>() {
+            @Override
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
+
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<ReferralResponse> updateReferralCode(String userMobile, String referralCode){
+        MutableLiveData<ReferralResponse> data = new MutableLiveData<>();
+
+        RequestBody userMob = RequestBody.create(MediaType.parse(Constant.multipart), userMobile);
+        RequestBody referralCod = RequestBody.create(MediaType.parse(Constant.multipart), referralCode);
+        apiService.updateReferralCode(userMob,referralCod).enqueue(new Callback<ReferralResponse>() {
+            @Override
+            public void onResponse(Call<ReferralResponse> call, Response<ReferralResponse> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ReferralResponse> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<CheckReferralResponse> checkReferralCode(String userId){
+        MutableLiveData<CheckReferralResponse> data = new MutableLiveData<>();
+
+        RequestBody userID = RequestBody.create(MediaType.parse(Constant.multipart), userId);
+        apiService.checkReferralCode(userID).enqueue(new Callback<CheckReferralResponse>() {
+            @Override
+            public void onResponse(Call<CheckReferralResponse> call, Response<CheckReferralResponse> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<CheckReferralResponse> call, Throwable t) {
                 data.setValue(null);
             }
         });

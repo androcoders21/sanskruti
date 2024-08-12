@@ -55,7 +55,9 @@ public class BottomAdapter extends RecyclerView.Adapter<BottomAdapter.MyViewHold
     JSONArray jsonArrayModel = new JSONArray();
     boolean greeting = false;
 
-    public BottomAdapter(Activity context, String image_url, List<ItemPolitical> jsonArray, String type, JSONArray jsonArrayNew,OnItemClickListener onItemClickListener,boolean greeting) {
+    String imagePosition = "";
+
+    public BottomAdapter(Activity context, String image_url, List<ItemPolitical> jsonArray, String type, JSONArray jsonArrayNew,OnItemClickListener onItemClickListener,boolean greeting,String imagePosition) {
         this.context = context;
         this.itemList = jsonArray;
         this.image_url = image_url;
@@ -65,6 +67,7 @@ public class BottomAdapter extends RecyclerView.Adapter<BottomAdapter.MyViewHold
         if (jsonArrayNew != null) {
             addAllData(jsonArrayNew);
         }
+        this.imagePosition = imagePosition != null ? imagePosition : "";
 
         preferenceManager = new PreferenceManager(this.context);
         Log.i("getJSONData", "size 11 = " + String.valueOf(jsonArray.size()));
@@ -149,6 +152,7 @@ public class BottomAdapter extends RecyclerView.Adapter<BottomAdapter.MyViewHold
                         intent.putExtra("img", image_url);
                         intent.putExtra("profileId", item.profileId);
                         intent.putExtra("greeting",greeting);
+                        intent.putExtra("imagePosition",imagePosition);
                         context.startActivity(intent);
                     }
 

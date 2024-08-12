@@ -58,7 +58,8 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
 
                 } else if (sliderItem.getSliderType().equals(Constant.SUBS_PLAN)) {
                     MyUtils.openPlanActivity(context);
-                } else if (sliderItem.getSliderType().equals(Constant.CATEGORY) || sliderItem.getSliderType().equals(Constant.FESTIVAL)) {
+                } else if (sliderItem.getSliderType().equals(Constant.CATEGORY) || sliderItem.getSliderType().equals(Constant.FESTIVAL)
+                        || sliderItem.getSliderType().equals(Constant.GREETING) || sliderItem.getSliderType().equals("trending")) {
 
                     Intent intent = new Intent(context, PreviewActivity.class);
                     intent.putExtra(Constant.INTENT_TYPE, sliderItem.getSliderType());

@@ -25,12 +25,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -51,6 +53,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -102,6 +105,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -170,8 +174,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
 
     private boolean isAddImage = false;
     Watermark watermarkDetails;
+    String imagePosition;
 
     RecyclerView stickerRecyclerView,recyclerViewStickerCat;
+
+    Typeface nameTypeface;
 
     private void setIsAddImage(boolean value){
         this.isAddImage = value;
@@ -289,7 +296,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_edit_political_profile_details);
         movableImageView = findViewById(R.id.movableImageView);
         llStickerLl = (LinearLayout)findViewById(R.id.stickerLl);
@@ -319,6 +326,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         recyclerViewStickerCat = findViewById(R.id.recyclerViewStickerCat);
         movableImageView.setVisibility(View.GONE);
         ivclose.setVisibility(View.GONE);
+        nameTypeface = ResourcesCompat.getFont(this,R.font.khand_bold);
         ivclose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -424,13 +432,13 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if(greeting) {
-                    long clickTime = System.currentTimeMillis();
-                    if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-                        // Double click detected
-                        openGallery();
-                        photoViewFlip.setVisibility(VISIBLE);
-                    }
-                    lastClickTime = clickTime;
+//                    long clickTime = System.currentTimeMillis();
+//                    if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+//                        // Double click detected
+//                        openGallery();
+//                        photoViewFlip.setVisibility(VISIBLE);
+//                    }
+//                    lastClickTime = clickTime;
                     handleCloseButtons(true);
                 }
             }
@@ -460,6 +468,13 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                         xDelta = event.getRawX() - view.getX();
                         yDelta = event.getRawY() - view.getY();
                         activePointerId1 = event.getPointerId(0);
+
+                        long clickTime = System.currentTimeMillis();
+                        if (clickTime - lastClickTime < DOUBLE_TAP_TIME_DELTA) {
+                            // Double tap detected, open gallery
+                            openGallery();
+                        }
+                        lastClickTime = clickTime;
                         break;
 
                     case MotionEvent.ACTION_POINTER_DOWN:
@@ -491,15 +506,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        long clickTime = System.currentTimeMillis();
-                        if (clickTime - lastClickTime < DOUBLE_TAP_TIME_DELTA) {
-                            // Double tap detected, open gallery
-                            openGallery();
-                        }
-                        lastClickTime = clickTime;
                         activePointerId1 = INVALID_POINTER_ID;
                         activePointerId2 = INVALID_POINTER_ID;
                         break;
+
                     case MotionEvent.ACTION_CANCEL:
                         activePointerId1 = INVALID_POINTER_ID;
                         activePointerId2 = INVALID_POINTER_ID;
@@ -534,6 +544,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             }
         });
 
+
         photoViewFlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -561,11 +572,13 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         init();
         loadStickerCategoryData();
         loadWaterMark();
+
 //        loadStickerData();
         onClick();
         onShowHide();
         getDataShare();
-        showBackDialog();
+        handleUploadPosition();
+//        showBackDialog();
     }
     private void showColorPickerDialog(TextView tv) {
         // Inflate the custom layout for the color picker
@@ -605,11 +618,12 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         });
     }
     public void onBackPressed() {
+        finish();
 
-        if (!dialog.isShowing()) {
-
-            dialog.show();
-        }
+//        if (!dialog.isShowing()) {
+//
+//            dialog.show();
+//        }
 
     }
     private void showBackDialog() {
@@ -827,6 +841,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         // Convert JSONArray string back to List<User>
         Log.i("getJSONData", "userDataString = " + userDataString.toString());
 
+
         position = getIntent().getStringExtra("index");
         String imgUrl = getIntent().getStringExtra("img");
         greeting = getIntent().getBooleanExtra("greeting", false);
@@ -834,8 +849,9 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
 
    //     Toast.makeText(this, "greeting = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
         if (greeting) {
+            photoViewFlip.setVisibility(VISIBLE);
             photoView.setVisibility(VISIBLE);
-            movableImageView.setVisibility(VISIBLE);
+            movableImageView.setVisibility(View.GONE);
             llStickerLl.setVisibility(View.GONE);
             textPhotoAddll.setVisibility(VISIBLE);
             add_textLL.setVisibility(VISIBLE);
@@ -1037,8 +1053,35 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         }*/
 
     }
+
+    private void handleUploadPosition(){
+        String imagePosition = getIntent().getStringExtra("imagePosition");
+        Log.i("saqlain", imagePosition != null ? imagePosition : "Position Not Available");
+
+        if (greeting && imagePosition != null) {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) photoViewll.getLayoutParams();
+
+            switch (imagePosition) {
+                case "other":
+                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+                    break;
+                case "right":
+                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+                    break;
+                case "left":
+                    params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+                    break;
+                default:
+                    params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                    break;
+            }
+            photoViewll.setLayoutParams(params);
+        }
+    }
+
     private void setData() {
         tvNameTv.setText(pName);
+        tvNameTv.setTypeface(nameTypeface);
         tvDesignation1Tv.setText(pDesignation1);
         tvDesignation2Tv.setText(pDesignation2);
         tvMobileNoTv.setText(pPhone);
@@ -3530,15 +3573,31 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
 
     }
     private Bitmap viewToBitmap(View view) {
-
-        //  tvEdit.setVisibility(GONE);
+        int desiredWidth = 1024;
+        int desiredHeight = 1024;
 
         try {
 
-            Bitmap createBitmap = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
+            Bitmap createBitmap = Bitmap.createBitmap(desiredWidth,desiredHeight, Bitmap.Config.ARGB_8888);
+//
+//New Code
+            Canvas canvas = new Canvas(createBitmap);
 
+            // Scale the view to fit within the bitmap dimensions
+            float scaleX = (float) desiredWidth / view.getWidth();
+            float scaleY = (float) desiredHeight / view.getHeight();
+            float scale = Math.min(scaleX, scaleY);
 
-            view.draw(new Canvas(createBitmap));
+            // Center the view if it doesn't fill the bitmap completely
+            float dx = (desiredWidth - view.getWidth() * scale) / 2;
+            float dy = (desiredHeight - view.getHeight() * scale) / 2;
+
+            canvas.translate(dx, dy);
+            canvas.scale(scale, scale);
+
+            // Draw the view onto the bitmap
+            view.draw(canvas);
+//            view.draw(new Canvas(createBitmap));
             return createBitmap;
         } finally {
             view.destroyDrawingCache();
@@ -3908,6 +3967,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         // Create the sticker ImageView
         ImageView stickerImageView = new ImageView(context);
         stickerImageView.setId(View.generateViewId()); // Generate a unique ID for each view
+//        stickerImageView.setPadding(25,25,25,25);
         stickerImageView.setImageURI(selectedImage);
         // Set layout parameters for the sticker ImageView
         RelativeLayout.LayoutParams stickerParams = new RelativeLayout.LayoutParams(
@@ -3916,7 +3976,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         );
 
         stickerParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        stickerParams.setMargins(20,20,20,20);
+
 
         stickerImageView.setLayoutParams(stickerParams);
         stickerImageView.setZ(-Float.MAX_VALUE);
@@ -4602,6 +4662,19 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        }
+        else{
+            if (watermarkDetails.position != null && watermarkDetails.showWatermark != null) {
+                if (watermarkDetails.position == 1) {
+                    leftThumbnailImage.setVisibility(View.VISIBLE);
+                } else if (watermarkDetails.position == 2) {
+                    centerThumbnailImage.setVisibility(View.VISIBLE);
+                } else if (watermarkDetails.position == 3) {
+                    rightThumbnailImage.setVisibility(View.VISIBLE);
+                }
+
+            }
+            showDownloadDialog();
         }
     }
 

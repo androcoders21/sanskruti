@@ -44,26 +44,39 @@
 
         </LinearLayout>
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmer_view_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/ll_search"
-            >
+<!--        <com.facebook.shimmer.ShimmerFrameLayout-->
+<!--            android:id="@+id/shimmer_view_container"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_below="@+id/ll_search"-->
+<!--            >-->
 
-            <include layout="@layout/cat_placeholder" />
+<!--            <include layout="@layout/cat_placeholder" />-->
 
-        </com.facebook.shimmer.ShimmerFrameLayout>
+<!--        </com.facebook.shimmer.ShimmerFrameLayout>-->
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lstbusinessList"
+            android:id="@+id/search_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/ll_search"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ll_search"
-            app:spanCount="3"
-            tools:listitem="@layout/raw_business_listdialog" />
+            app:spanCount="2"
+            tools:listitem="@layout/search_item" />
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/rv_post"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_marginStart="@dimen/_5sdp"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_marginEnd="@dimen/_5sdp"-->
+<!--            android:visibility="gone"-->
+<!--            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:spanCount="2" />-->
 
         <LinearLayout
             android:id="@+id/llNotFound"

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.paytm.pgsdk.Log;
 import com.sanskruti.volotek.AppConfig;
 import com.sanskruti.volotek.R;
 import com.sanskruti.volotek.api.ApiClient;
@@ -182,7 +183,7 @@ public class PlanDetailActivity extends AppCompatActivity implements PaymentResu
        binding.cbPaytm.setOnClickListener(v -> setButtonStyle("PAYTM"));
 
         binding.btnContinue.setOnClickListener(v -> {
-
+            Log.i("saqlain",String.valueOf(finalPrice));
             binding.pbPayment.setVisibility(VISIBLE);
             binding.btnContinue.setVisibility(GONE);
 

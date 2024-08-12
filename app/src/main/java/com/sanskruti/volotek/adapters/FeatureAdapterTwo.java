@@ -45,6 +45,8 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
 
     private boolean greeting = false;
 
+    private String imagePosition = "";
+
     public FeatureAdapterTwo(Activity context, String From, FragmentManager fragmentManager,boolean greetingNew) {
         this.context = context;
         this.From = From;
@@ -121,7 +123,7 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
         // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
 
         if(fragmentManager !=null){
-            MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(data.image_url,context,"NA",greeting,data.type);
+            MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(data.image_url,context,"NA",greeting,data.type,data.position);
             bottomSheetFragment.show(fragmentManager, bottomSheetFragment.getTag());
         }else {
 

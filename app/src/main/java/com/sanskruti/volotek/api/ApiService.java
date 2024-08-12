@@ -8,6 +8,7 @@ import com.sanskruti.volotek.custom.poster.model.ThumbnailWithList;
 import com.sanskruti.volotek.model.AppInfos;
 import com.sanskruti.volotek.model.BusinessItem;
 import com.sanskruti.volotek.model.CategoryItem;
+import com.sanskruti.volotek.model.CheckReferralResponse;
 import com.sanskruti.volotek.model.CouponItem;
 import com.sanskruti.volotek.model.DeletePoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.DigitalCardModel;
@@ -22,6 +23,8 @@ import com.sanskruti.volotek.model.PaytmResponse;
 import com.sanskruti.volotek.model.PoliticalCreateResponse;
 import com.sanskruti.volotek.model.PoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.PostItem;
+import com.sanskruti.volotek.model.ReferralResponse;
+import com.sanskruti.volotek.model.SearchData;
 import com.sanskruti.volotek.model.ServiceItem;
 import com.sanskruti.volotek.model.SliderItem;
 import com.sanskruti.volotek.model.Sticker;
@@ -83,6 +86,9 @@ public interface ApiService {
             @Part("user_mobile_email") RequestBody user_id
     );
 
+    @POST("searchfilterAPI")
+    Call<SearchData> getSearchData();
+
     @Multipart
     @POST("updateDeviceLoginStatus")
     Call<LoginStatus> updateLoginStatus(
@@ -90,7 +96,18 @@ public interface ApiService {
             @Part("is_logged_in") RequestBody is_logged_in
     );
 
+    @Multipart
+    @POST("updateReferralCode")
+    Call<ReferralResponse> updateReferralCode(
+            @Part("user_mobile_email") RequestBody user_mobile,
+            @Part("referral_code") RequestBody referral_code
+    );
 
+    @Multipart
+    @POST("leader-status-check")
+    Call<CheckReferralResponse> checkReferralCode(
+            @Part("user_id") RequestBody user_id
+    );
 
     //*** login with google****
 
@@ -182,7 +199,7 @@ public interface ApiService {
 
 
     @Multipart
-    @PATCH("profile/{profileId}")
+    @POST("profile/{profileId}")
     Call<PoliticalCreateResponse> updatePolitical(
             @Path("profileId") String profileId,
             @Part("pUserId") RequestBody userId,
@@ -203,7 +220,9 @@ public interface ApiService {
             @Part("pFacebookUsername") RequestBody facebook,
             @Part("pTwitterUsername") RequestBody twitter,
             @Part("pDesignation1") RequestBody designation1,
-            @Part("pDesignation2") RequestBody designation2);
+            @Part("pDesignation2") RequestBody designation2,
+            @Part("_method") RequestBody method
+    );
 
     @GET("profile/{profileId}")
     Call<GetPoliticalCreateResponse> getPolitical(
@@ -298,10 +317,13 @@ public interface ApiService {
     Call<List<PostItem>> getDailyPostData(@Query("page") Integer page, @Query("catId") String categoryID, @Query("language") String language);
 
     @GET("greetingData")
-    Call<List<FeatureItem>> getGreetingData(@Query("catId") String categoryID,@Query("page")Integer page);
+        Call<List<FeatureItem>> getGreetingData(@Query("catId") String categoryID,@Query("page")Integer page);
 
     @GET("previewGreetingData")
-    Call<List<FeatureItem>> getFeaturedGreeting();
+    Call<List<CategoryItem>> getFeaturedGreeting();
+
+    @GET("trending-category")
+    Call<List<CategoryItem>> getTrending();
 
     //*** Create Transaction after succesfull purchase****
 

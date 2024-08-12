@@ -85,6 +85,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activities.ReferralActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activities.SettingActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

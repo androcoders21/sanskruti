@@ -7,6 +7,7 @@ import com.sanskruti.volotek.api.ApiStatus;
 import com.sanskruti.volotek.custom.animated_video.model.ModelAudio;
 import com.sanskruti.volotek.model.AppInfos;
 import com.sanskruti.volotek.model.CategoryItem;
+import com.sanskruti.volotek.model.CheckReferralResponse;
 import com.sanskruti.volotek.model.CouponItem;
 import com.sanskruti.volotek.model.DeletePoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.DigitalCardModel;
@@ -17,6 +18,8 @@ import com.sanskruti.volotek.model.HomeItem;
 import com.sanskruti.volotek.model.LanguageItem;
 import com.sanskruti.volotek.model.PoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.PostItem;
+import com.sanskruti.volotek.model.ReferralResponse;
+import com.sanskruti.volotek.model.SearchData;
 import com.sanskruti.volotek.model.ServiceItem;
 import com.sanskruti.volotek.model.SliderItem;
 import com.sanskruti.volotek.model.SubsPlanItem;
@@ -155,7 +158,20 @@ public class HomeViewModel extends ViewModel {
     public LiveData<LoginStatus> updateLoginStatus(String userId,String isLogin){
         return respository.updateLoginStatus(userId,isLogin);
     }
-    public LiveData<List<FeatureItem>> getFeaturedGreeting() {
+    public LiveData<List<CategoryItem>> getFeaturedGreeting() {
         return respository.getFeaturedGreeting();
     }
+
+    public LiveData<List<CategoryItem>> getTrending() {
+        return respository.getTrending();
+    }
+    public LiveData<SearchData> getSearchData() {
+        return respository.getSearchData();
+    }
+
+    public LiveData<ReferralResponse> updateReferralCode(String userMobile, String referralCode)
+    { return respository.updateReferralCode(userMobile,referralCode);}
+
+    public LiveData<CheckReferralResponse> checkReferralCode(String userId)
+    { return respository.checkReferralCode(userId);}
 }

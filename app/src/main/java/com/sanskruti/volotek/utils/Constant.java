@@ -201,6 +201,9 @@ public class Constant {
     public static String rewid = "";
     public static String uri = "";
     public static SubsPlanItem subsPlanItem;
+    public static final String USER_TYPE = "userType";
+
+    public static final String USER_REFERRAL = "userReferral";
 
 
     public static ArrayList<String> movieImageList = new ArrayList<>();

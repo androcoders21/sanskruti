@@ -464,7 +464,7 @@ public class UserRespository {
         Log.i("getJSONDataCreate", "RESPONSE partyBody -->" + String.valueOf(partyBody));
 
         Log.i("getJSONDataCreate", "RESPONSE profileBody -->" + String.valueOf(profileBody));
-        ApiClientSecond.getApiDataService().submitPoliticak(userid,
+        apiService.submitPoliticak(userid,
                         profileBody,
 
                         body,
@@ -504,7 +504,6 @@ public class UserRespository {
                                                              String pDesignation1, String pDesignation2) {
 
         MutableLiveData<PoliticalCreateResponse> data = new MutableLiveData<>();
-
         MultipartBody.Part body = null;
         RequestBody signatureImageUri = null;
 
@@ -623,6 +622,7 @@ public class UserRespository {
         RequestBody politicalTwitter = null;
         RequestBody politicalDesignation1 = null;
         RequestBody politicalDesignation2 = null;
+        RequestBody method = null;
         if (pName != null) {
             politicalName = RequestBody.create(MediaType.parse(Constant.multipart), pName);
         }
@@ -654,9 +654,10 @@ public class UserRespository {
         if (pDesignation2 != null) {
             politicalDesignation2 = RequestBody.create(MediaType.parse(Constant.multipart), pDesignation2);
         }
+        method = RequestBody.create(MediaType.parse(Constant.multipart),"PATCH");
 
         Log.i("getJSONDataUpdate", "RESPONSE second profileIdOther -->" + String.valueOf(profileId));
-        ApiClientSecond.getApiDataService().updatePolitical(profileId, userid,
+        apiService.updatePolitical(profileId, userid,
                         profileBody,
 
                         body,
@@ -665,7 +666,7 @@ public class UserRespository {
                         leader3Body, leader4Body,
                         leader5Body, leader6Body,
                         politicalName, politicalPhone, politicalEmail, politicalInstagram, politicalFacebook, politicalTwitter,
-                        politicalDesignation1, politicalDesignation2).
+                        politicalDesignation1, politicalDesignation2,method).
                 enqueue(new Callback<PoliticalCreateResponse>() {
                     @Override
                     public void onResponse(Call<PoliticalCreateResponse> call, Response<PoliticalCreateResponse> response) {
@@ -694,7 +695,7 @@ public class UserRespository {
         MutableLiveData<GetPoliticalCreateResponse> data = new MutableLiveData<>();
 
 
-        ApiClientSecond.getApiDataService().getPolitical(profileId).
+        apiService.getPolitical(profileId).
                 enqueue(new Callback<GetPoliticalCreateResponse>() {
                     @Override
                     public void onResponse(Call<GetPoliticalCreateResponse> call, Response<GetPoliticalCreateResponse> response) {

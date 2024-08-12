@@ -34,7 +34,10 @@ public class PostItem implements Serializable {
     @SerializedName("video")
     public boolean is_video;
 
-    public PostItem(@NonNull String postId, String fest_id, String type, String image_url, String language, boolean is_premium, boolean is_trending, boolean is_video) {
+    @SerializedName("position")
+    public String position;
+
+    public PostItem(@NonNull String postId, String fest_id, String type, String image_url, String language, boolean is_premium, boolean is_trending, boolean is_video,String position) {
         this.postId = postId;
         this.fest_id = fest_id;
         this.type = type;
@@ -43,6 +46,7 @@ public class PostItem implements Serializable {
         this.is_premium = is_premium;
         this.is_trending = is_trending;
         this.is_video = is_video;
+        this.position = position;
     }
 
 }

@@ -107,10 +107,10 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
 
     private String type;
-    private String category_name;
+    private String category_name,image_position;
 
     private boolean greeting;
-    public MyBottomSheetFragment(String image_url, Activity context, String typeOpen, boolean greetingNew,String category_name) {
+    public MyBottomSheetFragment(String image_url, Activity context, String typeOpen, boolean greetingNew,String category_name,String imagePosition) {
 //        this.data = data;
         this.userItem = Constant.getUserItem(context);
         this.context = context;
@@ -119,8 +119,9 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
         this.type = typeOpen;
         this.greeting = greetingNew;
         this.category_name = category_name;
-
+        this.image_position = imagePosition;
     }
+
 
     private BusinessListAdapter getBusinessAdapter;
     private StaggeredGridLayoutManager recyclerViewLayoutManager;
@@ -157,6 +158,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                                     intent.putExtra("backgroundImage", image_url);
                                     intent.putExtra("type", "images");
                                     intent.putExtra("sizeposition", "1:1");
+                                    intent.putExtra("imagePosition",image_position);
 
                                     intent.putExtra("greeting",greeting);
                                     intent.putExtra("index", String.valueOf(0));
@@ -264,6 +266,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditPersonalProfileDetailsActivity.class);
                 intent.putExtra("backgroundImage", image_url);
+                intent.putExtra("imagePosition",image_position);
                 intent.putExtra("type", "images");
                 intent.putExtra("sizeposition", "1:1");
 
@@ -442,6 +445,19 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                 }
             }
         }
+        if(preferenceManager.getString(Constant.USER_TYPE).equals("party_worker")){
+            business_rvbus.setVisibility(View.GONE);
+            political_RV.setVisibility(View.GONE);
+            bustv.setVisibility(View.GONE);
+            toolbarbus.setVisibility(View.GONE);
+            toolbarpm.setVisibility(GONE);
+            toolbarppm.setVisibility(View.GONE);
+            ll.setVisibility(View.GONE);
+
+            iv_edit_politicalll.setVisibility(GONE);
+            lineDataiv.setVisibility(GONE);
+            iv_edit_politicalllbus.setVisibility(GONE);
+        }
     }
 
     String actualRatio = "1:1";
@@ -456,6 +472,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             Intent intent = new Intent(context, EditPoliticalProfileDetailsActivity.class);
             intent.putExtra("index", String.valueOf(0));
             intent.putExtra("img", image_url);
+            intent.putExtra("imagePosition",image_position);
             intent.putExtra("imgThum", postItemList.get(data).getThumbnail());
             intent.putExtra("greeting",greeting);
             intent.putExtra("categoryName",category_name);
@@ -484,7 +501,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                 if (frameResponse.framecategories.size() > 0 && frameResponse.framecategories.get(0).getFrameModels().size() > 0) {
 
                     FrameModel frameModel = new FrameModel();
-                  frameModel.setThumbnail("https://androcoders.com/temp/sanskruti/common_desired_frame.png");
+                  frameModel.setThumbnail("https://admin.sanskrutidesign.com/assets/images/common_desired_frame.png");
                     postItemList.add(frameModel);
                     for (int i = 0; i < frameResponse.framecategories.size(); i++) {
                         if (frameResponse.framecategories.get(i).getName().equalsIgnoreCase("Custom")) {
@@ -512,12 +529,13 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
         Log.i("RESPONSEGetAllData", "USER_ID-->" + preferenceManager.getString(Constant.USER_ID));
         Constant.getHomeViewModel(this).getAllPoliticalProfile(preferenceManager.getString(Constant.USER_ID)).observe(this, businessItem -> {
 
-
+            isPoliticalLoading = false;
             if (businessItem != null) {
+                if (businessItem.success != null) {
                 if (items.size()>0){
                     items.clear();
                 }
-                isPoliticalLoading = false;
+
                 Log.i("RESPONSEGetAllData", "RESPONSE-->" + new Gson().toJson(businessItem));
                 Log.i("RESPONSEGetAllData", "RESPONSE-->" + new Gson().toJson(businessItem));
 
@@ -551,7 +569,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
                 }
                 Log.i("RESPONSEGetAllData", "RESPONSE Size-->" + String.valueOf(items.size())+", type = "+type);
-                featureAdapter = new BottomAdapter(context, image_url, items, type,jsonArrayModel,this,greeting);
+                featureAdapter = new BottomAdapter(context, image_url, items, type,jsonArrayModel,this,greeting,image_position);
                 featureAdapter.notifyDataSetChanged();
                 political_RV.setLayoutManager(new LinearLayoutManager(context));
                 political_RV.setAdapter(featureAdapter);
@@ -560,7 +578,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                 setVisibility();
             }
 
-        });
+        } });
 
        /* preferenceManager.getString(Constant.USER_ID);
         String userDataString = preferenceManager.getStringTwo(Constant.USER_POLITICAL_PROFILE);

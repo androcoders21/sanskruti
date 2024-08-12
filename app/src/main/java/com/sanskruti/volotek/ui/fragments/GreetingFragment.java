@@ -106,7 +106,7 @@ public class GreetingFragment extends Fragment {
     private void loadCategories() {
 
         List<CategoryItem> categoryItemList = new ArrayList<>();
-        categoryItemList.add(new CategoryItem("-1", "All", "", false));
+//        categoryItemList.add(new CategoryItem("-1", "All", "", false));
 
         Constant.getHomeViewModel(this).getCategories(Constant.GREETING).observe(getActivity(), categoryItems -> {
 
@@ -143,28 +143,28 @@ public class GreetingFragment extends Fragment {
         layoutManager = new StaggeredGridLayoutManager(1, 1);
         binding.allVideos.setLayoutManager(layoutManager);
 
-        binding.allVideos.addOnScrollListener(new PaginationListener(layoutManager) {
-            @Override
-            public boolean isLastPage() {
-                return false;
-            }
-
-            @Override
-            public boolean isLoading() {
-                return isLoading;
-            }
-
-            @Override
-            public void loadMoreItems() {
-                isLoading = true;
-                page = page + 1;
-
-                binding.progreee.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(() -> loadDataMore(), 100);
-
-
-            }
-        });
+//        binding.allVideos.addOnScrollListener(new PaginationListener(layoutManager) {
+//            @Override
+//            public boolean isLastPage() {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean isLoading() {
+//                return isLoading;
+//            }
+//
+//            @Override
+//            public void loadMoreItems() {
+//                isLoading = true;
+//                page = page + 1;
+//
+//                binding.progreee.setVisibility(View.VISIBLE);
+//                new Handler().postDelayed(() -> loadDataMore(), 100);
+//
+//
+//            }
+//        });
 
 
         if (isConnectingToInternet(context)) {

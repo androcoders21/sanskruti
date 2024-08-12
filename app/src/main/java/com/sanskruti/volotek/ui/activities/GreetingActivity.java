@@ -100,7 +100,7 @@ public class GreetingActivity extends AppCompatActivity {
     private void loadCategories() {
 
         List<CategoryItem> categoryItemList = new ArrayList<>();
-        categoryItemList.add(new CategoryItem("-1", "All", "", false));
+//        categoryItemList.add(new CategoryItem("-1", "All", "", false));
 
         Constant.getHomeViewModel(this).getCategories(Constant.GREETING).observe(this, categoryItems -> {
 

@@ -315,6 +315,7 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
         if (Action != null) {
             if (Action.equalsIgnoreCase("update")) {
                 Log.i("getJSONDataUpdate", "RESPONSE profileIdOther -->" + String.valueOf(profileIdOther));
+                Log.i("saqlain",instagramUsername);
 
                 if(name.equalsIgnoreCase(Name)){
                     name = null;

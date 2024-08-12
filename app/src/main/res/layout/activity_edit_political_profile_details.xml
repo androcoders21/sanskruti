@@ -146,26 +146,20 @@
         android:layout_height="390dp"
         android:layout_below="@id/header"
         android:layout_margin="10dp">
-<!--        <com.github.chrisbanes.photoview.PhotoView-->
-<!--            android:id="@+id/photoView"-->
-<!--            android:layout_width="150dp"-->
-<!--            android:layout_height="150dp"/>-->
-<!--        <com.easystudio.rotateimageview.RotateZoomImageView-->
-<!--            android:id="@+id/photoView"-->
-<!--            android:layout_width="150dp"-->
-<!--            android:layout_height="200dp" />-->
         <LinearLayout
             android:id="@+id/photoViewll"
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
         <ImageView
             android:id="@+id/photoView"
-            android:layout_width="225dp"
-            android:layout_height="225dp"/>
+            android:layout_width="200dp"
+            android:src="@drawable/photo_upload"
+            android:layout_height="200dp"/>
             <ImageView
                 android:id="@+id/photoViewFlip"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/sticker_flip"/>
@@ -220,6 +214,7 @@
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/movableImageView"
+                android:visibility="gone"
                 android:layout_width="150dp"
                 android:layout_height="150dp">
                 <ImageView

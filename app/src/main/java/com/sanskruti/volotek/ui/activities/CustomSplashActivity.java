@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -122,6 +124,12 @@ public class CustomSplashActivity extends AppCompatActivity {
                     if (status.equalsIgnoreCase("0")) {
                         showDialog(CustomSplashActivity.this, "Disable Account",
                                 "Your Account is disable");
+                    }else if(preferenceManager.getBoolean(Constant.IS_LOGIN) && userItem.getUserName() == null){
+                        Intent intent;
+                        intent = new Intent(this, ProfileEditActivity.class);
+                        intent.putExtra("isNameNull",true);
+                        startActivity(intent);
+                        finish();
                     } else {
                         gotoMainActivity();
                     }
@@ -312,8 +320,9 @@ public class CustomSplashActivity extends AppCompatActivity {
         TextView dialogMessageTextView = dialog.findViewById(R.id.dialogMessageTextView);
         dialogMessageTextView.setText(msgn);
 
-        LinearLayout dialogOkButton = dialog.findViewById(R.id.dialogOkButton);
-        LinearLayout dialogCancelButton = dialog.findViewById(R.id.dialogCancelButton);
+        Button dialogOkButton = dialog.findViewById(R.id.dialogOkButton);
+        dialogOkButton.setVisibility(View.GONE);
+        Button dialogCancelButton = dialog.findViewById(R.id.dialogCancelButton);
         dialogOkButton.setOnClickListener(v -> {
 
             dialog.dismiss();

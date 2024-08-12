@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class politicalProfileModel implements Serializable {
 
-    @SerializedName("_id")
+    @SerializedName("id")
     public String _id;
     @SerializedName("pUserId")
     public String pUserId;

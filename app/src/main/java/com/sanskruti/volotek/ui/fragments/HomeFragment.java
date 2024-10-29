@@ -4,6 +4,7 @@ import static android.os.Looper.getMainLooper;
 import static com.sanskruti.volotek.MyApplication.context;
 import static com.sanskruti.volotek.utils.Constant.CATEGORY;
 import static com.sanskruti.volotek.utils.Constant.FESTIVAL;
+import static com.sanskruti.volotek.utils.Constant.GREETING;
 import static com.sanskruti.volotek.utils.Constant.INTENT_TYPE;
 import static com.sanskruti.volotek.utils.Constant.SUBS_PLAN;
 
@@ -24,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -127,6 +129,24 @@ public class HomeFragment extends Fragment {
             } else if (item.type.equals(SUBS_PLAN)) {
                 Intent intent = new Intent(getActivity(), SubsPlanActivity.class);
                 startActivity(intent);
+            } else if(item.type.equals(GREETING)){
+                Intent intent = new Intent(getActivity(), CategoryActivity.class);
+                intent.putExtra(INTENT_TYPE,"greetingChild");
+                intent.putExtra(Constant.INTENT_FEST_ID,item.festivalId);
+
+                intent.putExtra(Constant.INTENT_FEST_NAME, item.title);
+                intent.putExtra(Constant.INTENT_POST_IMAGE, "");
+                intent.putExtra(Constant.INTENT_VIDEO, item.video);
+                startActivity(intent);
+            } else if(item.type.equals(CATEGORY)){
+                Intent intent = new Intent(getActivity(), CategoryActivity.class);
+                intent.putExtra(INTENT_TYPE,"categoryChild");
+                intent.putExtra(Constant.INTENT_FEST_ID,item.festivalId);
+
+                intent.putExtra(Constant.INTENT_FEST_NAME, item.title);
+                intent.putExtra(Constant.INTENT_POST_IMAGE, "");
+                intent.putExtra(Constant.INTENT_VIDEO, item.video);
+                startActivity(intent);
             } else {
                 Intent intent = new Intent(getActivity(), PreviewActivity.class);
                 intent.putExtra(Constant.INTENT_TYPE, item.type);
@@ -162,11 +182,10 @@ public class HomeFragment extends Fragment {
 
         //Category Region
         categoryAdapter = new CategoryAdapter(getContext(), item -> {
-            Intent intent = new Intent(getActivity(), PreviewActivity.class);
-            intent.putExtra(Constant.INTENT_TYPE, CATEGORY);
+            Intent intent = new Intent(getActivity(), CategoryActivity.class);
+            intent.putExtra(Constant.INTENT_TYPE, "categoryChild");
             intent.putExtra(Constant.INTENT_FEST_ID, item.id);
             intent.putExtra(Constant.INTENT_FEST_NAME, item.name);
-
             intent.putExtra(Constant.INTENT_POST_IMAGE, "");
             intent.putExtra(Constant.INTENT_VIDEO, item.video);
             startActivity(intent);
@@ -245,8 +264,8 @@ public class HomeFragment extends Fragment {
 //        });
 
         greetingAdapter = new CategoryAdapter(getContext(), item -> {
-            Intent intent = new Intent(getActivity(), PreviewActivity.class);
-            intent.putExtra(Constant.INTENT_TYPE, "greeting");
+            Intent intent = new Intent(getActivity(), CategoryActivity.class);
+            intent.putExtra(Constant.INTENT_TYPE, "greetingChild");
             intent.putExtra(Constant.INTENT_FEST_ID, item.id);
             intent.putExtra(Constant.INTENT_FEST_NAME, item.name);
 
@@ -370,7 +389,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        Constant.getHomeViewModel(this).getFeaturedGreeting().observe(getViewLifecycleOwner(),greetingData -> {
+        Constant.getHomeViewModel(this).getGreetingMainCategories().observe(getViewLifecycleOwner(),greetingData -> {
             if(greetingData != null){
 //                greetingFeatureAdapter.setFeatureItemList(greetingData);
                 greetingAdapter.setCategories(greetingData);
@@ -381,6 +400,12 @@ public class HomeFragment extends Fragment {
             if(trendingData != null){
 //                greetingFeatureAdapter.setFeatureItemList(greetingData);
                 trendingAdapter.setCategories(trendingData);
+            }
+        });
+
+        Constant.getHomeViewModel(this).getMainCategories().observe(getViewLifecycleOwner(),mainCategories -> {
+            if(mainCategories != null){
+                categoryAdapter.setCategories(mainCategories);
             }
         });
 
@@ -398,7 +423,7 @@ public class HomeFragment extends Fragment {
         }
 
         if (data.categoryList != null) {
-            categoryAdapter.setCategories(data.categoryList);
+//            categoryAdapter.setCategories(data.categoryList);
         }
 
         if (data.featureItemList != null) {

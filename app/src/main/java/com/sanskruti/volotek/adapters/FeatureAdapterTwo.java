@@ -22,10 +22,14 @@ import com.sanskruti.volotek.AdsUtils.InterstitialsAdsManager;
 import com.sanskruti.volotek.R;
 import com.sanskruti.volotek.binding.GlideDataBinding;
 import com.sanskruti.volotek.custom.poster.activity.ThumbnailActivity;
+import com.sanskruti.volotek.databinding.GreetingFeatureBinding;
 import com.sanskruti.volotek.databinding.ItemFeatureBinding;
 import com.sanskruti.volotek.model.FeatureItem;
+import com.sanskruti.volotek.model.GreetingPage;
 import com.sanskruti.volotek.model.PostItem;
 import com.sanskruti.volotek.model.UserItem;
+import com.sanskruti.volotek.ui.activities.CategoryActivity;
+import com.sanskruti.volotek.ui.activities.CategoryPostActivity;
 import com.sanskruti.volotek.ui.activities.PreviewActivity;
 import com.sanskruti.volotek.ui.fragments.HomeFragment;
 import com.sanskruti.volotek.ui.fragments.MyBottomSheetFragment;
@@ -36,7 +40,7 @@ import java.util.List;
 
 public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.MyViewHolder> {
 
-    public List<FeatureItem> featureItemList;
+    public List<GreetingPage> greetingItemList;
     Activity context;
     PreferenceManager preferenceManager;
     private String From;
@@ -59,20 +63,20 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
     }
 
 
-    public void setFeatureItemList(List<FeatureItem> featureItemList) {
-        this.featureItemList = featureItemList;
+    public void setFeatureItemList(List<GreetingPage> greetingItemList) {
+        this.greetingItemList = greetingItemList;
         notifyDataSetChanged();
 
 
-    }  public void addFeatureItems(List<FeatureItem> featureItemList) {
-        this.featureItemList.addAll(featureItemList);
+    }  public void addFeatureItems(List<GreetingPage> greetingItemList) {
+        this.greetingItemList.addAll(greetingItemList);
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemFeatureBinding binding = ItemFeatureBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        GreetingFeatureBinding binding = GreetingFeatureBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new MyViewHolder(binding);
     }
 
@@ -85,14 +89,23 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
 
         holder.binding.txtViewTrending.setOnClickListener(v -> interstitialsAdsManager.showInterstitialAd(() -> goToPreviewActivityViewMore(position)));
 
-        holder.adapters = new TrendingAdapter(context, data -> interstitialsAdsManager.showInterstitialAd(() -> gotoPreviewActivity(holder, data, position)));
+        holder.adapters = new CategoryAdapter(context,item -> {
+            Intent intent = new Intent(context, CategoryPostActivity.class);
+            intent.putExtra(Constant.INTENT_TYPE, greeting ? "greetingChild" : "videoChild");
+            intent.putExtra(Constant.INTENT_PARENT_CAT_ID,item.category_id);
+            intent.putExtra(Constant.INTENT_FEST_ID, item.id);
+            intent.putExtra(Constant.INTENT_FEST_NAME, item.name);
 
+            intent.putExtra(Constant.INTENT_POST_IMAGE, "");
+            intent.putExtra(Constant.INTENT_VIDEO, item.video);
+            context.startActivity(intent);
+        },false);
+        //Use Category Adapter
 
         holder.binding.rvFeature.setAdapter(holder.adapters);
-        holder.binding.tvFeature.setText(featureItemList.get(position).title);
+        holder.binding.tvFeature.setText(greetingItemList.get(position).name);
 
-
-        holder.adapters.setTrending(featureItemList.get(position).postItemList);
+        holder.adapters.setCategories(greetingItemList.get(position).subCategories);
 
 
     }
@@ -107,23 +120,23 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
         intent.putExtra(Constant.INTENT_VIDEO, featureItemList.get(position).video);
         intent.putExtra("From", From);
         context.startActivity(intent);*/
-        Log.i("saqlain","check details in this type = "+featureItemList.get(position).type);
+        Log.i("saqlain","check details in this type = "+greetingItemList.get(position).name);
 
 //        Intent intent = new Intent(context, ThumbnailActivity.class);
 //        intent.putExtra("backgroundImage", data.image_url);
 //        intent.putExtra("type", "images");
 //        intent.putExtra("sizeposition", "1:1");
 //        context.startActivity(intent);
-        if (featureItemList.get(position).type != null && featureItemList.get(position).type.equals("greeting")) {
-            greeting = true;
-        }
+//        if (greetingItemList.get(position).type != null && greetingItemList.get(position).type.equals("greeting")) {
+//            greeting = true;
+//        }
 
 
         // Or using static method
         // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
 
         if(fragmentManager !=null){
-            MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(data.image_url,context,"NA",greeting,data.type,data.position);
+            MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(data.image_url,context,"NA",greeting,data.type,data.position,false);
             bottomSheetFragment.show(fragmentManager, bottomSheetFragment.getTag());
         }else {
 
@@ -134,20 +147,21 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
     }
 
     private void goToPreviewActivityViewMore(int position) {
-        Intent intent = new Intent(context, PreviewActivity.class);
-        intent.putExtra(Constant.INTENT_TYPE, featureItemList.get(position).type);
-        intent.putExtra(Constant.INTENT_FEST_ID, featureItemList.get(position).festId);
-        intent.putExtra(Constant.INTENT_FEST_NAME, featureItemList.get(position).title);
+
+        Intent intent = new Intent(context, CategoryActivity.class);
+        intent.putExtra(Constant.INTENT_TYPE, greeting ? "greetingChild" : "videoChild");
+        intent.putExtra(Constant.INTENT_FEST_ID, greetingItemList.get(position).id);
+        intent.putExtra(Constant.INTENT_FEST_NAME, greetingItemList.get(position).name);
         intent.putExtra(Constant.INTENT_POST_IMAGE, "");
-        intent.putExtra(Constant.INTENT_VIDEO, featureItemList.get(position).video);
+        intent.putExtra(Constant.INTENT_VIDEO, false);
         intent.putExtra("From", From);
         context.startActivity(intent);
     }
 
     @Override
     public int getItemCount() {
-        if (featureItemList != null && featureItemList.size() > 0) {
-            return featureItemList.size();
+        if (greetingItemList != null && greetingItemList.size() > 0) {
+            return greetingItemList.size();
         } else {
             return 0;
         }
@@ -155,10 +169,10 @@ public class FeatureAdapterTwo extends RecyclerView.Adapter<FeatureAdapterTwo.My
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ItemFeatureBinding binding;
-        TrendingAdapter adapters;
+        GreetingFeatureBinding binding;
+        CategoryAdapter adapters;
 
-        public MyViewHolder(@NonNull ItemFeatureBinding binding) {
+        public MyViewHolder(@NonNull GreetingFeatureBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 

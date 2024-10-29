@@ -12,11 +12,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +38,7 @@ import com.sanskruti.volotek.AdsUtils.AdsUtils;
 import com.sanskruti.volotek.AdsUtils.InterstitialsAdsManager;
 import com.sanskruti.volotek.R;
 import com.sanskruti.volotek.binding.GlideDataBinding;
+import com.sanskruti.volotek.databinding.ActivityPoliticalProfileDetailsEditBinding;
 import com.sanskruti.volotek.model.ItemPolitical;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.ImageCropperFragment;
@@ -87,6 +91,8 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
     public static void setProfileType(int profilePhoto) {
         PROFILE_PHOTO_TYPE = profilePhoto;
     }
+    TextView toolName;
+    ImageView toolBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +152,13 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
         ivAddImgLeader4 = (CircularImageView) findViewById(R.id.iv_add_img_leader4);
         ivAddImgLeader5 = (CircularImageView) findViewById(R.id.iv_add_img_leader5);
         ivAddImgLeader6 = (CircularImageView) findViewById(R.id.iv_add_img_leader6);
+        toolName = (TextView) findViewById(R.id.tool_name);
+        toolBack = (ImageView) findViewById(R.id.back);
+
+        toolName.setText("Political Profile");
+        toolBack.setOnClickListener(v->onBackPressed());
+//        toolbar.toolbar.toolName.setText("Political Profile");
+//        binding.toolbar.back.setOnClickListener(v -> onBackPressed());
     }
 
     public void onBackPressed() {
@@ -158,7 +171,6 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
         }else{*/
         super.onBackPressed();
         /*}*/
-
 
     }
 
@@ -398,8 +410,7 @@ public class PoliticalProfileDetailsEditActivity extends AppCompatActivity {
 
 
 //                        setResult(RESULT_OK);
-//                        finish();
-
+                        finish();
                     }
 
 

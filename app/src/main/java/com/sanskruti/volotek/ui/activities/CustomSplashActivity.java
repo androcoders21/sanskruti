@@ -156,26 +156,28 @@ public class CustomSplashActivity extends AppCompatActivity {
     public void loadData() {
 
         if (networkConnectivity.isConnected()) {
-            FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-            FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                    .setMinimumFetchIntervalInSeconds(60)
-                    .build();
-            firebaseRemoteConfig.setConfigSettingsAsync(configSettings);
-            firebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
-            firebaseRemoteConfig.fetchAndActivate()
-                    .addOnCompleteListener(task -> {
+//            FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+//            FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+//                    .setMinimumFetchIntervalInSeconds(60)
+//                    .build();
+//            firebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+//            firebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
+//            firebaseRemoteConfig.fetchAndActivate()
+//                    .addOnCompleteListener(task -> {
+//
+//                        Util.showLog("API_KEY: " + firebaseRemoteConfig.getString("apiKey"));
+//                        preferenceManager.setString(Constant.api_key, firebaseRemoteConfig.getString("apiKey"));
+//
+//                        AppConfig.API_KEY = preferenceManager.getString(Constant.api_key);
 
-                        Util.showLog("API_KEY: " + firebaseRemoteConfig.getString("apiKey"));
-                        preferenceManager.setString(Constant.api_key, firebaseRemoteConfig.getString("apiKey"));
+                loadAppData();
 
-                        AppConfig.API_KEY = preferenceManager.getString(Constant.api_key);
-                        loadAppData();
 
-                    })
-                    .addOnFailureListener(e -> {
-                        Util.showErrorLog("Firebase", e);
-                        gotoMainActivity();
-                    });
+//                    })
+//                    .addOnFailureListener(e -> {
+//                        Util.showErrorLog("Firebase", e);
+//                        gotoMainActivity();
+//                    });
 
         } else {
             Util.showLog("Internet is not connected");

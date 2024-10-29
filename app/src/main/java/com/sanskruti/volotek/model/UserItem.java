@@ -52,6 +52,9 @@ public class UserItem implements Serializable {
     @SerializedName("business_limit")
     public int businessLimit;
 
+    @SerializedName("api_token")
+    public String apiToken;
+
     public String getPlanId() {
         return planId;
     }

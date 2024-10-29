@@ -144,8 +144,7 @@
         android:id="@+id/constraintTwo"
         android:layout_width="match_parent"
         android:layout_height="390dp"
-        android:layout_below="@id/header"
-        android:layout_margin="10dp">
+        android:layout_below="@id/header">
 <!--        <com.github.chrisbanes.photoview.PhotoView-->
 <!--            android:id="@+id/photoView"-->
 <!--            android:layout_width="match_parent"-->
@@ -171,6 +170,11 @@
             android:id="@+id/constraint"
             android:layout_width="fill_parent"
             android:layout_height="match_parent">
+            <VideoView
+                android:id="@+id/backgroundVideoView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
             <RelativeLayout
                 android:id="@+id/constraintThum"
                 android:layout_width="fill_parent"

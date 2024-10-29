@@ -7,6 +7,7 @@ import static com.sanskruti.volotek.MyApplication.getAppContext;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,8 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -49,13 +52,18 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 //import com.github.chrisbanes.photoview.PhotoView;
+import com.arthenica.mobileffmpeg.FFmpeg;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.jaredrummler.android.colorpicker.ColorPickerView;
 import com.sanskruti.volotek.R;
@@ -63,6 +71,7 @@ import com.sanskruti.volotek.adapters.StickerAdapterTwo;
 import com.sanskruti.volotek.adapters.StickerCatAdapter;
 import com.sanskruti.volotek.api.ApiClient;
 import com.sanskruti.volotek.binding.GlideDataBinding;
+import com.sanskruti.volotek.custom.poster.activity.ThumbnailActivity;
 import com.sanskruti.volotek.custom.poster.adapter.FontAdapter;
 import com.sanskruti.volotek.custom.poster.listener.OnClickCallback;
 import com.sanskruti.volotek.model.ItemPolitical;
@@ -94,6 +103,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -151,7 +161,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
     private ImageView photoView,photoViewFlip;
     private static final int PICK_IMAGE_REQUEST = 1;
     private int slectedFontColor = -16056320;
-    private String selectedFontFamily =  "Baloo-Bold.ttf";
+    private String selectedFontFamily =  "Khand-Bold.ttf";
     EditText etText;
     Uri imageUri;
     private float selectedFontSize =  20;
@@ -159,6 +169,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
     Watermark watermarkDetails;
     String imagePosition;
     Typeface nameTypeface;
+    private Activity activity;
     private void setIsAddImage(boolean value){
         this.isAddImage = value;
     }
@@ -168,6 +179,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
     private List<Sticker> stickerArrayList;
 
     List<ImageView> closeButtons = new ArrayList<>();
+    String imgUrl;
 
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -177,6 +189,8 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
                     if (result.getData() != null) {
                         getImageFromURI(result);
                     }
+                }else{
+                    setIsAddImage(false);
                 }
             });
     private void getImageFromURI(ActivityResult result) {
@@ -200,6 +214,8 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 
 
             }
+        }else{
+            setIsAddImage(false);
         }
     }
 
@@ -230,30 +246,31 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         someActivityResultLauncher.launch(intent);
     }
 
-    private boolean greeting = false;
+    private boolean greeting = false,isVideo = false;
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
-         if (requestCode == UCrop.REQUEST_CROP) {
+        if (requestCode == UCrop.REQUEST_CROP) {
 
             if (data != null) {
-                new ImageCropperFragment(0, MyUtils.getPathFromURI(this, UCrop.getOutput(data)), (id, out) -> {
-                    imageUri = Uri.parse(out);
-                    if(isAddImage){
-                        createImage(getAppContext(),imageUri);
+                String imagePath = MyUtils.getPathFromURI(this,UCrop.getOutput(data));
+                imageUri = Uri.parse(imagePath);
+                if(isAddImage){
+                    new ImageCropperFragment(0,imagePath,(id,out) -> {
+
+                        imageUri = Uri.parse(out);
+                        createImage(getAppContext(), imageUri);
                         setIsAddImage(false);
-                    }else {
-                        photoView.setImageURI(imageUri);
-                        uploadedPhoto.setVisibility(View.GONE);
-                    }
-                }).show(getSupportFragmentManager(), "");
+                    }).show(getSupportFragmentManager(),"");
+                }else{
+                    photoView.setImageURI(imageUri);
+                    uploadedPhoto.setVisibility(View.GONE);
+                }
+            }else{
+                setIsAddImage(false);
             }
 
         }
-
-
     }
 
 //    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -275,11 +292,13 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 
     private ImageView ivclose,ivStickerImg;
     private float xDelta, yDelta;
+    VideoView videoView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_edit_personal_profile_details);
+        universalDialog = new UniversalDialog(this, false);
         movableImageView = findViewById(R.id.movableImageView);
         llStickerLl = (LinearLayout)findViewById(R.id.stickerLl);
         add_StickerLL = (LinearLayout) findViewById(R.id.add_StickerLL);
@@ -307,7 +326,9 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         recyclerViewStickerCat = findViewById(R.id.recyclerViewStickerCat);
         movableImageView.setVisibility(View.GONE);
         ivclose.setVisibility(View.GONE);
+        videoView = (VideoView) findViewById(R.id.backgroundVideoView);
         nameTypeface = ResourcesCompat.getFont(this,R.font.khand_bold);
+        activity = this;
         ivclose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -398,7 +419,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                if(greeting) {
+
 //                    long clickTime = System.currentTimeMillis();
 //                    if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
 //                        // Double click detected
@@ -407,7 +428,6 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 //                    }
 //                    lastClickTime = clickTime;
                     handleCloseButtons(true);
-                }
             }
         });
 
@@ -831,8 +851,9 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         Log.i("getJSONData", "userDataString = " + userDataString.toString());
 
         position = getIntent().getStringExtra("index");
-        String imgUrl = getIntent().getStringExtra("img");
+        imgUrl = getIntent().getStringExtra("img");
         greeting = getIntent().getBooleanExtra("greeting", false);
+        isVideo = getIntent().getBooleanExtra("isVideo", false);
 
         //     Toast.makeText(this, "greeting = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
         if (greeting) {
@@ -937,6 +958,45 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 
 
         setData();
+        if(isVideo) {
+            Uri videoUri = Uri.parse(imgUrl);
+            universalDialog.showLoadingDialog(this, "Loading...");
+            videoView.setVideoURI(videoUri);
+            MediaController mediaController = new MediaController(this);
+            mediaController.setAnchorView(videoView);
+            videoView.setMediaController(mediaController);
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    videoView.start();
+                    universalDialog.dissmissLoadingDialog();
+                }
+            });
+//            videoView.setOnPreparedListener(mediaPlayer -> mediaPlayer.setLooping(true));
+        }else{
+            Uri imageUri = Uri.parse(imgUrl);
+            videoView.setVisibility(View.GONE);
+            Glide.with(this).load(imageUri).into(new CustomViewTarget<RelativeLayout, Drawable>(constraint) {
+                @Override
+                protected void onResourceCleared(@Nullable Drawable placeholder) {
+                    // Remove any resources from the background if necessary
+                    constraint.setBackground(null);
+                }
+
+                @Override
+                public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                    // Handle error case
+                    constraint.setBackground(errorDrawable);
+                }
+
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    constraint.setBackground(resource);
+                }
+            });
+
+//            new DownloadImageTask().execute(imgUrl);
+        }
 
         Log.i("getJSONDataLuc", "RESPONSE profileIdOther 777-->" + String.valueOf(name));
         //    String profileId = Action.equalsIgnoreCase("update") ? profileIdOther : null;
@@ -961,7 +1021,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         });*/
 
         // Load the image from the URL and set it as the background
-        new DownloadImageTask().execute(imgUrl);
+//        new DownloadImageTask().execute(imgUrl);
         int index = Integer.valueOf(position);
        /* if (!userDataString.isEmpty()) {
             try {
@@ -2711,7 +2771,6 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         fm.setVisibility(View.GONE);
         ivBack = (RelativeLayout)findViewById(R.id.btn_bckprass);
         preferenceManager = new PreferenceManager(this);
-        universalDialog = new UniversalDialog(this, false);
         btnDownload = (LinearLayout) findViewById(R.id.ll_save);
 
         ivFlipIv = (ImageView)findViewById(R.id.flipIv);
@@ -2819,6 +2878,8 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
 
         // Get the width of the screen or the parent layout
         int screenWidth = getResources().getDisplayMetrics().widthPixels-56;
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) constraintTwo.getLayoutParams();
+        params.setMargins(28,28,28,28);
         constraintTwo.getLayoutParams().height = screenWidth;
         // Request layout to make sure changes are applied
         constraintTwo.requestLayout();
@@ -3104,6 +3165,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
                 RelativeLayout.LayoutParams.WRAP_CONTENT,  // Width
                 RelativeLayout.LayoutParams.WRAP_CONTENT   // Height
         );
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE);
         relativeLayout.setLayoutParams(layoutParams);
 
         // Create the sticker ImageView
@@ -3329,8 +3391,8 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
                 RelativeLayout.LayoutParams.WRAP_CONTENT,  // Width
                 RelativeLayout.LayoutParams.WRAP_CONTENT   // Height
         );
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE);
         relativeLayout.setLayoutParams(layoutParams);
-
 
 
         LinearLayout linearLayoutText = new LinearLayout(context);
@@ -3609,6 +3671,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
                 RelativeLayout.LayoutParams.WRAP_CONTENT,  // Width
                 RelativeLayout.LayoutParams.WRAP_CONTENT   // Height
         );
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE);
         relativeLayout.setLayoutParams(layoutParams);
 
         ImageView stickerImageView = new ImageView(context);
@@ -3821,7 +3884,11 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         handleCloseButtons(true);
-                        saveImage(viewToBitmap(constraintTwo), true);
+                        if(isVideo) {
+                            applyFrameNMusicProcess(ThumbnailActivity.convertViewToPng(activity, constraint, 1080, 1080));
+                        }else{
+                            saveImage(viewToBitmap(constraintTwo), true);
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -3897,6 +3964,71 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             }
             showDownloadDialog();
         }
+    }
+
+    private void applyFrameNMusicProcess(String framePath) {
+
+
+        universalDialog.showLoadingDialog(this, "Downloading...");
+
+        String outputDir = MyUtils.getStoreVideoExternalStorage(this) + File.separator + System.currentTimeMillis() + ".mp4";
+
+        List<String> ffmpegCommandList = new ArrayList<>();
+        ffmpegCommandList.add("-i");
+        ffmpegCommandList.add(imgUrl);
+        ffmpegCommandList.add("-i");
+        ffmpegCommandList.add(framePath);
+
+
+        ffmpegCommandList.add("-filter_complex");
+
+        ffmpegCommandList.add("[0:v][1:v]overlay[out]");
+
+        ffmpegCommandList.add("-map");
+        ffmpegCommandList.add("[out]");
+
+        ffmpegCommandList.add("-map");
+        ffmpegCommandList.add("0:a");
+
+        ffmpegCommandList.add("-c:a");
+        ffmpegCommandList.add("aac");
+
+
+        ffmpegCommandList.add("-s");
+        ffmpegCommandList.add("1080:1080");
+
+        ffmpegCommandList.add("-c:v");
+        ffmpegCommandList.add("libx264");
+        ffmpegCommandList.add("-preset");
+        ffmpegCommandList.add("ultrafast");
+        ffmpegCommandList.add("-crf");
+        ffmpegCommandList.add("20");
+        ffmpegCommandList.add("-shortest");
+        ffmpegCommandList.add("-y");
+        ffmpegCommandList.add(outputDir);
+
+        String[] ffmpegCommand = ffmpegCommandList.toArray(new String[ffmpegCommandList.size()]);
+
+        FFmpeg.executeAsync(ffmpegCommand, (executionId, returnCode) -> {
+
+            if (returnCode == 1) {
+                FFmpeg.cancel(executionId);
+
+                universalDialog.dissmissLoadingDialog();
+
+                MyUtils.showToast(activity, "Try Again!!");
+            } else if (returnCode == 0) {
+                FFmpeg.cancel(executionId);
+
+                openShareActivity(outputDir);
+            } else if (returnCode == 255) {
+                android.util.Log.e("finalProcess__", "Command execution cancelled by user.");
+            } else {
+                String str = String.format("Command execution failed with rc=%d and the output below.",
+                        Arrays.copyOf(new Object[]{Integer.valueOf(returnCode)}, 1));
+                android.util.Log.i("finalProcess__", str);
+            }
+        });
     }
 
 }

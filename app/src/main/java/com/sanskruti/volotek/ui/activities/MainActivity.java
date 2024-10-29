@@ -460,13 +460,13 @@ public class MainActivity extends BaseActivity {
                 case R.id.home_menu:
 
                     navController.navigate(R.id.homeFragment);
-                    topBar(R.string.app_name, View.VISIBLE, View.GONE, View.GONE, View.VISIBLE);
+                    topBar(R.string.app_name, View.VISIBLE, View.GONE, View.GONE, View.VISIBLE, View.VISIBLE);
 
                     return true;
                 case R.id.custom_menu:
 
                     navController.navigate(R.id.customFragment);
-                    topBar(R.string.menu_custom, View.GONE, View.VISIBLE, View.VISIBLE, View.VISIBLE);
+                    topBar(R.string.greetings, View.GONE, View.VISIBLE, View.VISIBLE, View.VISIBLE, View.GONE);
                  //   Toast.makeText(activity, "Coming Soon", Toast.LENGTH_SHORT).show();
                     return true;
                 case R.id.business_menu:
@@ -478,17 +478,17 @@ public class MainActivity extends BaseActivity {
                 case R.id.profile_menu:
 
                     navController.navigate(R.id.profileFragment);
-                    topBar(R.string.menu_profile, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE);
+                    topBar(R.string.menu_profile, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE,View.VISIBLE);
 
 
                     return true;
                 case R.id.download_menu:
 
-                   /* navController.navigate(R.id.allSavedDataFragment);
-                    topBar(R.string.my_creation, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE);*/
-                    Intent intent = new Intent(activity, CategoryActivity.class);
-                    intent.putExtra(INTENT_TYPE,"category");
-                    startActivity(intent);
+                    navController.navigate(R.id.allSavedDataFragment);
+                    topBar(R.string.video, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE, View.GONE);
+//                    Intent intent = new Intent(activity, CategoryActivity.class);
+//                    intent.putExtra(INTENT_TYPE,"video");
+//                    startActivity(intent);
 
 
                     return true;
@@ -558,7 +558,7 @@ public class MainActivity extends BaseActivity {
         makeStickerDir(MainActivity.this);
         new CopyFontBG().execute("");
 
-        topBar(R.string.app_name, View.VISIBLE, View.GONE, View.GONE, View.VISIBLE);
+        topBar(R.string.app_name, View.VISIBLE, View.GONE, View.GONE, View.VISIBLE,View.VISIBLE);
 
 
     }
@@ -575,7 +575,7 @@ public class MainActivity extends BaseActivity {
 
 
     private RelativeLayout toolbar;
-    private void topBar(int menu_custom, int gone, int visible, int visible1, int visible3) {
+    private void topBar(int menu_custom, int gone, int visible, int visible1, int visible3,int visible4) {
         toolName.setText(getResources().getString(menu_custom));
         llBusiness.setVisibility(gone);
         toolbar.setVisibility(visible3);
@@ -583,6 +583,7 @@ public class MainActivity extends BaseActivity {
         favorite.setVisibility(visible1);
         ivPremium.setVisibility(gone);
         youtubeIcon.setVisibility(gone);
+        searchBar.setVisibility(visible4);
     }
 
 

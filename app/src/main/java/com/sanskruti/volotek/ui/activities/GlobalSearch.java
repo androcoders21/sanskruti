@@ -58,7 +58,7 @@ public class GlobalSearch extends AppCompatActivity{
                         isGreeting = adapter.getOriginalList().get(data).getType().equals("greeting_post") ? true :false;
 
                         MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment(adapter.getOriginalList().get(data).path,this,"NA",isGreeting,
-                                "",adapter.getOriginalList().get(data).getPosition());
+                                "",adapter.getOriginalList().get(data).getPosition(),false);
 
                         // Or using static method
                         // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);

@@ -1,5 +1,4 @@
-package com.sanskruti.volotek.ui.activities;
-
+package com.sanskruti.volotek.ui.fragments;
 
 import static com.sanskruti.volotek.utils.MyUtils.isConnectingToInternet;
 
@@ -8,53 +7,50 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.google.android.exoplayer2.util.Log;
 import com.sanskruti.volotek.AdsUtils.AdsUtils;
-import com.sanskruti.volotek.adapters.FeatureAdapter;
 import com.sanskruti.volotek.adapters.FeatureAdapterTwo;
 import com.sanskruti.volotek.adapters.SubCategoryAdapter;
 import com.sanskruti.volotek.custom.animated_video.adapters.TemplateListAdapter;
-import com.sanskruti.volotek.databinding.ActivityPhotoFrameBinding;
+import com.sanskruti.volotek.databinding.FragmentGreetingBinding;
 import com.sanskruti.volotek.model.CategoryItem;
 import com.sanskruti.volotek.model.FeatureItem;
-import com.sanskruti.volotek.ui.fragments.MyBottomSheetFragment;
+import com.sanskruti.volotek.ui.activities.CategoryActivity;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.MyUtils;
-import com.sanskruti.volotek.utils.PaginationListener;
 import com.sanskruti.volotek.utils.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class GreetingActivity extends AppCompatActivity {
-
-    ActivityPhotoFrameBinding binding;
+public class VideoFragment extends Fragment {
+    public VideoFragment() {
+    }
     TemplateListAdapter templateListAdapter;
-
     PreferenceManager preferenceManager;
-    private String selectedCat = "Latest";
-    private int page = 1;
     private Activity context;
     private StaggeredGridLayoutManager layoutManager;
     private boolean isLoading = false;
     FeatureAdapterTwo featureAdapter;
 
     List<FeatureItem> featureItemList;
+    FragmentGreetingBinding binding;
 
+
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityPhotoFrameBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-
-        context = this;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentGreetingBinding.inflate(getLayoutInflater());
+        context = getActivity();
         featureItemList = new ArrayList<>();
         hideShimmmerLayout(true);
 
@@ -62,11 +58,11 @@ public class GreetingActivity extends AppCompatActivity {
 
         new AdsUtils(context).showBannerAds(context);
 
-        Intent intent = getIntent();
+      /*  Intent intent = getIntent();
 
-        String name = intent.getStringExtra("name");
-        featureAdapter = new FeatureAdapterTwo(context, "HOME",getSupportFragmentManager(),true);
-//        binding.allVideos.setAdapter(featureAdapter);
+        String name = intent.getStringExtra("name");*/
+        featureAdapter = new FeatureAdapterTwo(context, "HOME",getActivity().getSupportFragmentManager(),false);
+        binding.allVideos.setAdapter(featureAdapter);
 
 
 
@@ -77,7 +73,6 @@ public class GreetingActivity extends AppCompatActivity {
 
             if (templateListAdapter != null) templateListAdapter.clearData();
 
-            page = 1;
 
             isLoading = false;
 
@@ -89,27 +84,27 @@ public class GreetingActivity extends AppCompatActivity {
 
 
         });
-
+/*
         binding.toolbar.back.setOnClickListener(view -> onBackPressed());
-        binding.toolbar.toolName.setText(name);
+        binding.toolbar.toolName.setText(name);*/
 
         loadCategories();
-
+        return binding.getRoot();
     }
-
     private void loadCategories() {
 
         List<CategoryItem> categoryItemList = new ArrayList<>();
 //        categoryItemList.add(new CategoryItem("-1", "All", "", false));
 
-        Constant.getHomeViewModel(this).getCategories(Constant.GREETING).observe(this, categoryItems -> {
+
+        Constant.getHomeViewModel(this).getVideoPageData().observe(getActivity(), categoryItems -> {
 
             if (categoryItems != null) {
 
                 SubCategoryAdapter categoryAdapter = new SubCategoryAdapter(context, data -> {
 
-                    Intent intent = new Intent(context, PreviewActivity.class);
-                    intent.putExtra(Constant.INTENT_TYPE, Constant.GREETING);
+                    Intent intent = new Intent(context, CategoryActivity.class);
+                    intent.putExtra(Constant.INTENT_TYPE, "videoChild");
                     intent.putExtra(Constant.INTENT_FEST_ID, data.id);
                     intent.putExtra(Constant.INTENT_FEST_NAME, data.getName());
                     intent.putExtra(Constant.INTENT_POST_IMAGE, "");
@@ -119,8 +114,12 @@ public class GreetingActivity extends AppCompatActivity {
 
                 }, false);
 
-                categoryItemList.addAll(categoryItems);
+//                categoryItemList.addAll(categoryItems);
 
+                for (int i = 0;i < categoryItems.size();i++){
+                    Log.i("saqlain",categoryItems.get(i).name);
+                    categoryItemList.add(new CategoryItem(categoryItems.get(i).id,categoryItems.get(i).name,"",false));
+                }
                 categoryAdapter.setCategories(categoryItemList);
 
                 binding.rvCategory.setAdapter(categoryAdapter);
@@ -137,28 +136,28 @@ public class GreetingActivity extends AppCompatActivity {
         layoutManager = new StaggeredGridLayoutManager(1, 1);
         binding.allVideos.setLayoutManager(layoutManager);
 
-        binding.allVideos.addOnScrollListener(new PaginationListener(layoutManager) {
-            @Override
-            public boolean isLastPage() {
-                return false;
-            }
-
-            @Override
-            public boolean isLoading() {
-                return isLoading;
-            }
-
-            @Override
-            public void loadMoreItems() {
-                isLoading = true;
-                page = page + 1;
-
-                binding.progreee.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(() -> loadDataMore(), 100);
-
-
-            }
-        });
+//        binding.allVideos.addOnScrollListener(new PaginationListener(layoutManager) {
+//            @Override
+//            public boolean isLastPage() {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean isLoading() {
+//                return isLoading;
+//            }
+//
+//            @Override
+//            public void loadMoreItems() {
+//                isLoading = true;
+//                page = page + 1;
+//
+//                binding.progreee.setVisibility(View.VISIBLE);
+//                new Handler().postDelayed(() -> loadDataMore(), 100);
+//
+//
+//            }
+//        });
 
 
         if (isConnectingToInternet(context)) {
@@ -190,46 +189,25 @@ public class GreetingActivity extends AppCompatActivity {
     private void getData() {
 
 
-//        Constant.getHomeViewModel(this).getGreetingData(selectedCat, page).observe(this, featureItems -> {
-//
-//            if (featureItems != null) {
-//
-//                MyUtils.showResponse(featureItems);
-//
-//                binding.refreshLayout.setRefreshing(false);
-//                featureAdapter.setFeatureItemList(featureItems);
-//                hideShimmmerLayout(false);
-//
-//            }else{
-//
-//                binding.noData.setVisibility(View.VISIBLE);
-//            }
-//
-//            binding.progreee.setVisibility(View.GONE);
-//
-//
-//        });
-
-    }
-
-    private void loadDataMore() {
-
-        Constant.getHomeViewModel(this).getGreetingData(selectedCat, page).observe(this, featureItems -> {
+        Constant.getHomeViewModel(this).getVideoPageData().observe(getActivity(), featureItems -> {
 
             if (featureItems != null) {
 
+                MyUtils.showResponse(featureItems);
 
-             //   featureItemList.addAll(featureItems);
-//                featureAdapter.addFeatureItems(featureItems);
-                isLoading = false;
+                binding.refreshLayout.setRefreshing(false);
+                featureAdapter.setFeatureItemList(featureItems);
+                hideShimmmerLayout(false);
+
+            }else{
+
+                binding.noData.setVisibility(View.VISIBLE);
             }
 
-            binding.refreshLayout.setRefreshing(false);
             binding.progreee.setVisibility(View.GONE);
+
 
         });
 
     }
-
-
 }

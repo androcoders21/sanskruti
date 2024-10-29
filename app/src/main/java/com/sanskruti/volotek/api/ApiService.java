@@ -16,8 +16,10 @@ import com.sanskruti.volotek.model.FeatureItem;
 import com.sanskruti.volotek.model.FestivalItem;
 import com.sanskruti.volotek.model.FrameResponse;
 import com.sanskruti.volotek.model.GetPoliticalCreateResponse;
+import com.sanskruti.volotek.model.GreetingPage;
 import com.sanskruti.volotek.model.HomeItem;
 import com.sanskruti.volotek.model.LanguageItem;
+import com.sanskruti.volotek.model.Logout;
 import com.sanskruti.volotek.model.ModelCreated;
 import com.sanskruti.volotek.model.PaytmResponse;
 import com.sanskruti.volotek.model.PoliticalCreateResponse;
@@ -32,6 +34,7 @@ import com.sanskruti.volotek.model.StickerResponse;
 import com.sanskruti.volotek.model.StripeResponse;
 import com.sanskruti.volotek.model.SubsPlanItem;
 import com.sanskruti.volotek.model.UserItem;
+import com.sanskruti.volotek.model.VideoItem;
 import com.sanskruti.volotek.model.WatermarkResponse;
 import com.sanskruti.volotek.model.WhatsappOtpResponse;
 import com.sanskruti.volotek.model.politicalProfileModel;
@@ -95,6 +98,8 @@ public interface ApiService {
             @Part("user_mobile_email") RequestBody user_id,
             @Part("is_logged_in") RequestBody is_logged_in
     );
+    @POST("logout")
+    Call<Logout> logout();
 
     @Multipart
     @POST("updateReferralCode")
@@ -449,4 +454,49 @@ public interface ApiService {
     @GET("getAllService")
     Call<List<ServiceItem>> getAllService();
 
+    @GET("getMainCategories")
+    Call<List<CategoryItem>> getMainCategories();
+
+    @Multipart
+    @POST("getSubCategories")
+    Call<List<CategoryItem>> getSubCategories(
+            @Part("category_id") RequestBody category_id
+    );
+
+    @Multipart
+    @POST("getSubCategoriesFrames")
+    Call<List<PostItem>> getSubCategoryPosts(
+            @Part("category_id") RequestBody category_id,
+            @Part("sub_category_id") RequestBody sub_category_id
+    );
+    @Multipart
+    @POST("getGreetingSubCategories")
+    Call<List<CategoryItem>> getGreetingSubCategories(
+            @Part("category_id") RequestBody category_id
+    );
+    @GET("getGreetingMainCategories")
+    Call<List<CategoryItem>> getGreetingMainCategories();
+    @Multipart
+    @POST("getGreetingSubCategoriesFrames")
+    Call<List<PostItem>> getGreetingSubCategoryPosts(
+            @Part("category_id") RequestBody category_id,
+            @Part("sub_category_id") RequestBody sub_category_id
+    );
+    @POST("getGreetingMainCategoriesHomePage")
+    Call<List<GreetingPage>> getGreetingPageData();
+    @GET("getVideoMainCategories")
+    Call<List<CategoryItem>> getVideoMainCategories();
+    @Multipart
+    @POST("getVideoSubCategories")
+    Call<List<CategoryItem>> getVideoSubCategories(
+            @Part("category_id") RequestBody category_id
+    );
+    @Multipart
+    @POST("getVideoSubCategoriesFrames")
+    Call<List<VideoItem>> getVideoSubCategoriesFrames(
+            @Part("category_id") RequestBody category_id,
+            @Part("sub_category_id") RequestBody sub_category_id
+    );
+    @POST("getVideoMainCategoriesHomePage")
+    Call<List<GreetingPage>> getVideoPageData();
 }

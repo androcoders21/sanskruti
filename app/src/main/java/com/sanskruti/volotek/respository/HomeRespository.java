@@ -20,8 +20,10 @@ import com.sanskruti.volotek.model.DigitalCardModel;
 import com.sanskruti.volotek.model.FeatureItem;
 import com.sanskruti.volotek.model.FestivalItem;
 import com.sanskruti.volotek.model.FrameResponse;
+import com.sanskruti.volotek.model.GreetingPage;
 import com.sanskruti.volotek.model.HomeItem;
 import com.sanskruti.volotek.model.LanguageItem;
+import com.sanskruti.volotek.model.Logout;
 import com.sanskruti.volotek.model.PoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.PostItem;
 import com.sanskruti.volotek.model.ReferralResponse;
@@ -29,6 +31,7 @@ import com.sanskruti.volotek.model.SearchData;
 import com.sanskruti.volotek.model.ServiceItem;
 import com.sanskruti.volotek.model.SliderItem;
 import com.sanskruti.volotek.model.SubsPlanItem;
+import com.sanskruti.volotek.model.VideoItem;
 import com.sanskruti.volotek.model.WatermarkResponse;
 import com.sanskruti.volotek.model.politicalProfileModel;
 import com.sanskruti.volotek.model.video.LoginStatus;
@@ -601,6 +604,200 @@ public class HomeRespository {
 
             @Override
             public void onFailure(Call<CheckReferralResponse> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<Logout> logout(){
+        MutableLiveData<Logout> data = new MutableLiveData<>();
+        apiService.logout().enqueue(new Callback<Logout>() {
+            @Override
+            public void onResponse(Call<Logout> call, Response<Logout> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Logout> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<List<CategoryItem>> getMainCategories(){
+        MutableLiveData<List<CategoryItem>> data = new MutableLiveData<>();
+        apiService.getMainCategories().enqueue(new Callback<List<CategoryItem>>() {
+            @Override
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<List<CategoryItem>> getSubCategories(String categoryId){
+        MutableLiveData<List<CategoryItem>> data = new MutableLiveData<>();
+        RequestBody category = RequestBody.create(MediaType.parse(Constant.multipart), categoryId);
+        apiService.getSubCategories(category).enqueue(new Callback<List<CategoryItem>>() {
+            @Override
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+    public LiveData<List<PostItem>> getSubCategoryPosts(String categoryId,String subCategoryId){
+        MutableLiveData<List<PostItem>> data = new MutableLiveData<>();
+        RequestBody category = RequestBody.create(MediaType.parse(Constant.multipart), categoryId);
+        RequestBody subCategory = RequestBody.create(MediaType.parse(Constant.multipart), subCategoryId);
+        apiService.getSubCategoryPosts(category,subCategory).enqueue(new Callback<List<PostItem>>() {
+            @Override
+            public void onResponse(Call<List<PostItem>> call, Response<List<PostItem>> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<PostItem>> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<List<CategoryItem>> getGreetingMainCategories(){
+        MutableLiveData<List<CategoryItem>> data = new MutableLiveData<>();
+        apiService.getGreetingMainCategories().enqueue(new Callback<List<CategoryItem>>() {
+            @Override
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+    public LiveData<List<CategoryItem>> getGreetingSubCategories(String categoryId){
+        MutableLiveData<List<CategoryItem>> data = new MutableLiveData<>();
+        RequestBody category = RequestBody.create(MediaType.parse(Constant.multipart), categoryId);
+        apiService.getGreetingSubCategories(category).enqueue(new Callback<List<CategoryItem>>() {
+            @Override
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+    public LiveData<List<PostItem>> getGreetingSubCategoryPosts(String categoryId,String subCategoryId){
+        MutableLiveData<List<PostItem>> data = new MutableLiveData<>();
+        RequestBody category = RequestBody.create(MediaType.parse(Constant.multipart), categoryId);
+        RequestBody subCategory = RequestBody.create(MediaType.parse(Constant.multipart), subCategoryId);
+        apiService.getGreetingSubCategoryPosts(category,subCategory).enqueue(new Callback<List<PostItem>>() {
+            @Override
+            public void onResponse(Call<List<PostItem>> call, Response<List<PostItem>> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<PostItem>> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<List<GreetingPage>> getGreetingPageData(){
+        MutableLiveData<List<GreetingPage>> data = new MutableLiveData<>();
+        apiService.getGreetingPageData().enqueue(new Callback<List<GreetingPage>>() {
+            @Override
+            public void onResponse(Call<List<GreetingPage>> call, Response<List<GreetingPage>> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<GreetingPage>> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+    public LiveData<List<CategoryItem>> getVideoMainCategories(){
+        MutableLiveData<List<CategoryItem>> data = new MutableLiveData<>();
+        apiService.getVideoMainCategories().enqueue(new Callback<List<CategoryItem>>() {
+            @Override
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+    public LiveData<List<CategoryItem>> getVideoSubCategories(String categoryId){
+        MutableLiveData<List<CategoryItem>> data = new MutableLiveData<>();
+        RequestBody category = RequestBody.create(MediaType.parse(Constant.multipart), categoryId);
+        apiService.getVideoSubCategories(category).enqueue(new Callback<List<CategoryItem>>() {
+            @Override
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+    public LiveData<List<VideoItem>> getVideoSubCategoriesFrames(String categoryId,String subCategoryId){
+        MutableLiveData<List<VideoItem>> data = new MutableLiveData<>();
+        RequestBody category = RequestBody.create(MediaType.parse(Constant.multipart), categoryId);
+        RequestBody subCategory = RequestBody.create(MediaType.parse(Constant.multipart), subCategoryId);
+        apiService.getVideoSubCategoriesFrames(category,subCategory).enqueue(new Callback<List<VideoItem>>() {
+            @Override
+            public void onResponse(Call<List<VideoItem>> call, Response<List<VideoItem>> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<VideoItem>> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+    public LiveData<List<GreetingPage>> getVideoPageData(){
+        MutableLiveData<List<GreetingPage>> data = new MutableLiveData<>();
+        apiService.getVideoPageData().enqueue(new Callback<List<GreetingPage>>() {
+            @Override
+            public void onResponse(Call<List<GreetingPage>> call, Response<List<GreetingPage>> response) {
+                data.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<GreetingPage>> call, Throwable t) {
                 data.setValue(null);
             }
         });

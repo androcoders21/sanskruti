@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.onesignal.OneSignal;
+import com.sanskruti.volotek.AppConfig;
 import com.sanskruti.volotek.OtpEditText;
 import com.sanskruti.volotek.R;
 import com.sanskruti.volotek.api.ApiClient;
@@ -353,17 +354,7 @@ public class LoginActivity extends AppCompatActivity {
                 prgDialog.show();
                 if (otpType.equals("phone")) {
                     Log.i("saqlain",91+numberEt.getText().toString());
-                    Constant.getHomeViewModel(this).getLoginStatus(91+numberEt.getText().toString()).observe(this,data->{
-                        if(data != null){
-                            if(data.getIsLogIn() != null && data.getIsLogIn().equals("0")){
-                                Log.i("saqlain",data.getIsLogIn());
-                                universalDialog.showErrorDialog("You're currently logged in on another device. Please log out from that device and then log in again."
-                                        ,"Back");
-                                    universalDialog.show();
-                                    prgDialog.dismiss();
-                                universalDialog.cancelBtn.setVisibility(View.GONE);
-                                universalDialog.setCancelable(false);
-                            }else{
+
                                 PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
                                     .setPhoneNumber(ccp.getDefaultCountryCodeWithPlus() + numberEt.getText().toString())       // Phone number to verify
                                     .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
@@ -372,21 +363,6 @@ public class LoginActivity extends AppCompatActivity {
                                     .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
                                     .build();
                     PhoneAuthProvider.verifyPhoneNumber(options);
-                            }
-                        }else{
-                            Log.i("saqlain","Error occurred");
-                        }
-                    });
-
-//                    PhoneAuthOptions options =
-//                            PhoneAuthOptions.newBuilder(mAuth)
-//                                    .setPhoneNumber(ccp.getDefaultCountryCodeWithPlus() + numberEt.getText().toString())       // Phone number to verify
-//                                    .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-//                                    .setActivity(this)                 // (optional) Activity for callback binding
-//                                    // If no activity is passed, reCAPTCHA verification can not be used.
-//                                    .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-//                                    .build();
-//                    PhoneAuthProvider.verifyPhoneNumber(options);
 
                 } else {
                     prgDialog.show();
@@ -508,7 +484,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void addLoginInfo(String email, String displayName, String photoUrl, String mobile, String loginType) {
-
+        preferenceManager.setString(Constant.api_key, "123456");
 
         Constant.getUserViewModel(this).userLoginGoogle(email, displayName, photoUrl, mobile, loginType).observe(this, userItem -> {
 
@@ -536,13 +512,16 @@ public class LoginActivity extends AppCompatActivity {
                 preferenceManager.setString(Constant.STATUS, userItem.status);
                 preferenceManager.setString(Constant.LOGIN_TYPE, loginType);
                 preferenceManager.setInt(Constant.USER_BUSINESS_LIMIT, userItem.businessLimit);
+                preferenceManager.setString(Constant.api_key, userItem.apiToken);
+                Log.i("saqlain",preferenceManager.getString(Constant.api_key));
+                AppConfig.API_KEY = preferenceManager.getString(Constant.api_key);
 
-                Constant.getHomeViewModel(this).updateLoginStatus(userItem.phone,
-                        "0").observe(this,data->{
-                    if(data!=null){
-                        Log.i("saqlain",data.getIsLogIn());
-                    }
-                });
+//                Constant.getHomeViewModel(this).updateLoginStatus(userItem.phone,
+//                        "0").observe(this,data->{
+//                    if(data!=null){
+//                        Log.i("saqlain",data.getIsLogIn());
+//                    }
+//                });
 
                 Intent intent;
                 if(userItem.userName != null){

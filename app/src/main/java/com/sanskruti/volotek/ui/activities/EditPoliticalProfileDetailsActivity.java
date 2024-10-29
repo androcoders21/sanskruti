@@ -3,6 +3,7 @@ package com.sanskruti.volotek.ui.activities;
 import static android.view.View.VISIBLE;
 import static com.sanskruti.volotek.MyApplication.context;
 import static com.sanskruti.volotek.MyApplication.getAppContext;
+import static com.sanskruti.volotek.custom.poster.activity.ThumbnailActivity.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -19,6 +20,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -41,14 +43,17 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,7 +63,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.arthenica.mobileffmpeg.FFmpeg;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.easystudio.rotateimageview.RotateZoomImageView;
 //import com.github.chrisbanes.photoview.PhotoView;
 import com.google.gson.Gson;
@@ -68,6 +76,7 @@ import com.sanskruti.volotek.adapters.StickerAdapterTwo;
 import com.sanskruti.volotek.adapters.StickerCatAdapter;
 import com.sanskruti.volotek.api.ApiClient;
 import com.sanskruti.volotek.binding.GlideDataBinding;
+import com.sanskruti.volotek.custom.poster.activity.ThumbnailActivity;
 import com.sanskruti.volotek.custom.poster.adapter.FontAdapter;
 import com.sanskruti.volotek.custom.poster.listener.OnClickCallback;
 import com.sanskruti.volotek.model.ItemPolitical;
@@ -102,6 +111,7 @@ import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -168,7 +178,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
 
     private int slectedFontColor = -16056320;
 
-    private String selectedFontFamily =  "Baloo-Bold.ttf";
+    private String selectedFontFamily =  "Khand-Bold.ttf";
 
     private float selectedFontSize =  20;
 
@@ -179,6 +189,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
     RecyclerView stickerRecyclerView,recyclerViewStickerCat;
 
     Typeface nameTypeface;
+    private Activity activity;
 
     private void setIsAddImage(boolean value){
         this.isAddImage = value;
@@ -186,6 +197,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
     private Boolean getIsAddImage(){
         return isAddImage;
     }
+    String imgUrl;
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -194,6 +206,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                     if (result.getData() != null) {
                         getImageFromURI(result);
                     }
+                }else{
+                    setIsAddImage(false);
                 }
             });
     private void getImageFromURI(ActivityResult result) {
@@ -217,6 +231,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
 
 
             }
+        }else{
+            setIsAddImage(false);
         }
     }
 
@@ -245,7 +261,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
 //        startActivityForResult(intent, PICK_IMAGE_REQUEST);
         someActivityResultLauncher.launch(intent);
     }
-    private boolean greeting = false;
+    private boolean greeting = false,isVideo = false;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -255,16 +271,21 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         if (requestCode == UCrop.REQUEST_CROP) {
 
             if (data != null) {
-                new ImageCropperFragment(0, MyUtils.getPathFromURI(this, UCrop.getOutput(data)), (id, out) -> {
-                    imageUri = Uri.parse(out);
-                    if(isAddImage){
-                        createImage(getAppContext(),imageUri);
+                String imagePath = MyUtils.getPathFromURI(this,UCrop.getOutput(data));
+                imageUri = Uri.parse(imagePath);
+                if(isAddImage){
+                    new ImageCropperFragment(0,imagePath,(id,out) -> {
+
+                        imageUri = Uri.parse(out);
+                        createImage(getAppContext(), imageUri);
                         setIsAddImage(false);
-                    }else {
-                        photoView.setImageURI(imageUri);
-                        uploadedPhoto.setVisibility(View.GONE);
-                    }
-                }).show(getSupportFragmentManager(), "");
+                    }).show(getSupportFragmentManager(),"");
+                }else{
+                    photoView.setImageURI(imageUri);
+                    uploadedPhoto.setVisibility(View.GONE);
+                }
+             }else{
+               setIsAddImage(false);
             }
 
         }
@@ -292,6 +313,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
     private List<Sticker> stickerArrayList;
 
     private List<StickersCategory> stickersCategoryList,stickersCategoryList2;
+    VideoView videoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -326,7 +348,9 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         recyclerViewStickerCat = findViewById(R.id.recyclerViewStickerCat);
         movableImageView.setVisibility(View.GONE);
         ivclose.setVisibility(View.GONE);
+        videoView = (VideoView) findViewById(R.id.backgroundVideoView);
         nameTypeface = ResourcesCompat.getFont(this,R.font.khand_bold);
+        activity = this;
         ivclose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -431,16 +455,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
 
             @Override
             public void onClick(View v) {
-                if(greeting) {
-//                    long clickTime = System.currentTimeMillis();
-//                    if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-//                        // Double click detected
-//                        openGallery();
-//                        photoViewFlip.setVisibility(VISIBLE);
-//                    }
-//                    lastClickTime = clickTime;
                     handleCloseButtons(true);
-                }
             }
         });
 
@@ -692,7 +707,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         protected Bitmap doInBackground(String... urls) {
             String url = urls[0];
             Bitmap bitmap = null;
-            Log.i("thisisknowdowload", "AsyncTask urls = " + urls.toString());
+            Log.i("thisisknowdowload", "AsyncTask urls thum= " + urls.toString());
             try {
                 URL imageUrl = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) imageUrl.openConnection();
@@ -843,9 +858,9 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
 
 
         position = getIntent().getStringExtra("index");
-        String imgUrl = getIntent().getStringExtra("img");
+        imgUrl = getIntent().getStringExtra("img");
         greeting = getIntent().getBooleanExtra("greeting", false);
-
+        isVideo = getIntent().getBooleanExtra("isVideo", false);
 
    //     Toast.makeText(this, "greeting = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
         if (greeting) {
@@ -886,7 +901,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
 
             new DownloadImageTaskThum().execute(imgUrlThum);
         } else {
-            //    Toast.makeText(this, "null", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "null", Toast.LENGTH_SHORT).show();
         }
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -974,7 +989,46 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         });
 
         // Load the image from the URL and set it as the background
-        new DownloadImageTask().execute(imgUrl);
+        if(isVideo) {
+            Uri videoUri = Uri.parse(imgUrl);
+            universalDialog.showLoadingDialog(this,"Loading...");
+            universalDialog.setCancelable(false);
+            videoView.setVideoURI(videoUri);
+            MediaController mediaController = new MediaController(this);
+            mediaController.setAnchorView(videoView);
+            videoView.setMediaController(mediaController);
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    universalDialog.dissmissLoadingDialog();
+                    videoView.start();
+                }
+            });
+//            videoView.setOnPreparedListener(mediaPlayer -> mediaPlayer.setLooping(true));
+        }else{
+            Uri imageUri = Uri.parse(imgUrl);
+            videoView.setVisibility(View.GONE);
+            Glide.with(this).load(imageUri).into(new CustomViewTarget<RelativeLayout, Drawable>(constraint) {
+                @Override
+                protected void onResourceCleared(@Nullable Drawable placeholder) {
+                    // Remove any resources from the background if necessary
+                    constraint.setBackground(null);
+                }
+
+                @Override
+                public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                    // Handle error case
+                    constraint.setBackground(errorDrawable);
+                }
+
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    constraint.setBackground(resource);
+                }
+            });
+
+//            new DownloadImageTask().execute(imgUrl);
+        }
         int index = Integer.valueOf(position);
        /* if (!userDataString.isEmpty()) {
             try {
@@ -2707,7 +2761,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 ivclose.setVisibility(View.GONE);
-                checkSubscriptionPlansExpireDialog();
+                    checkSubscriptionPlansExpireDialog();
             }
         });
 
@@ -3415,6 +3469,10 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
         // Get the width of the screen or the parent layout
         int screenWidth = getResources().getDisplayMetrics().widthPixels-56;
         constraintTwo.getLayoutParams().height = screenWidth;
+
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) constraintTwo.getLayoutParams();
+        params.setMargins(28,28,28,28);
+
         // Request layout to make sure changes are applied
         constraintTwo.requestLayout();
 
@@ -3573,8 +3631,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
 
     }
     private Bitmap viewToBitmap(View view) {
-        int desiredWidth = 1024;
-        int desiredHeight = 1024;
+        int desiredWidth = view.getWidth();
+        int desiredHeight = view.getHeight();
 
         try {
 
@@ -3584,16 +3642,16 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             Canvas canvas = new Canvas(createBitmap);
 
             // Scale the view to fit within the bitmap dimensions
-            float scaleX = (float) desiredWidth / view.getWidth();
-            float scaleY = (float) desiredHeight / view.getHeight();
-            float scale = Math.min(scaleX, scaleY);
+//            float scaleX = (float) desiredWidth / view.getWidth();
+//            float scaleY = (float) desiredHeight / view.getHeight();
+//            float scale = Math.min(scaleX, scaleY);
 
             // Center the view if it doesn't fill the bitmap completely
-            float dx = (desiredWidth - view.getWidth() * scale) / 2;
-            float dy = (desiredHeight - view.getHeight() * scale) / 2;
+//            float dx = (desiredWidth - view.getWidth() * scale) / 2;
+//            float dy = (desiredHeight - view.getHeight() * scale) / 2;
 
-            canvas.translate(dx, dy);
-            canvas.scale(scale, scale);
+//            canvas.translate(dx, dy);
+//            canvas.scale(scale, scale);
 
             // Draw the view onto the bitmap
             view.draw(canvas);
@@ -3745,6 +3803,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                 RelativeLayout.LayoutParams.WRAP_CONTENT   // Height
         );
         relativeLayout.setLayoutParams(layoutParams);
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE);
 
         // Create the sticker ImageView
 //        RotateZoomImageView stickerImageView = new RotateZoomImageView(context);
@@ -3962,6 +4021,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                 RelativeLayout.LayoutParams.WRAP_CONTENT,  // Width
                 RelativeLayout.LayoutParams.WRAP_CONTENT   // Height
         );
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE);
         relativeLayout.setLayoutParams(layoutParams);
 
         // Create the sticker ImageView
@@ -4189,9 +4249,8 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                 RelativeLayout.LayoutParams.WRAP_CONTENT,  // Width
                 RelativeLayout.LayoutParams.WRAP_CONTENT   // Height
         );
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE);
         relativeLayout.setLayoutParams(layoutParams);
-
-
 
         LinearLayout linearLayoutText = new LinearLayout(context);
         linearLayoutText.setId(View.generateViewId());
@@ -4589,7 +4648,11 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         handleCloseButtons(true);
-                        saveImage(viewToBitmap(constraintTwo), true);
+                        if(isVideo) {
+                            applyFrameNMusicProcess(ThumbnailActivity.convertViewToPng(activity, constraint, 1080, 1080));
+                        }else{
+                            saveImage(viewToBitmap(constraintTwo), true);
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -4676,6 +4739,71 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             }
             showDownloadDialog();
         }
+    }
+
+    private void applyFrameNMusicProcess(String framePath) {
+
+
+        universalDialog.showLoadingDialog(activity, "Downloading...");
+
+        String outputDir = MyUtils.getStoreVideoExternalStorage(activity) + File.separator + System.currentTimeMillis() + ".mp4";
+
+        List<String> ffmpegCommandList = new ArrayList<>();
+        ffmpegCommandList.add("-i");
+        ffmpegCommandList.add(imgUrl);
+        ffmpegCommandList.add("-i");
+        ffmpegCommandList.add(framePath);
+
+
+        ffmpegCommandList.add("-filter_complex");
+
+        ffmpegCommandList.add("[0:v][1:v]overlay[out]");
+
+        ffmpegCommandList.add("-map");
+        ffmpegCommandList.add("[out]");
+
+        ffmpegCommandList.add("-map");
+        ffmpegCommandList.add("0:a");
+
+        ffmpegCommandList.add("-c:a");
+        ffmpegCommandList.add("aac");
+
+
+        ffmpegCommandList.add("-s");
+        ffmpegCommandList.add("1080:1080");
+
+        ffmpegCommandList.add("-c:v");
+        ffmpegCommandList.add("libx264");
+        ffmpegCommandList.add("-preset");
+        ffmpegCommandList.add("ultrafast");
+        ffmpegCommandList.add("-crf");
+        ffmpegCommandList.add("20");
+        ffmpegCommandList.add("-shortest");
+        ffmpegCommandList.add("-y");
+        ffmpegCommandList.add(outputDir);
+
+        String[] ffmpegCommand = ffmpegCommandList.toArray(new String[ffmpegCommandList.size()]);
+
+        FFmpeg.executeAsync(ffmpegCommand, (executionId, returnCode) -> {
+
+            if (returnCode == 1) {
+                FFmpeg.cancel(executionId);
+
+                universalDialog.dissmissLoadingDialog();
+
+                MyUtils.showToast(activity, "Try Again!!");
+            } else if (returnCode == 0) {
+                FFmpeg.cancel(executionId);
+
+                openShareActivity(outputDir);
+            } else if (returnCode == 255) {
+                android.util.Log.e("finalProcess__", "Command execution cancelled by user.");
+            } else {
+                String str = String.format("Command execution failed with rc=%d and the output below.",
+                        Arrays.copyOf(new Object[]{Integer.valueOf(returnCode)}, 1));
+                android.util.Log.i("finalProcess__", str);
+            }
+        });
     }
 
 }

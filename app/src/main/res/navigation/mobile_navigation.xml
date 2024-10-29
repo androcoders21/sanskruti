@@ -43,7 +43,7 @@
 
     <fragment
         android:id="@+id/allSavedDataFragment"
-        android:name="com.sanskruti.volotek.ui.fragments.AllSavedDataFragment"
+        android:name="com.sanskruti.volotek.ui.fragments.VideoFragment"
         android:label="All Saved Data"
         tools:layout="@layout/fragment_my_downloads">
         <action

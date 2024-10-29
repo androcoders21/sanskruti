@@ -9,19 +9,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sanskruti.volotek.AppConfig;
 import com.sanskruti.volotek.databinding.CategoryItemBinding;
+import com.sanskruti.volotek.databinding.SubCategoryItemBinding;
 import com.sanskruti.volotek.listener.ClickListener;
 import com.sanskruti.volotek.model.CategoryItem;
 
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
+public class ChildCategoryAdapter extends RecyclerView.Adapter<ChildCategoryAdapter.MyViewHolder> {
 
     public Context context;
     public ClickListener<CategoryItem> listener;
     public List<CategoryItem> categoryItemList;
     boolean isHome;
 
-    public CategoryAdapter(Context context, ClickListener<CategoryItem> listener, boolean isHome) {
+    public ChildCategoryAdapter(Context context, ClickListener<CategoryItem> listener, boolean isHome) {
         this.context = context;
         this.listener = listener;
         this.isHome = isHome;
@@ -40,7 +41,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        CategoryItemBinding binding = CategoryItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        SubCategoryItemBinding binding = SubCategoryItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new MyViewHolder(binding);
     }
 
@@ -67,9 +68,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        CategoryItemBinding binding;
+        SubCategoryItemBinding binding;
 
-        public MyViewHolder(@NonNull CategoryItemBinding binding) {
+        public MyViewHolder(@NonNull SubCategoryItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

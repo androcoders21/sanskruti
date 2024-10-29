@@ -1,8 +1,15 @@
 package com.sanskruti.volotek.api;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
+import com.onesignal.OneSignal;
 import com.sanskruti.volotek.MyApplication;
+import com.sanskruti.volotek.ui.activities.CustomSplashActivity;
+import com.sanskruti.volotek.ui.activities.LoginActivity;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.PreferenceManager;
 import com.google.gson.Gson;
@@ -51,9 +58,8 @@ public class ApiClient {
 
                     Response response = chain.proceed(request);
 
-
                     int tryCount = 0;
-                    while (!response.isSuccessful() && tryCount < 3) {
+                    while (!response.isSuccessful() && tryCount < 2) {
 
                         Log.d("intercept", "Request is not successful - " + tryCount);
 
@@ -61,10 +67,12 @@ public class ApiClient {
 
                         // retry the request
                         response.close();
-                        response = chain.proceed(original);
+                        response = chain.proceed(request);
                     }
-
-
+                    if(response.code() == 401){
+                       Log.i("saqlain","User logged on some another device");
+                        handleUnAuthorized();
+                    }
                     return response;
                 })
                 .build();
@@ -79,4 +87,18 @@ public class ApiClient {
                 .create(ApiService.class);
     }
 
+    private static void handleUnAuthorized(){
+        Context context = MyApplication.getAppContext();
+        new Handler(Looper.getMainLooper()).post(()->{
+            PreferenceManager preferenceManager = new PreferenceManager(context);
+            preferenceManager.clearAllDataOnLogout();
+
+                preferenceManager.setBoolean(Constant.IS_LOGIN, false);
+
+                // Redirect to the splash screen
+                Intent intent = new Intent(context, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(intent);
+        });
+    }
 }

@@ -104,27 +104,27 @@ public class Util {
     }
 
     public static void loadFirebase(Context context) {
-        PreferenceManager preferenceManager = new PreferenceManager(context);
-        FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                .setMinimumFetchIntervalInSeconds(60)
-                .build();
-        mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
-        mFirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
-        mFirebaseRemoteConfig.fetchAndActivate()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        boolean updated = task.getResult();
-                        Util.showLog("Config params updated: " + updated);
-
-                    } else {
-
-                    }
-                    preferenceManager.setString(Constant.api_key, mFirebaseRemoteConfig.getString("apiKey"));
-
-                    AppConfig.API_KEY = preferenceManager.getString(Constant.api_key);
-                })
-                .addOnFailureListener(e -> Util.showErrorLog("Firebase", e));
+//        PreferenceManager preferenceManager = new PreferenceManager(context);
+//        FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+//        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+//                .setMinimumFetchIntervalInSeconds(60)
+//                .build();
+//        mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+//        mFirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
+//        mFirebaseRemoteConfig.fetchAndActivate()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        boolean updated = task.getResult();
+//                        Util.showLog("Config params updated: " + updated);
+//
+//                    } else {
+//
+//                    }
+//                    preferenceManager.setString(Constant.api_key, mFirebaseRemoteConfig.getString("apiKey"));
+//
+//                    AppConfig.API_KEY = preferenceManager.getString(Constant.api_key);
+//                })
+//                .addOnFailureListener(e -> Util.showErrorLog("Firebase", e));
     }
 
     public static void showToast(Context context, String message) {

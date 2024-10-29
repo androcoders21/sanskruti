@@ -280,7 +280,7 @@
         android:layout_marginStart="@dimen/_5sdp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="@dimen/_5sdp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -109,8 +109,8 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
     private String type;
     private String category_name,image_position;
 
-    private boolean greeting;
-    public MyBottomSheetFragment(String image_url, Activity context, String typeOpen, boolean greetingNew,String category_name,String imagePosition) {
+    private boolean greeting,isVideo;
+    public MyBottomSheetFragment(String image_url, Activity context, String typeOpen, boolean greetingNew,String category_name,String imagePosition,boolean isVideo) {
 //        this.data = data;
         this.userItem = Constant.getUserItem(context);
         this.context = context;
@@ -120,6 +120,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
         this.greeting = greetingNew;
         this.category_name = category_name;
         this.image_position = imagePosition;
+        this.isVideo = isVideo;
     }
 
 
@@ -279,6 +280,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
                 intent.putExtra("email",  userItem.getEmail());
                 intent.putExtra("greeting",greeting);
                 intent.putExtra("userDesignation", userItem.getDesignation());
+                intent.putExtra("isVideo",isVideo);
                 context.startActivity(intent);
                 dismiss();
             }
@@ -468,7 +470,6 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
     //    Toast.makeText(context, "greeting 2 = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
         adapter = new SpecialFramesAdater(getActivity(), (data) -> {
 //            Toast.makeText(context, "greeting 3 = "+String.valueOf(greeting), Toast.LENGTH_SHORT).show();
-
             Intent intent = new Intent(context, EditPoliticalProfileDetailsActivity.class);
             intent.putExtra("index", String.valueOf(0));
             intent.putExtra("img", image_url);
@@ -476,6 +477,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
             intent.putExtra("imgThum", postItemList.get(data).getThumbnail());
             intent.putExtra("greeting",greeting);
             intent.putExtra("categoryName",category_name);
+            intent.putExtra("isVideo",isVideo);
             context.startActivity(intent);
         }, 3, getResources().getDimension(com.intuit.ssp.R.dimen._2ssp), postItemList);
         rvSpec.setAdapter(adapter);
@@ -569,7 +571,7 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment implements 
 
                 }
                 Log.i("RESPONSEGetAllData", "RESPONSE Size-->" + String.valueOf(items.size())+", type = "+type);
-                featureAdapter = new BottomAdapter(context, image_url, items, type,jsonArrayModel,this,greeting,image_position);
+                featureAdapter = new BottomAdapter(context, image_url, items, type,jsonArrayModel,this,greeting,image_position,isVideo);
                 featureAdapter.notifyDataSetChanged();
                 political_RV.setLayoutManager(new LinearLayoutManager(context));
                 political_RV.setAdapter(featureAdapter);

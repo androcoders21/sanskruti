@@ -82,7 +82,7 @@ public class ProfileFragment extends Fragment {
              /*   Intent intent = new Intent(context, AddBusinessActivity.class);
                 intent.putExtra("Action", "Insert");
                 startActivity(intent);*/
-                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"bus",false,"","");
+                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"bus",false,"","",false);
 
                 // Or using static method
                 // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
@@ -131,7 +131,7 @@ public class ProfileFragment extends Fragment {
         binding.ivEditPolitical.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"profile",false,"","");
+                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"profile",false,"","",false);
 
                 // Or using static method
                 // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
@@ -142,7 +142,7 @@ public class ProfileFragment extends Fragment {
         binding.ivEditPolitical.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"profile",false,"","");
+                MyBottomSheetFragment bottomSheetFragment = new MyBottomSheetFragment("",context,"profile",false,"","",false);
 
                 // Or using static method
                 // MyBottomSheetFragment bottomSheetFragment = MyBottomSheetFragment.newInstance(itemData);
@@ -173,10 +173,9 @@ public class ProfileFragment extends Fragment {
 
             universalDialog.okBtn.setOnClickListener(view -> {
 
-                Constant.getHomeViewModel(this).updateLoginStatus(preferenceManager.getString(Constant.USER_PHONE),
-                        "1").observe(this,data->{
+                Constant.getHomeViewModel(this).logout().observe(getViewLifecycleOwner(),data->{
                             if(data!=null){
-                                Log.i("saqlain",data.getIsLogIn());
+                                Log.i("saqlain",data.getMessage());
                             }
                 });
 

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.exoplayer2.util.Log;
 import com.sanskruti.volotek.AdsUtils.AdsUtils;
 import com.sanskruti.volotek.R;
 import com.sanskruti.volotek.adapters.FeatureAdapterTwo;
@@ -24,6 +25,7 @@ import com.sanskruti.volotek.databinding.FragmentGreetingBinding;
 import com.sanskruti.volotek.databinding.FragmentProfileBinding;
 import com.sanskruti.volotek.model.CategoryItem;
 import com.sanskruti.volotek.model.FeatureItem;
+import com.sanskruti.volotek.ui.activities.CategoryActivity;
 import com.sanskruti.volotek.ui.activities.PreviewActivity;
 import com.sanskruti.volotek.utils.Constant;
 import com.sanskruti.volotek.utils.MyUtils;
@@ -52,6 +54,7 @@ public class GreetingFragment extends Fragment {
 
     List<FeatureItem> featureItemList;
     FragmentGreetingBinding binding;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -108,14 +111,15 @@ public class GreetingFragment extends Fragment {
         List<CategoryItem> categoryItemList = new ArrayList<>();
 //        categoryItemList.add(new CategoryItem("-1", "All", "", false));
 
-        Constant.getHomeViewModel(this).getCategories(Constant.GREETING).observe(getActivity(), categoryItems -> {
+
+        Constant.getHomeViewModel(this).getGreetingPageData().observe(getActivity(), categoryItems -> {
 
             if (categoryItems != null) {
 
                 SubCategoryAdapter categoryAdapter = new SubCategoryAdapter(context, data -> {
 
-                    Intent intent = new Intent(context, PreviewActivity.class);
-                    intent.putExtra(Constant.INTENT_TYPE, Constant.GREETING);
+                    Intent intent = new Intent(context, CategoryActivity.class);
+                    intent.putExtra(Constant.INTENT_TYPE, "greetingChild");
                     intent.putExtra(Constant.INTENT_FEST_ID, data.id);
                     intent.putExtra(Constant.INTENT_FEST_NAME, data.getName());
                     intent.putExtra(Constant.INTENT_POST_IMAGE, "");
@@ -125,8 +129,12 @@ public class GreetingFragment extends Fragment {
 
                 }, false);
 
-                categoryItemList.addAll(categoryItems);
+//                categoryItemList.addAll(categoryItems);
 
+                for (int i = 0;i < categoryItems.size();i++){
+                    Log.i("saqlain",categoryItems.get(i).name);
+                    categoryItemList.add(new CategoryItem(categoryItems.get(i).id,categoryItems.get(i).name,"",false));
+                }
                 categoryAdapter.setCategories(categoryItemList);
 
                 binding.rvCategory.setAdapter(categoryAdapter);
@@ -196,7 +204,7 @@ public class GreetingFragment extends Fragment {
     private void getData() {
 
 
-        Constant.getHomeViewModel(this).getGreetingData(selectedCat, page).observe(getActivity(), featureItems -> {
+        Constant.getHomeViewModel(this).getGreetingPageData().observe(getActivity(), featureItems -> {
 
             if (featureItems != null) {
 
@@ -218,22 +226,22 @@ public class GreetingFragment extends Fragment {
 
     }
 
-    private void loadDataMore() {
-
-        Constant.getHomeViewModel(this).getGreetingData(selectedCat, page).observe(this, featureItems -> {
-
-            if (featureItems != null) {
-
-
-                //   featureItemList.addAll(featureItems);
-                featureAdapter.addFeatureItems(featureItems);
-                isLoading = false;
-            }
-
-            binding.refreshLayout.setRefreshing(false);
-            binding.progreee.setVisibility(View.GONE);
-
-        });
-
-    }
+//    private void loadDataMore() {
+//
+//        Constant.getHomeViewModel(this).getGreetingData(selectedCat, page).observe(this, featureItems -> {
+//
+//            if (featureItems != null) {
+//
+//
+//                //   featureItemList.addAll(featureItems);
+//                featureAdapter.addFeatureItems(featureItems);
+//                isLoading = false;
+//            }
+//
+//            binding.refreshLayout.setRefreshing(false);
+//            binding.progreee.setVisibility(View.GONE);
+//
+//        });
+//
+//    }
 }

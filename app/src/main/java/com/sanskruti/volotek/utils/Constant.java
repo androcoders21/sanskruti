@@ -67,7 +67,7 @@ public class Constant {
     public static final String NOTIFICATION_ENABLED = "NotificationEnabled";
     public static final String NOTIFICATION_FIRST = "NOTIFICATION_FIRST";
     public static final String IS_LOGIN = "IS_LOGIN";
-    public static final String api_key = "demoKey";
+    public static final String api_key = "123456";
     public static final String GOOGLE = "google";
     public static final String FESTIVAL = "festival";
     public static final String CATEGORY = "category";
@@ -204,6 +204,7 @@ public class Constant {
     public static final String USER_TYPE = "userType";
 
     public static final String USER_REFERRAL = "userReferral";
+    public static final String INTENT_PARENT_CAT_ID = "INTENT_PARENT_CAT_ID";
 
 
     public static ArrayList<String> movieImageList = new ArrayList<>();

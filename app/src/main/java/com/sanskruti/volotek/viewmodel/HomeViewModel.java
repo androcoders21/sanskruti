@@ -14,8 +14,10 @@ import com.sanskruti.volotek.model.DigitalCardModel;
 import com.sanskruti.volotek.model.FeatureItem;
 import com.sanskruti.volotek.model.FestivalItem;
 import com.sanskruti.volotek.model.FrameResponse;
+import com.sanskruti.volotek.model.GreetingPage;
 import com.sanskruti.volotek.model.HomeItem;
 import com.sanskruti.volotek.model.LanguageItem;
+import com.sanskruti.volotek.model.Logout;
 import com.sanskruti.volotek.model.PoliticalProfileBaseModel;
 import com.sanskruti.volotek.model.PostItem;
 import com.sanskruti.volotek.model.ReferralResponse;
@@ -23,6 +25,7 @@ import com.sanskruti.volotek.model.SearchData;
 import com.sanskruti.volotek.model.ServiceItem;
 import com.sanskruti.volotek.model.SliderItem;
 import com.sanskruti.volotek.model.SubsPlanItem;
+import com.sanskruti.volotek.model.VideoItem;
 import com.sanskruti.volotek.model.WatermarkResponse;
 import com.sanskruti.volotek.model.politicalProfileModel;
 import com.sanskruti.volotek.model.video.LoginStatus;
@@ -158,6 +161,7 @@ public class HomeViewModel extends ViewModel {
     public LiveData<LoginStatus> updateLoginStatus(String userId,String isLogin){
         return respository.updateLoginStatus(userId,isLogin);
     }
+
     public LiveData<List<CategoryItem>> getFeaturedGreeting() {
         return respository.getFeaturedGreeting();
     }
@@ -174,4 +178,41 @@ public class HomeViewModel extends ViewModel {
 
     public LiveData<CheckReferralResponse> checkReferralCode(String userId)
     { return respository.checkReferralCode(userId);}
+
+    public LiveData<Logout> logout(){
+        return respository.logout();
+    }
+    public LiveData<List<CategoryItem>> getMainCategories(){
+        return respository.getMainCategories();
+    }
+    public LiveData<List<CategoryItem>> getSubCategories(String categoryId){
+        return respository.getSubCategories(categoryId);
+    }
+    public LiveData<List<PostItem>> getSubCategoryPosts(String categoryId,String subCategoryId){
+        return respository.getSubCategoryPosts(categoryId,subCategoryId);
+    }
+    public LiveData<List<CategoryItem>> getGreetingSubCategories(String categoryId){
+        return respository.getGreetingSubCategories(categoryId);
+    }
+    public LiveData<List<CategoryItem>> getGreetingMainCategories(){
+        return respository.getGreetingMainCategories();
+    }
+    public LiveData<List<PostItem>> getGreetingSubCategoryPosts(String categoryId,String subCategoryId){
+        return respository.getGreetingSubCategoryPosts(categoryId,subCategoryId);
+    }
+    public LiveData<List<GreetingPage>> getGreetingPageData(){
+        return respository.getGreetingPageData();
+    }
+    public LiveData<List<CategoryItem>> getVideoMainCategories(){
+        return respository.getVideoMainCategories();
+    }
+    public LiveData<List<CategoryItem>> getVideoSubCategories(String categoryId){
+        return respository.getVideoSubCategories(categoryId);
+    }
+    public LiveData<List<VideoItem>> getVideoSubCategoriesFrames(String categoryId, String subCategoryId){
+        return respository.getVideoSubCategoriesFrames(categoryId,subCategoryId);
+    }
+    public LiveData<List<GreetingPage>> getVideoPageData(){
+        return respository.getVideoPageData();
+    }
 }

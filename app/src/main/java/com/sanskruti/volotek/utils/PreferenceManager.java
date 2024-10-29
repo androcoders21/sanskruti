@@ -36,7 +36,7 @@ public class PreferenceManager {
 
     public void setString(String PREF_NAME, String VAL) {
         editor.putString(PREF_NAME, VAL);
-        editor.commit();
+        editor.apply();
     }
 
 

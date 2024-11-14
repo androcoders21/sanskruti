@@ -318,7 +318,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_edit_political_profile_details);
         movableImageView = findViewById(R.id.movableImageView);
         llStickerLl = (LinearLayout)findViewById(R.id.stickerLl);
@@ -4690,7 +4690,7 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
     private void checkSubscriptionPlansExpireDialog() {
         String todayDateTime = new SimpleDateFormat(Constant.TODAY_DATE_PATTERN, Locale.getDefault()).format(System.currentTimeMillis());
         String planEndDate = preferenceManager.getString(Constant.PLAN_END_DATE);
-
+        Log.i("saqlain",planEndDate);
         if (planEndDate != null && !planEndDate.isEmpty()) {
             SimpleDateFormat dateFormat = new SimpleDateFormat(Constant.TODAY_DATE_PATTERN, Locale.getDefault());
             try {
@@ -4727,17 +4727,15 @@ public class EditPoliticalProfileDetailsActivity extends AppCompatActivity{
             }
         }
         else{
-            if (watermarkDetails.position != null && watermarkDetails.showWatermark != null) {
-                if (watermarkDetails.position == 1) {
-                    leftThumbnailImage.setVisibility(View.VISIBLE);
-                } else if (watermarkDetails.position == 2) {
-                    centerThumbnailImage.setVisibility(View.VISIBLE);
-                } else if (watermarkDetails.position == 3) {
-                    rightThumbnailImage.setVisibility(View.VISIBLE);
-                }
+            universalDialog.showWarningDialog(getString(R.string.upgrade), getString(R.string.your_plan_expired),
+                    getString(R.string.upgrade), true);
+            universalDialog.show();
+            universalDialog.okBtn.setOnClickListener(view -> {
+                universalDialog.cancel();
+                startActivity(new Intent(this, SubsPlanActivity.class));
+            });
 
-            }
-            showDownloadDialog();
+            universalDialog.cancelBtn.setOnClickListener(view -> universalDialog.cancel());
         }
     }
 

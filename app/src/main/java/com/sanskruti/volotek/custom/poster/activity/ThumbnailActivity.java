@@ -3740,6 +3740,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
 
     public static String convertViewToPng(Activity context, View mainLayout, int desiredWidth, int desiredHeight) {
         // Create a bitmap with the same dimensions as the view
+        Log.i("saqlain","CONVERTER CODE EXECUTED");
         Bitmap originalBitmap = Bitmap.createBitmap(mainLayout.getWidth(), mainLayout.getHeight(), Bitmap.Config.ARGB_8888);
 
         // Create a canvas with the original bitmap
@@ -3754,6 +3755,8 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
         // Generate a file path for the PNG image
         String outputPath = MyUtils.getFolderPath(context, "cache") + "/viewimage.png";
 
+        Log.i("saqlain", "Path :" + outputPath);
+
         try {
             // Create a file output stream
             FileOutputStream outputStream = new FileOutputStream(outputPath);
@@ -3765,6 +3768,7 @@ public class ThumbnailActivity extends BaseActivity implements View.OnClickListe
             outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
+            Log.e("saqlain", "Error writing PNG file: " + e.getMessage());
             return null;
         }
 

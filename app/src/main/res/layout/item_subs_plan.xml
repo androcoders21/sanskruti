@@ -102,7 +102,7 @@
                         android:textAllCaps="true"
                         android:textColor="@color/black_1000"
                         app:fonts='@{"extra_bold"}'
-                        app:textSize='@{"font_body_s_size"}' />
+                        app:textSize='@{"font_title_size"}' />
 
                     <TextView
                         android:id="@+id/tv_discount"
@@ -151,7 +151,7 @@
                         android:textAllCaps="true"
                         android:textColor="@color/black_1000"
                         app:fonts='@{"light"}'
-                        app:textSize='@{"font_body_s_size"}' />
+                        app:textSize='@{"font_title_size"}' />
 
 
                 </RelativeLayout>

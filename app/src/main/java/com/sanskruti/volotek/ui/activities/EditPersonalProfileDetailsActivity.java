@@ -296,7 +296,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_edit_personal_profile_details);
         universalDialog = new UniversalDialog(this, false);
         movableImageView = findViewById(R.id.movableImageView);
@@ -3921,8 +3921,8 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             try {
                 Date todayDate = dateFormat.parse(todayDateTime);
                 Date endDate = dateFormat.parse(planEndDate);
-
-                if (endDate != null && endDate.before(todayDate)) {
+                Log.i("saqlain","ENDDATE: "+endDate);
+                if (planEndDate == null || endDate != null && endDate.before(todayDate)) {
                     // Your plan got expired. Show dialog
                     universalDialog.showWarningDialog(getString(R.string.upgrade), getString(R.string.your_plan_expired),
                             getString(R.string.upgrade), true);
@@ -3952,17 +3952,15 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
             }
         }
         else{
-            if (watermarkDetails.position != null && watermarkDetails.showWatermark != null) {
-                if (watermarkDetails.position == 1) {
-                    leftThumbnailImage.setVisibility(View.VISIBLE);
-                } else if (watermarkDetails.position == 2) {
-                    centerThumbnailImage.setVisibility(View.VISIBLE);
-                } else if (watermarkDetails.position == 3) {
-                    rightThumbnailImage.setVisibility(View.VISIBLE);
-                }
+            universalDialog.showWarningDialog(getString(R.string.upgrade), getString(R.string.your_plan_expired),
+                    getString(R.string.upgrade), true);
+            universalDialog.show();
+            universalDialog.okBtn.setOnClickListener(view -> {
+                universalDialog.cancel();
+                startActivity(new Intent(this, SubsPlanActivity.class));
+            });
 
-            }
-            showDownloadDialog();
+            universalDialog.cancelBtn.setOnClickListener(view -> universalDialog.cancel());
         }
     }
 
@@ -3974,6 +3972,7 @@ public class EditPersonalProfileDetailsActivity extends AppCompatActivity {
         String outputDir = MyUtils.getStoreVideoExternalStorage(this) + File.separator + System.currentTimeMillis() + ".mp4";
 
         List<String> ffmpegCommandList = new ArrayList<>();
+
         ffmpegCommandList.add("-i");
         ffmpegCommandList.add(imgUrl);
         ffmpegCommandList.add("-i");

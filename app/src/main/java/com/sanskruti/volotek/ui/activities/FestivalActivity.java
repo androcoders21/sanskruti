@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,6 +34,7 @@ public class FestivalActivity extends AppCompatActivity implements ClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityFestivalBinding.inflate(getLayoutInflater());
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(binding.getRoot());
         activity = this;
         preferenceManager = new PreferenceManager(activity);

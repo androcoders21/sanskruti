@@ -224,6 +224,7 @@ public class MainActivity extends BaseActivity {
 
         MyUtils.hideNavigation(this, true);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_main);
         activeBusinessName = (TextView) findViewById(R.id.active_business_name);
         youtubeIcon = (ImageView) findViewById(R.id.youtube);

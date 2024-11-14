@@ -6,6 +6,7 @@ import static com.sanskruti.volotek.utils.Constant.NOTIFICATION_ENABLED;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -62,6 +63,7 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(binding.getRoot());
 
         preferenceManager = new PreferenceManager(this);

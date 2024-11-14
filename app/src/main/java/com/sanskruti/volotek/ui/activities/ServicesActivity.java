@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class ServicesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityServicesBinding.inflate(getLayoutInflater());
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(binding.getRoot());
 
         getData();

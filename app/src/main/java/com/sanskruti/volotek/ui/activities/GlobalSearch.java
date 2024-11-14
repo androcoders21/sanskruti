@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class GlobalSearch extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_search_global);
         binding = ActivitySearchGlobalBinding.inflate(getLayoutInflater());
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(binding.getRoot());
 
         binding.toolbar.toolName.setText("Search");
@@ -48,7 +50,7 @@ public class GlobalSearch extends AppCompatActivity{
         Constant.getHomeViewModel(this).getSearchData()
                 .observe(this,searchData -> {
             if(searchData != null){
-                Log.i("saqlain",searchData.getMessage());
+
 
                 postItemList = searchData.getData();
 

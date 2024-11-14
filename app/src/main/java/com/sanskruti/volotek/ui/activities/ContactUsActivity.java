@@ -2,6 +2,7 @@ package com.sanskruti.volotek.ui.activities;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -27,6 +28,7 @@ public class ContactUsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityContactUsBinding.inflate(getLayoutInflater());
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(binding.getRoot());
 
         preferenceManager = new PreferenceManager(this);

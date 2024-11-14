@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -74,6 +75,7 @@ public class PlanDetailActivity extends AppCompatActivity implements PaymentResu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityPlanBinding.inflate(getLayoutInflater());
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(this);
 

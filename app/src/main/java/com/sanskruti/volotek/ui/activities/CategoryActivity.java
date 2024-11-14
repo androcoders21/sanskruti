@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -36,6 +37,7 @@ public class CategoryActivity extends AppCompatActivity implements ClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCategoryBinding.inflate(getLayoutInflater());
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(binding.getRoot());
 
         preferenceManager = new PreferenceManager(this);

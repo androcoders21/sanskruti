@@ -3,6 +3,7 @@ package com.sanskruti.volotek.ui.activities;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -24,6 +25,7 @@ public class PrivacyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityPrivacyBinding.inflate(getLayoutInflater());
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(binding.getRoot());
 
         preferenceManager = new PreferenceManager(this);

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ public class ReferralActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityReferralBinding.inflate(getLayoutInflater());
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(binding.getRoot());
 
         binding.toolbar.toolName.setText("Referral");

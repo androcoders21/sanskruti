@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -63,6 +64,7 @@ public class CategoryPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = ActivityCategoryPostBinding.inflate(getLayoutInflater());
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(binding.getRoot());
 
         networkConnectivity = new NetworkConnectivity(this);
